@@ -1,36 +1,44 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Page,
   Layout,
-  Card,
+  Text,
+  Button,
   BlockStack,
+  InlineGrid,
 } from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
-import { authenticate } from "../shopify.server";
-import IndexFiltersWithNoFiltersExample from './js/tabs';
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.admin(request);
+import IndexFiltersDefaultExample from './offer_components/offer_tab';
+import SetupAssistance from "./offer_components/setup_assistance";
 
-  return null;
-};
+function OfferHeader() {
+  console.log("Checkpoitn 3");
+  return (
+    <>
+      <Layout.Section >
+        <InlineGrid columns="1fr auto">
+          <Text as="h3" variant="headingLg">
+            Offers
+          </Text>
+          <Button
+            onClick={() => { }}
+            accessibilityLabel="Export variants"
+            variant="primary"> Add Offer </Button>
+        </InlineGrid>
+      </Layout.Section>
+    </>
+  )
+}
+
 
 export default function Index() {
-  
+  console.log("Checkpoitn 1");
+  console.log("Checkpoint 2");
   return (
     <Page>
-      <TitleBar title="Remix app template">
-        <button variant="primary" >
-          Generate a product
-        </button>
-      </TitleBar>
       <BlockStack gap="500">
         <Layout>
-          <Layout.Section>
-            <Card>
-              {IndexFiltersWithNoFiltersExample()}
-            </Card>
-          </Layout.Section>
-          
+          {OfferHeader()}
+          {SetupAssistance()}
+          {IndexFiltersDefaultExample()}
         </Layout>
       </BlockStack>
     </Page>
