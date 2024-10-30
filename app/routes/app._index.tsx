@@ -8,6 +8,7 @@ import {
 } from "@shopify/polaris";
 import IndexFiltersDefaultExample from './offer_components/offer_tab';
 import SetupAssistance from "./offer_components/setup_assistance";
+import HelpBotton from "./offer_components/help_bottom";
 
 function OfferHeader() {
   console.log("Checkpoitn 3");
@@ -39,6 +40,7 @@ export default function Index() {
           {OfferHeader()}
           {SetupAssistance()}
           {IndexFiltersDefaultExample()}
+          {HelpBotton()}
         </Layout>
       </BlockStack>
     </Page>

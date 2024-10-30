@@ -4,14 +4,15 @@ import {
     useSetIndexFiltersMode,
     Layout,
     BlockStack,
-    Icon,
-    Box,
-    Text,
+    // Text,
+    EmptyState,
+    // Spinner,
 } from '@shopify/polaris';
 import type { TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
-import empty_state from '../assets/Empty_state.svg';
-
+import SafeSpan from '../components/custom/SafeSpan';
+// import empty_state from '../assets/Empty_state.svg';
+import '../css/Custom.css';
 export default function IndexFiltersWithNoFiltersExample() {
     const itemStrings =
         ['All',
@@ -40,32 +41,11 @@ export default function IndexFiltersWithNoFiltersExample() {
         [],
     );
 
-    const Placeholder = ({ label = '', height = 'auto', width = 'auto' }) => {
-        return (
-            <div
-                style={{
-                    background: 'var(--p-color-border-interactive-subdued)',
-                    height: height,
-                    width: width,
-                }}
-            >
-                <div
-                    style={{
-                        color: 'var(--p-color-text)',
-                    }}
-                >
-                    <Text as="p">
-                        {label}
-                    </Text>
-                </div>
-            </div>
-        );
-    }
-
     const styledTabs = tabs.map(tab => ({
-        ...tab, 
-        content: <span style={{ fontWeight: 'bold'}}>{tab.content}</span>
+        ...tab,
+        content: <SafeSpan className='bold-text'>{tab.content}</SafeSpan>
     }));
+
 
     return (
         <>
@@ -93,11 +73,20 @@ export default function IndexFiltersWithNoFiltersExample() {
                         hideFilters
                         filteringAccessibilityTooltip="Search and Filter (F)"
                     />
-                    <BlockStack align='center'>
-                        <Icon source={empty_state} />
-                        <Box>
-                            <Placeholder label="Content inside a box" />
-                        </Box>
+                    <BlockStack align='center' inlineAlign="center">
+                        <EmptyState
+                            heading="Add an offer to get started"
+                            action={{
+                                content: 'Add offer',
+                                onAction: () => {
+                                    console.log('Add offer clicked');
+                                    // Add your action handler here
+                                },
+                            }}
+                            image="https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Empty_state.svg"
+                        >
+                            <p>Display products as upsell & cross-sell offers</p>
+                        </EmptyState>
                     </BlockStack>
                 </LegacyCard>
 
