@@ -1,14 +1,10 @@
 import {
     Layout,
-    // Text,
     InlineStack,
     Text,
     Button,
-    // Spinner,
 } from '@shopify/polaris';
 import { ComposeIcon } from '@shopify/polaris-icons';
-// import empty_state from '../assets/Empty_state.svg';
-import '../css/Custom.css';
 
 export default function HelpBotton() {
     return (

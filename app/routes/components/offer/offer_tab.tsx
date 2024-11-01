@@ -10,10 +10,11 @@ import {
 } from '@shopify/polaris';
 import type { TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
-import SafeSpan from '../components/custom/SafeSpan';
+import SafeSpan from '../custom/SafeSpan';
 // import empty_state from '../assets/Empty_state.svg';
-import '../css/Custom.css';
-export default function IndexFiltersWithNoFiltersExample() {
+import '../../css/Custom.css';
+
+export default function IndexFiltersWithNoFiltersExample({onShowOfferPage}) {
     const itemStrings =
         ['All',
             'Product page offers',
@@ -80,6 +81,7 @@ export default function IndexFiltersWithNoFiltersExample() {
                                 content: 'Add offer',
                                 onAction: () => {
                                     console.log('Add offer clicked');
+                                    onShowOfferPage(false);
                                     // Add your action handler here
                                 },
                             }}

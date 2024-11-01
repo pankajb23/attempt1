@@ -1,46 +1,49 @@
 import {
   Page,
   Layout,
-  Text,
-  Button,
   BlockStack,
-  InlineGrid,
 } from "@shopify/polaris";
-import IndexFiltersDefaultExample from './offer_components/offer_tab';
-import SetupAssistance from "./offer_components/setup_assistance";
-import HelpBotton from "./offer_components/help_bottom";
-
-function OfferHeader() {
-  console.log("Checkpoitn 3");
-  return (
-    <>
-      <Layout.Section >
-        <InlineGrid columns="1fr auto">
-          <Text as="h3" variant="headingLg">
-            Offers
-          </Text>
-          <Button
-            onClick={() => { }}
-            accessibilityLabel="Export variants"
-            variant="primary"> Add Offer </Button>
-        </InlineGrid>
-      </Layout.Section>
-    </>
-  )
-}
-
+import IndexFiltersDefaultExample from './components/offer/offer_tab';
+import SetupAssistance from "./components/offer/setup_assistance";
+import HelpBotton from "./components/offer/help_bottom";
+import OfferHeader from "./components/offer/offer_header";
+import { useState } from "react";
+import OfferOnPage from "./components/offer_tab/offer_page";
 
 export default function Index() {
-  console.log("Checkpoitn 1");
-  console.log("Checkpoint 2");
+  const [offerPage, setOfferPage] = useState(true);
+  const [showAssistance, setupShowAssistance] = useState(true);
+
+  const showOfferPage = (flag: boolean) => {
+    console.log("Changing offer page" + flag + " from value " + offerPage);
+    setOfferPage(flag);
+  }
+
+  const setupShowAssistanceDef = (flag: boolean) => {
+    setupShowAssistance(false);
+  }
+
   return (
     <Page>
-      <BlockStack gap="500">
+      <BlockStack>
         <Layout>
-          {OfferHeader()}
-          {SetupAssistance()}
-          {IndexFiltersDefaultExample()}
-          {HelpBotton()}
+          {offerPage ?
+            <>
+              <OfferHeader onShowOfferPage={showOfferPage} />
+              {showAssistance ?
+                <>
+                  <SetupAssistance showSetupAssistance={setupShowAssistanceDef} />
+                </>
+                : null
+              }
+              <IndexFiltersDefaultExample onShowOfferPage={showOfferPage} />
+              <HelpBotton />
+            </>
+            :
+            <>
+              <OfferOnPage onShowOfferPage={showOfferPage} />
+            </>
+          }
         </Layout>
       </BlockStack>
     </Page>
