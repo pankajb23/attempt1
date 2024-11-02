@@ -1,13 +1,54 @@
-import { Layout, BlockStack } from "@shopify/polaris";
+import {
+    Layout,
+    BlockStack,
+    Card,
+    Text,
+    TextField,
+} from "@shopify/polaris";
 import TopHeadingBanner from "./top_heading_banner";
+import { useState } from "react";
+import TriggerCheckbox from "./commons/TriggerCheckbox";
 
 export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
+    const [offerName, setOfferName] = useState('')
+    const setOfferNameDef = (offer) => {
+        console.log("Setting offer name " + offer + " from " + offerName);
+        setOfferName(offerName);
+    }
+
     return (
         <>
             <Layout.Section>
-                <BlockStack>
-                    <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Frequently Bought Together"} />
+                <BlockStack >
+                    <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Frequently Bought Together"} saveOfferButton={true} />
                 </BlockStack>
+                <div style={{ marginTop: "16px" }}>
+                    <BlockStack gap='200'>
+                        <Layout>
+                            <Layout.Section>
+                                <BlockStack gap='300' >
+                                    <Card>
+                                        <Text as="h5" variant="headingSm" fontWeight="bold">
+                                            Offer name - for internal reference
+                                        </Text>
+                                        <TextField
+                                            value={offerName}
+                                            onChange={setOfferNameDef}
+                                            placeholder="Eg: Upsell for mobile phones"
+                                            label=""
+                                            autoComplete="off"
+                                        />
+                                    </Card>
+                                    <TriggerCheckbox />
+                                </BlockStack>
+                            </Layout.Section>
+                            <Layout.Section variant="oneThird">
+
+                            </Layout.Section>
+                        </Layout>
+
+                    </BlockStack>
+                </div>
             </Layout.Section>
         </>
     );
