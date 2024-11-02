@@ -1,10 +1,25 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button, ChoiceList, Text, Card, Checkbox, BlockStack, ResourceItem, LegacyFilters, ResourceList } from "@shopify/polaris";
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 
 
 function AddProductTagsModal({ tagsArray, selectedIds, handleChange }) {
     const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
+    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+
+    const onSelectingTags = useCallback((productId: string) => {
+        console.log("change in productId " + productId)
+        setSelectedTags((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(productId)) {
+                newSet.delete(productId);
+            } else {
+                newSet.add(productId);
+            }
+            return newSet;
+        });
+    }, []);
+
     const handleQueryValueRemove = useCallback(
         () => setQueryValue(undefined),
         []
@@ -14,15 +29,30 @@ function AddProductTagsModal({ tagsArray, selectedIds, handleChange }) {
         handleQueryValueRemove();
     }, [handleQueryValueRemove]);
 
-    const newDs = tagsArray.map(name => ({
-        name,
-        isChecked: selectedIds.has(name)
-    }));
+    const newDs = tagsArray
+        .filter(name =>
+            !queryValue  // this checks for undefined, null, empty string
+            || name.toLowerCase().includes(queryValue.toLowerCase())  // case-insensitive search
+        )
+        .map(name => ({
+            name,
+            isChecked: selectedIds.has(name) || selectedTags.has(name)
+        }));
 
     const resourceName = {
         singular: "tag",
         plural: "tags",
     }
+
+    useEffect(() => {
+        const handleEscKey = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                shopify.modal.hide('my-modal')
+            }
+        };
+        document.addEventListener('keydown', handleEscKey);
+    });
+
     const filterControl = (
         <LegacyFilters
             queryValue={queryValue}
@@ -38,11 +68,14 @@ function AddProductTagsModal({ tagsArray, selectedIds, handleChange }) {
         const { name, isChecked } = item;
 
         return (
-            <ResourceItem id={name} onClick={handleChange(name)}>
+            <ResourceItem id={name} onClick={() => {
+                console.log("Changing in resource Item")
+                onSelectingTags(name)
+            }}>
                 <Checkbox
                     label={name}
                     checked={isChecked}
-                    onChange={handleChange(name)}
+                    onChange={() => { }}
                 />
             </ResourceItem>
         );
@@ -52,7 +85,13 @@ function AddProductTagsModal({ tagsArray, selectedIds, handleChange }) {
         <>
             <Modal id="my-modal" variant="large">
                 <TitleBar title="Add product tags">
-                    <button variant="primary">Add</button>
+                    <button variant="primary" onClick={() => {
+                        console.log("Submitting pids " + selectedTags);
+                        selectedTags.forEach(tag =>
+                            handleChange(tag)
+                        )
+                        shopify.modal.toggle('my-modal')
+                    }}>Add</button>
                 </TitleBar>
                 <BlockStack>
                     <ResourceList
@@ -83,6 +122,7 @@ export default function TriggerCheckbox() {
     ];
 
     const handleChange = useCallback((productId: string) => {
+        console.log("change in productId " + productId)
         setSelectedIds((prev) => {
             const newSet = new Set(prev);
             if (newSet.has(productId)) {
@@ -108,21 +148,23 @@ export default function TriggerCheckbox() {
             case "specific_products":
                 return (<div style={{ marginTop: '6px' }}>
                     {/* @ts-ignore */}
-                    <Button variant="secondary" size="medium" onClick={() => shopify.modal.show('my-modal')}>
+                    <Button variant="secondary" size="medium" >
                         <Text as="h6" fontWeight="bold" variant="headingSm">Select products</Text>
                     </Button>
                     <div style={{ marginTop: '10px' }}>
                         <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
-                        <AddProductTagsModal tagsArray={tagsArray} selectedIds={selectedIds} handleChange={handleChange} />
                     </div>
                 </div>);
             case "tags":
                 return (<>
                     {/* @ts-ignore */}
-                    <Button variant="tertiary">
+                    <Button variant="tertiary" onClick={() => shopify.modal.show('my-modal')}>
                         <Text as="p" fontWeight="bold" variant="bodySm">Select products</Text>
                     </Button>
-                    <Text as="p" variant="bodySm" fontWeight="regular"> The offer will be displayed on trigger product pages.</Text>
+                    <div style={{ marginTop: '10px' }} >
+                        <Text as="p" variant="bodySm" fontWeight="regular"> The offer will be displayed on trigger product pages.</Text>
+                        <AddProductTagsModal tagsArray={tagsArray} selectedIds={selectedIds} handleChange={handleChange} />
+                    </div>
                 </>);
             case "all_products":
                 return (<>
