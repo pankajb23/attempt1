@@ -10,7 +10,6 @@ import {
 import { ComposeIcon, XSmallIcon } from '@shopify/polaris-icons';
 
 
-{/* @TODO try with CalloutCard */}
 export default function SetupAssistance({showSetupAssistance}) {
     return (
         <>

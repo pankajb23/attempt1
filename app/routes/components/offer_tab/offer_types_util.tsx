@@ -1,4 +1,3 @@
-{/*  @ts-ignore */}
 export enum OfferType{
     BaseOfferPage = "BaseOfferPage",
     FrequentlyBoughtTogether = "FrequentlyBoughtTogether",
