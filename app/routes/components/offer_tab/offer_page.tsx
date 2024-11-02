@@ -4,14 +4,14 @@ import {
   InlineStack,
   Button,
   Text,
-  Tabs,
-  LegacyCard,
+  Tabs
 } from "@shopify/polaris";
 
 import { useState, useCallback } from "react";
 
 import { ChevronLeftIcon } from '@shopify/polaris-icons';
 import WidgetManager from "./widget_manager";
+import TopHeadingBanner from "./offers/top_heading_banner";
 
 export default function OfferOnPage({ onShowOfferPage }) {
   const [selected, setSelected] = useState(0);
@@ -63,17 +63,11 @@ export default function OfferOnPage({ onShowOfferPage }) {
     <>
       <Layout.Section>
         <BlockStack>
-          <InlineStack align="start" blockAlign="center" gap="300">
-            <div style={{ marginTop: "2px" }}>
-              <Button icon={ChevronLeftIcon} variant="tertiary" size="medium" onClick={() => onShowOfferPage(true)} />
-            </div>
-            <Text as="h5" variant="headingLg"> Add offer
-            </Text>
-          </InlineStack>
+          <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Add offer"} />
           <InlineStack>
             {/** @ts-ignore*/}
             <Tabs tabs={boldTabs} selected={selected} onSelect={handleTabChange}>
-              <WidgetManager filter={tabs[selected].id}/>
+              <WidgetManager filter={tabs[selected].id} onShowOfferPage={onShowOfferPage} />
             </Tabs>
           </InlineStack>
         </BlockStack>

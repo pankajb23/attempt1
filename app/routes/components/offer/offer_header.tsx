@@ -4,6 +4,7 @@ import {
     Button,
     InlineGrid,
   } from "@shopify/polaris";
+import { OfferType } from "../offer_tab/offer_types_util";
 
   
 export default function OfferHeader({onShowOfferPage}) {
@@ -15,7 +16,7 @@ export default function OfferHeader({onShowOfferPage}) {
               Offers
             </Text>
             <Button
-              onClick={() => { onShowOfferPage(false)}}
+              onClick={() => { onShowOfferPage(OfferType.BaseOfferPage)}}
               accessibilityLabel="Export variants"
               variant="primary"> Add Offer </Button>
           </InlineGrid>

@@ -6,9 +6,9 @@ import {
     Card
 } from "@shopify/polaris";
 
-export default function OfferWidget({ header, message, img }) {
+export default function OfferWidget({ header, message, img, onShowOfferPage, offerType }) {
     return (
-        <div style={{width:"320px"}}>
+        <div style={{ width: "320px" }}>
             <Card>
                 <BlockStack gap="200">
                     <InlineStack align="start" blockAlign="start"  >
@@ -28,7 +28,7 @@ export default function OfferWidget({ header, message, img }) {
                         <Text as="p" variant="bodySm">{message}</Text>
                     </BlockStack>
                     <InlineStack align="end" blockAlign="end" gap="1000">
-                        <Button textAlign="end" variant="primary">
+                        <Button textAlign="end" variant="primary" onClick={() => onShowOfferPage(offerType)}>
                             Create
                         </Button>
                     </InlineStack>

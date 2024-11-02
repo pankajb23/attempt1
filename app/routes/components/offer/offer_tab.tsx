@@ -13,8 +13,9 @@ import { useState, useCallback } from 'react';
 import SafeSpan from '../custom/SafeSpan';
 // import empty_state from '../assets/Empty_state.svg';
 import '../../css/Custom.css';
+import { OfferType } from '../offer_tab/offer_types_util';
 
-export default function IndexFiltersWithNoFiltersExample({onShowOfferPage}) {
+export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
     const itemStrings =
         ['All',
             'Product page offers',
@@ -81,7 +82,7 @@ export default function IndexFiltersWithNoFiltersExample({onShowOfferPage}) {
                                 content: 'Add offer',
                                 onAction: () => {
                                     console.log('Add offer clicked');
-                                    onShowOfferPage(false);
+                                    onShowOfferPage(OfferType.BaseOfferPage);
                                     // Add your action handler here
                                 },
                             }}
