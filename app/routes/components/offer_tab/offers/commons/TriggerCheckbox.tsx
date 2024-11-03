@@ -1,114 +1,55 @@
-import { useState, useCallback, useEffect } from "react";
-import { Button, ChoiceList, Text, Card, Checkbox, BlockStack, ResourceItem, LegacyFilters, ResourceList } from "@shopify/polaris";
-import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
+import { useState, useCallback } from "react";
+import { Button, ChoiceList, Text, Card, Tag, LegacyCard, ResourceItem, ResourceList, Avatar, InlineStack, Icon } from "@shopify/polaris";
+import { useAppBridge } from "@shopify/app-bridge-react";
+import AddProductTagsModal from "./AddProductTagsModal";
+import AddProductsModal from "./AddProductsModal";
+import ViewIcon from '@shopify/polaris-icons';
 
-
-function AddProductTagsModal({ tagsArray, selectedIds, handleChange }) {
-    const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
-    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
-
-    const onSelectingTags = useCallback((productId: string) => {
-        console.log("change in productId " + productId)
-        setSelectedTags((prev) => {
-            const newSet = new Set(prev);
-            if (newSet.has(productId)) {
-                newSet.delete(productId);
-            } else {
-                newSet.add(productId);
-            }
-            return newSet;
-        });
-    }, []);
-
-    const handleQueryValueRemove = useCallback(
-        () => setQueryValue(undefined),
-        []
-    );
-
-    const handleClearAll = useCallback(() => {
-        handleQueryValueRemove();
-    }, [handleQueryValueRemove]);
-
-    const newDs = tagsArray
-        .filter(name =>
-            !queryValue  // this checks for undefined, null, empty string
-            || name.toLowerCase().includes(queryValue.toLowerCase())  // case-insensitive search
-        )
-        .map(name => ({
-            name,
-            isChecked: selectedIds.has(name) || selectedTags.has(name)
-        }));
-
-    const resourceName = {
-        singular: "tag",
-        plural: "tags",
-    }
-
-    useEffect(() => {
-        const handleEscKey = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                shopify.modal.hide('my-modal')
-            }
-        };
-        document.addEventListener('keydown', handleEscKey);
-    });
-
-    const filterControl = (
-        <LegacyFilters
-            queryValue={queryValue}
-            filters={[]}
-            appliedFilters={[]}
-            onQueryChange={setQueryValue}
-            onQueryClear={handleQueryValueRemove}
-            onClearAll={handleClearAll}
-        ></LegacyFilters>
-    );
-
-    function renderItem(item) {
-        const { name, isChecked } = item;
-
-        return (
-            <ResourceItem id={name} onClick={() => {
-                console.log("Changing in resource Item")
-                onSelectingTags(name)
-            }}>
-                <Checkbox
-                    label={name}
-                    checked={isChecked}
-                    onChange={() => { }}
-                />
-            </ResourceItem>
-        );
-    }
-
+function TagsUI(selectedIds) {
     return (
-        <>
-            <Modal id="my-modal" variant="large">
-                <TitleBar title="Add product tags">
-                    <button variant="primary" onClick={() => {
-                        console.log("Submitting pids " + selectedTags);
-                        selectedTags.forEach(tag =>
-                            handleChange(tag)
-                        )
-                        shopify.modal.toggle('my-modal')
-                    }}>Add</button>
-                </TitleBar>
-                <BlockStack>
-                    <ResourceList
-                        resourceName={resourceName}
-                        items={newDs}
-                        renderItem={renderItem}
-                        filterControl={filterControl}
-                    />
-                </BlockStack>
-            </Modal>
-        </>
+        Array.from(selectedIds).map(tag => (
+            <Tag key={tag} onRemove={() => selectedIds.delete(tag)}>{tag}</Tag>
+        ))
     );
+}
+
+function SelectedProducts(pids) {
+    return (
+        <LegacyCard>
+            <ResourceList
+                resourceName={{ singular: 'product', plural: 'products' }}
+                items={pids}
+                renderItem={(item) => {
+                    const { id, name, img } = item;
+                    const media = <Avatar customer size="md" name={name} source={img}/>;
+
+                    return (
+                        <InlineStack>
+                            <ResourceItem
+                                id={id}
+                                name={name}
+                                media={media}
+                                url={''}
+                                accessibilityLabel={`View details for ${name}`}
+                            >
+                                <Text variant="bodyMd" fontWeight="bold" as="h3">
+                                    {name}
+                                </Text>
+                            </ResourceItem>
+                            <Icon source={ViewIcon} />;
+                        </InlineStack>
+                    );
+                }}
+            />
+        </LegacyCard>
+    )
 }
 
 export default function TriggerCheckbox() {
     const [selected, setSelected] = useState<string[]>(["specific_products"]);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const [selectedPids, setSelectedPids] = useState<Set<string>>(new Set());
+
     const shopify = useAppBridge();
 
     const tagsArray = [
@@ -119,6 +60,39 @@ export default function TriggerCheckbox() {
         "Snowboard",
         "Sport",
         "Winter"
+    ];
+
+    const productsArray = [
+        {
+            id: "1",
+            name: "Product One",
+            img: "/api/placeholder/100/100",  // Using placeholder image
+            isArchived: false
+        },
+        {
+            id: "2",
+            name: "Product Two",
+            img: "/api/placeholder/100/100",
+            isArchived: false
+        },
+        {
+            id: "3",
+            name: "Product Three",
+            img: "/api/placeholder/100/100",
+            isArchived: true
+        },
+        {
+            id: "4",
+            name: "Product Four",
+            img: "/api/placeholder/100/100",
+            isArchived: false
+        },
+        {
+            id: "5",
+            name: "Product Five",
+            img: "/api/placeholder/100/100",
+            isArchived: true
+        }
     ];
 
     const handleChange = useCallback((productId: string) => {
@@ -134,6 +108,18 @@ export default function TriggerCheckbox() {
         });
     }, []);
 
+    const handlePidChanges = useCallback((pid: string) => {
+        console.log("change in productId " + pid)
+        setSelectedPids((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(pid)) {
+                newSet.delete(pid);
+            } else {
+                newSet.add(pid);
+            }
+            return newSet;
+        });
+    }, []);
 
     const handleChoiceListChange = useCallback(
         (value: string[]) => setSelected(value),
@@ -143,24 +129,28 @@ export default function TriggerCheckbox() {
 
     const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Offer is triggered for </Text>
 
+
     const choiceSuffix = () => {
         switch (selected[0]) {
             case "specific_products":
                 return (<div style={{ marginTop: '6px' }}>
                     {/* @ts-ignore */}
-                    <Button variant="secondary" size="medium" >
+                    <Button variant="secondary" onClick={() => shopify.modal.show('my-product-modal')}>
                         <Text as="h6" fontWeight="bold" variant="headingSm">Select products</Text>
                     </Button>
                     <div style={{ marginTop: '10px' }}>
                         <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
+                        <AddProductsModal />
                     </div>
                 </div>);
             case "tags":
                 return (<>
                     {/* @ts-ignore */}
-                    <Button variant="tertiary" onClick={() => shopify.modal.show('my-modal')}>
-                        <Text as="p" fontWeight="bold" variant="bodySm">Select products</Text>
+                    <Button variant="secondary" onClick={() => shopify.modal.show('my-modal')}>
+                        <Text as="p" fontWeight="bold" variant="bodySm">Select Tags</Text>
                     </Button>
+                    <br />
+                    {TagsUI(selectedIds)}
                     <div style={{ marginTop: '10px' }} >
                         <Text as="p" variant="bodySm" fontWeight="regular"> The offer will be displayed on trigger product pages.</Text>
                         <AddProductTagsModal tagsArray={tagsArray} selectedIds={selectedIds} handleChange={handleChange} />
