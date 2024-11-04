@@ -63,7 +63,7 @@ export default function OfferOnPage({ onShowOfferPage }) {
     <>
       <Layout.Section>
         <BlockStack>
-          <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Add offer"} />
+          <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Add offer"} saveOfferButton={false}/>
           <InlineStack>
             {/** @ts-ignore*/}
             <Tabs tabs={boldTabs} selected={selected} onSelect={handleTabChange}>

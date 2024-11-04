@@ -49,6 +49,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
     }));
 
 
+    {/** @ts-ignore */}
     return (
         <>
             <Layout.Section>

@@ -1,30 +1,38 @@
 import { useState, useCallback } from "react";
-import { Button, ChoiceList, Text, Card, Tag, LegacyCard, ResourceItem, ResourceList, Avatar, InlineStack, Icon } from "@shopify/polaris";
+import { Button, ChoiceList, Text, Card, Tag, LegacyCard, ResourceItem, ResourceList, Avatar, InlineStack, Icon, InlineGrid } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import AddProductTagsModal from "./AddProductTagsModal";
 import AddProductsModal from "./AddProductsModal";
-import ViewIcon from '@shopify/polaris-icons';
+import { ViewIcon, XSmallIcon } from "@shopify/polaris-icons";
+
+
+
 
 function TagsUI(selectedIds) {
     return (
         Array.from(selectedIds).map(tag => (
-            <Tag key={tag} onRemove={() => selectedIds.delete(tag)}>{tag}</Tag>
+            <Tag
+                key={tag}
+                onRemove={() => selectedIds.delete(tag)}>{tag}</Tag>
         ))
     );
 }
 
 function SelectedProducts(pids) {
+    console.log("In selectedProducts " + JSON.stringify(pids));
     return (
-        <LegacyCard>
-            <ResourceList
-                resourceName={{ singular: 'product', plural: 'products' }}
-                items={pids}
-                renderItem={(item) => {
-                    const { id, name, img } = item;
-                    const media = <Avatar customer size="md" name={name} source={img}/>;
+        <div style={{ marginTop: '10px' }}>
+            <LegacyCard>
+                <ResourceList
+                    resourceName={{ singular: 'product', plural: 'products' }}
+                    items={pids}
+                    renderItem={(item) => {
+                        console.log("logging item " + item);
+                        const { id, name, img, isArchived } = item;
+                        const media = <Avatar customer size="md" name={name} source={img} />
 
-                    return (
-                        <InlineStack>
+                        return (
+
                             <ResourceItem
                                 id={id}
                                 name={name}
@@ -32,16 +40,31 @@ function SelectedProducts(pids) {
                                 url={''}
                                 accessibilityLabel={`View details for ${name}`}
                             >
-                                <Text variant="bodyMd" fontWeight="bold" as="h3">
-                                    {name}
-                                </Text>
+                                <InlineGrid columns={8}>
+                                    <div style={{width:'90%'}}>
+                                        <Text variant="bodyMd" fontWeight="medium" as="h3">
+                                            {name}
+                                        </Text>
+                                    </div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div>
+                                        <Icon source={ViewIcon} />
+                                    </div>
+                                    <div>
+                                        <Icon source={XSmallIcon}/>
+                                    </div>
+                                </InlineGrid>
                             </ResourceItem>
-                            <Icon source={ViewIcon} />;
-                        </InlineStack>
-                    );
-                }}
-            />
-        </LegacyCard>
+                            // <Icon source={ViewIcon} />
+                        );
+                    }}
+                />
+            </LegacyCard>
+        </div>
     )
 }
 
@@ -66,34 +89,36 @@ export default function TriggerCheckbox() {
         {
             id: "1",
             name: "Product One",
-            img: "/api/placeholder/100/100",  // Using placeholder image
+            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",  // Using placeholder image
             isArchived: false
         },
         {
             id: "2",
             name: "Product Two",
-            img: "/api/placeholder/100/100",
+            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
             isArchived: false
         },
         {
             id: "3",
             name: "Product Three",
-            img: "/api/placeholder/100/100",
+            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
             isArchived: true
         },
         {
             id: "4",
             name: "Product Four",
-            img: "/api/placeholder/100/100",
+            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
             isArchived: false
         },
         {
             id: "5",
             name: "Product Five",
-            img: "/api/placeholder/100/100",
+            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
             isArchived: true
         }
     ];
+
+    const pidsArray = productsArray.filter(pid => selectedPids.has(pid.name));
 
     const handleChange = useCallback((productId: string) => {
         console.log("change in productId " + productId)
@@ -109,7 +134,8 @@ export default function TriggerCheckbox() {
     }, []);
 
     const handlePidChanges = useCallback((pid: string) => {
-        console.log("change in productId " + pid)
+        console.log("change in productId " + pid);
+        console.log("Pids atm " + JSON.stringify(selectedPids));
         setSelectedPids((prev) => {
             const newSet = new Set(prev);
             if (newSet.has(pid)) {
@@ -138,9 +164,10 @@ export default function TriggerCheckbox() {
                     <Button variant="secondary" onClick={() => shopify.modal.show('my-product-modal')}>
                         <Text as="h6" fontWeight="bold" variant="headingSm">Select products</Text>
                     </Button>
+                    {SelectedProducts(pidsArray)}
                     <div style={{ marginTop: '10px' }}>
                         <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
-                        <AddProductsModal />
+                        <AddProductsModal tagsArray={productsArray} selectedIds={selectedPids} handleChange={handlePidChanges} modalId={"my-product-modalId"}/>
                     </div>
                 </div>);
             case "tags":
@@ -152,14 +179,14 @@ export default function TriggerCheckbox() {
                     <br />
                     {TagsUI(selectedIds)}
                     <div style={{ marginTop: '10px' }} >
-                        <Text as="p" variant="bodySm" fontWeight="regular"> The offer will be displayed on trigger product pages.</Text>
+                        <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
                         <AddProductTagsModal tagsArray={tagsArray} selectedIds={selectedIds} handleChange={handleChange} />
                     </div>
                 </>);
             case "all_products":
                 return (<>
                     {/* @ts-ignore */}
-                    <Text as="p" variant="bodySm" fontWeight="regular"> The offer will be displayed on trigger product pages.</Text>
+                    <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
                 </>);
         }
     }

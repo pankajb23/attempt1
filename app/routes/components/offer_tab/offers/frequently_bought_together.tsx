@@ -8,6 +8,9 @@ import {
 import TopHeadingBanner from "./top_heading_banner";
 import { useState } from "react";
 import TriggerCheckbox from "./commons/TriggerCheckbox";
+import OfferProductRadioButtonModal from "./commons/OfferProductRadioButtonModal";
+import DiscountModal from "./commons/DiscountsModal";
+import OtherDetailsModal from "./commons/OtherDetailsModal";
 
 export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
     const [offerName, setOfferName] = useState('')
@@ -16,6 +19,16 @@ export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
         setOfferName(offerName);
     }
 
+    const [isEnabledDiscountTicked, setIsEnabledDiscountedTicked] = useState<boolean>(false);
+    const [selectedChoice, setSelectedChoice] = useState<string | undefined>(undefined);
+
+    const handleCheckedBoxChange = (enabledDiscountedTicked: boolean) => {
+        setIsEnabledDiscountedTicked(enabledDiscountedTicked);
+    }
+
+    const handleSelectChoice = (selectedChoice: string) => {
+        setSelectedChoice(selectedChoice);
+    }
     return (
         <>
             <Layout.Section>
@@ -40,6 +53,9 @@ export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
                                         />
                                     </Card>
                                     <TriggerCheckbox />
+                                    <OfferProductRadioButtonModal />
+                                    <DiscountModal isEnabledDiscountTicked={isEnabledDiscountTicked} handleCheckedBoxChange={handleCheckedBoxChange} selectedChoice={selectedChoice} handleSelectedChoice={handleSelectChoice} />
+                                    <OtherDetailsModal />
                                 </BlockStack>
                             </Layout.Section>
                             <Layout.Section variant="oneThird">
