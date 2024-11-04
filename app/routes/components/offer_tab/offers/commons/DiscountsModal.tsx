@@ -26,30 +26,33 @@ export default function DiscountModal({ isEnabledDiscountTicked, handleCheckedBo
         <Text as="p" variant="bodySm" fontWeight="bold">Discount text</Text>
     )
     const discountDetails = (() => {
-        switch (selectedChoice) {
+        switch (selectedChoice[0]) {
             case 'percent_or_fixed_value':
+                const discountedValueLabel = (
+                    <Text as="p" variant="bodySm" fontWeight="bold">
+                        Discount value
+                    </Text>
+                )
                 return (
                     <>
                         <BlockStack gap="600">
-                            <InlineStack>
-                                <TextField
-                                    label="Quantity"
-                                    type="number"
-                                    value={value}
-                                    onChange={() => { }}
-                                    autoComplete="off"
-                                    placeholder="Optional, Eg. Buy this bundle and get {{discount}} off."
-                                    connectedRight={
-                                        <Select
-                                            value={"%"}
-                                            label="Weight unit"
-                                            onChange={() => { }}
-                                            labelHidden
-                                            options={["%", "Inr"]}
-                                        />
-                                    }
-                                />
-                            </InlineStack>
+                            <TextField
+                                label={discountedValueLabel}
+                                type="number"
+                                value={value}
+                                onChange={() => { }}
+                                autoComplete="off"
+                                placeholder="Optional, Eg. Buy this bundle and get {{discount}} off."
+                                connectedRight={
+                                    <Select
+                                        value={"%"}
+                                        label="Weight unit"
+                                        onChange={() => { }}
+                                        labelHidden
+                                        options={["%", "Inr"]}
+                                    />
+                                }
+                            />
                             <TextField
                                 label={discountedText}
                                 value={value}
@@ -63,16 +66,18 @@ export default function DiscountModal({ isEnabledDiscountTicked, handleCheckedBo
                                 <Text variant="bodyMd" as="p">
                                     This product discount can be combined with
                                 </Text>
-                                <div>
-                                    <Checkbox label="Other product discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
-                                    <Checkbox label="Shipping discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
-                                    <Checkbox label="Order discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
+                                <div style={{marginTop:'10px'}}>
+                                    <BlockStack>
+                                        <Checkbox label="Other product discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                        <Checkbox label="Shipping discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                        <Checkbox label="Order discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                    </BlockStack>
                                 </div>
                             </div>
                         </BlockStack>
@@ -95,22 +100,24 @@ export default function DiscountModal({ isEnabledDiscountTicked, handleCheckedBo
                                 <Text variant="bodyMd" as="p">
                                     This product discount can be combined with
                                 </Text>
-                                <div>
-                                    <Checkbox label="Other product discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
-                                    <Checkbox label="Shipping discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
-                                    <Checkbox label="Order discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
+                                <div style={{marginTop:'10px'}}>
+                                    <BlockStack>
+                                        <Checkbox label="Other product discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                        <Checkbox label="Shipping discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                        <Checkbox label="Order discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                    </BlockStack>
                                 </div>
                             </div>
                         </BlockStack>
                     </>
                 );
-            case "free_shipping" :
+            case "free_shipping":
                 (
                     <>
                         <BlockStack gap="600">
@@ -128,21 +135,23 @@ export default function DiscountModal({ isEnabledDiscountTicked, handleCheckedBo
                                 <Text variant="bodyMd" as="p">
                                     This product discount can be combined with
                                 </Text>
-                                <div>
-                                    <Checkbox label="Other product discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
-                                    <Checkbox label="Shipping discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
-                                    <Checkbox label="Order discounts"
-                                        checked={true}
-                                        onChange={() => { }} />
+                                <div style={{marginTop:'10px'}}>
+                                    <BlockStack>
+                                        <Checkbox label="Other product discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                        <Checkbox label="Shipping discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                        <Checkbox label="Order discounts"
+                                            checked={true}
+                                            onChange={() => { }} />
+                                    </BlockStack>
                                 </div>
                             </div>
                         </BlockStack>
                     </>
-                );    
+                );
         }
     }
 
@@ -150,28 +159,28 @@ export default function DiscountModal({ isEnabledDiscountTicked, handleCheckedBo
     return (
         <div>
             <Card>
-            <BlockStack gap='400'>
-                <Text as='p' variant="bodySm" fontWeight="bold"> Discounts</Text>
-                <Checkbox
-                    label={label}
-                    checked={isEnabledDiscountTicked}
-                    onChange={handleCheckedBoxChange}
-                />
-                {
-                    isEnabledDiscountTicked ? (
-                        <ChoiceList
-                            title={discountTypeHeading}
-                            choices={[
-                                { label: 'Percentage or Fixed value', value: 'percent_or_fixed_value' },
-                                { label: 'Cheapest item free', value: 'cheapest_item_free' },
-                                { label: 'Free shipping', value: 'free_shipping' },
-                            ]}
-                            selected={selectedChoice}
-                            onChange={handleSelectedChoice}
-                        />) : null
-                }
-                {discountDetails()}
-            </BlockStack>
+                <BlockStack gap='400'>
+                    <Text as='p' variant="bodySm" fontWeight="bold"> Discounts</Text>
+                    <Checkbox
+                        label={label}
+                        checked={isEnabledDiscountTicked}
+                        onChange={handleCheckedBoxChange}
+                    />
+                    {
+                        isEnabledDiscountTicked ? (
+                            <ChoiceList
+                                title={discountTypeHeading}
+                                choices={[
+                                    { label: 'Percentage or Fixed value', value: 'percent_or_fixed_value' },
+                                    { label: 'Cheapest item free', value: 'cheapest_item_free' },
+                                    { label: 'Free shipping', value: 'free_shipping' },
+                                ]}
+                                selected={selectedChoice}
+                                onChange={handleSelectedChoice}
+                            />) : null
+                    }
+                    {discountDetails()}
+                </BlockStack>
             </Card>
         </div>
     );

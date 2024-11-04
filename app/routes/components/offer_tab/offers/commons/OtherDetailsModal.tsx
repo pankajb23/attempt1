@@ -13,10 +13,17 @@ export default function OtherDetailsModal() {
         </Text>
     )
 
+    const otherPriorityLabel = (
+        <Text as="p" variant="bodySm" fontWeight="bold">
+            Other priority
+        </Text>
+    )
+
     return (
         <>
             <Card>
-                <BlockStack gap="600">
+                <BlockStack gap="400">
+                    {otherPriorityLabel}
                     <TextField
                         label={overrideTextFieldLabel}
                         value={null}

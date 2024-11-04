@@ -20,14 +20,17 @@ export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
     }
 
     const [isEnabledDiscountTicked, setIsEnabledDiscountedTicked] = useState<boolean>(false);
-    const [selectedChoice, setSelectedChoice] = useState<string | undefined>(undefined);
+    const [selectedChoice, setSelectedChoice] = useState<string[]>([]);
+
+    
+
+    const handleSelectChoice = (selectedChoice: string[]) => {
+        console.log("Selected choices " + selectedChoice);
+        setSelectedChoice(selectedChoice);
+    }
 
     const handleCheckedBoxChange = (enabledDiscountedTicked: boolean) => {
         setIsEnabledDiscountedTicked(enabledDiscountedTicked);
-    }
-
-    const handleSelectChoice = (selectedChoice: string) => {
-        setSelectedChoice(selectedChoice);
     }
     return (
         <>
