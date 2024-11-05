@@ -10,10 +10,9 @@ import {
 } from '@shopify/polaris';
 import type { TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
-import SafeSpan from '../custom/SafeSpan';
 import '../../css/Custom.css';
-import { OfferType } from '../offer_tab/offer_types_util';
 import MainPageOfferDashboardColumns from 'app/lib/data/MainPageDashboardColums';
+import SafeSpan from '../../custom/SafeSpan';
 
 export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
     const itemStrings = MainPageOfferDashboardColumns();
@@ -24,8 +23,8 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
         onAction: () => { },
         id: `${item}-${index}`,
         isLocked: index === 0,
-
     }));
+    
     const [selected, setSelected] = useState(0);
     const { mode, setMode } = useSetIndexFiltersMode();
     const onHandleCancel = () => { };

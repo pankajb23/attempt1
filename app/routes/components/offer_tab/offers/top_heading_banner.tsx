@@ -13,10 +13,9 @@ export default function TopHeadingBanner({ onShowOfferPage, heading, saveOfferBu
                         <Text as="h5" variant="headingLg"> {heading}
                         </Text>
                         {saveOfferButton ? <Button variant="primary" >Save Offer</Button> : null}
-                        
                     </InlineGrid>
                 </div>
             </InlineStack>
         </>
     );
-}
+} 
