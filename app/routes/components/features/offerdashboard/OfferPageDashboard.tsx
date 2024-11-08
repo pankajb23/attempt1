@@ -8,11 +8,14 @@ import {
 
 import { useState, useCallback } from "react";
 
-import WidgetManager from "./widget_manager";
-import TopHeadingBanner from "./offers/top_heading_banner";
+import TopHeadingBanner from "../../common/TopHeaderBanner";
 import { OfferTabs } from "app/lib/data/OfferPageVariations";
+import { useTranslation } from "react-i18next";
+import WidgetManager from "./widget/WidgetManager";
+import HelpBottonModal from "../../common/HelpBottomModal";
 
-export default function OfferOnPage({ onShowOfferPage }) {
+export default function OfferOnPageDashboard({ navigateTo }) {
+  const {t} = useTranslation();
   const [selected, setSelected] = useState(0);
 
   const handleTabChange = useCallback(
@@ -29,13 +32,14 @@ export default function OfferOnPage({ onShowOfferPage }) {
     <>
       <Layout.Section>
         <BlockStack>
-          <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Add offer"} saveOfferButton={false} />
+          <TopHeadingBanner navigateTo={navigateTo} heading={t("offer.add")} saveOfferButton={false} />
           <InlineStack>
             {/** @ts-ignore*/}
             <Tabs tabs={boldTabs} selected={selected} onSelect={handleTabChange}>
-              <WidgetManager filter={OfferTabs[selected].id} onShowOfferPage={onShowOfferPage} />
+              <WidgetManager filter={OfferTabs[selected].id} navigateTo={navigateTo} />
             </Tabs>
           </InlineStack>
+          <HelpBottonModal />
         </BlockStack>
       </Layout.Section>
     </>

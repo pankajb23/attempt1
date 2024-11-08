@@ -9,7 +9,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { authenticate } from "../shopify.server";
 import store from "app/lib/reducers/ReduxStore";
-import i18n from 'app/assets/i18n/config';
+import i18n from "app/assets/i18n/config";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 

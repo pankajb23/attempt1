@@ -12,12 +12,15 @@ import type { TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
 import SafeSpan from '../custom/SafeSpan';
 import '../../css/Custom.css';
-import { OfferType } from '../offer_tab/offer_types_util';
 import MainPageOfferDashboardColumns from 'app/lib/data/MainPageDashboardColums';
+import { useTranslation } from "react-i18next";
+import { NavigationPage } from 'app/lib/enums/NavigationPage';
 
-export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
+export default function OfferTabModal({ onShowOfferPage }) {
+    const { t } = useTranslation();
+
     const itemStrings = MainPageOfferDashboardColumns();
-
+    
     const tabs: TabProps[] = itemStrings.map((item, index) => ({
         content: item,
         index,
@@ -26,6 +29,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
         isLocked: index === 0,
 
     }));
+
     const [selected, setSelected] = useState(0);
     const { mode, setMode } = useSetIndexFiltersMode();
     const onHandleCancel = () => { };
@@ -51,7 +55,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
                 <LegacyCard>
                     <IndexFilters
                         queryValue={queryValue}
-                        queryPlaceholder="Search by product name, trigger product or trigger tag"
+                        queryPlaceholder={t("offer.dashboard.placeholder.query")}
                         onQueryChange={handleFiltersQueryChange}
                         onQueryClear={() => setQueryValue('')}
                         cancelAction={{
@@ -69,22 +73,21 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
                         mode={mode}
                         setMode={setMode}
                         hideFilters
-                        filteringAccessibilityTooltip="Search and Filter (F)"
+                        filteringAccessibilityTooltip={t("offer.dashboard.placeholder.accessiblity_tool_tip")}
                     />
                     <BlockStack align='center' inlineAlign="center">
                         <EmptyState
-                            heading="Add an offer to get started"
+                            heading= { t("offer.get_started")}
                             action={{
-                                content: 'Add offer',
+                                content: t("offer.add"),
                                 onAction: () => {
-                                    console.log('Add offer clicked');
-                                    onShowOfferPage(OfferType.BaseOfferPage);
+                                    onShowOfferPage(NavigationPage.OFFER_PAGE_DASHBOARD);
                                     // Add your action handler here
                                 },
                             }}
                             image="https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Empty_state.svg"
                         >
-                            <p>Display products as upsell & cross-sell offers</p>
+                            <p>{t("offer.display_products")}</p>
                         </EmptyState>
                     </BlockStack>
                 </LegacyCard>

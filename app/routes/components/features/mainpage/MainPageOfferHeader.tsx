@@ -4,7 +4,7 @@ import {
     Button,
     InlineGrid,
 } from "@shopify/polaris";
-import { OfferType } from "../../offer_tab/offer_types_util";
+import { NavigationPage } from "app/lib/enums/NavigationPage";
 import { useTranslation } from 'react-i18next';
 
 export default function MainPageOfferHeader({ navigateToPage }) {
@@ -17,7 +17,7 @@ export default function MainPageOfferHeader({ navigateToPage }) {
                         {t("offers.literal")}
                     </Text>
                     <Button
-                        onClick={() => { navigateToPage(OfferType.BaseOfferPage) }}
+                        onClick={() => { navigateToPage(NavigationPage.OFFER_PAGE_DASHBOARD) }}
                         accessibilityLabel="Export variants"
                         variant="primary">{t("offer.add")} </Button>
                 </InlineGrid>

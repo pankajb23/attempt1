@@ -18,10 +18,8 @@ export const { navigateTo } = navigationPageReducerSlicer.actions;
 
 //Selectors
 // Get the full user accessibility state
-export const selectUserCurrentPage = (state) => {
-    console.log("state " + JSON.stringify(state));
-    return state.pageView;
-}
+export const selectUserCurrentPage = (state) => state.navigateTo.pageView;
+
 
 // export
 export default navigationPageReducerSlicer.reducer;

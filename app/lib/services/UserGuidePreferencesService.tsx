@@ -46,17 +46,24 @@ export class MockUserGuidePreferencesDAO implements UseGuidePreferencesDAO {
     }
 
     update(data: UserGuidePreferences): Promise<void> {
-        this.mockData = data;
+        this.mockData = {...data};
         return Promise.resolve();
     }
 
     updateShowAssistanceOnMainPageEnabled(isShowAssistanceOnMainPageEnabled: boolean): Promise<void> {
-        this.mockData.isShowAssistanceOnMainPageEnabled = isShowAssistanceOnMainPageEnabled;
+        this.mockData = {
+            ...this.mockData,
+            isShowAssistanceOnMainPageEnabled
+        };
+        console.log("reached here "+ JSON.stringify(this.mockData));
         return Promise.resolve();
     }
 
     updateShowWarningOnOfferPageEnabled(isShowWarningOnOfferPageEnabled: boolean): Promise<void> {
-        this.mockData.isShowWarningOnOfferPageEnabled = isShowWarningOnOfferPageEnabled;
+        this.mockData = {
+            ...this.mockData,
+            isShowWarningOnOfferPageEnabled
+        };
         return Promise.resolve();
     }
 }

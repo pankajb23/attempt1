@@ -5,8 +5,11 @@ import {
     BlockStack,
     Card
 } from "@shopify/polaris";
+import { useTranslation } from "react-i18next";
 
-export default function OfferWidget({ header, message, img, onShowOfferPage, offerType }) {
+export default function OfferWidget({ header, message, img, navigateTo, offerType }) {
+    const { t } = useTranslation();
+
     return (
         <div style={{ width: "320px" }}>
             <Card>
@@ -28,8 +31,8 @@ export default function OfferWidget({ header, message, img, onShowOfferPage, off
                         <Text as="p" variant="bodySm">{message}</Text>
                     </BlockStack>
                     <InlineStack align="end" blockAlign="end" gap="1000">
-                        <Button textAlign="end" variant="primary" onClick={() => onShowOfferPage(offerType)}>
-                            Create
+                        <Button textAlign="end" variant="primary" onClick={() => navigateTo(offerType)}>
+                            {t("offer.widget.create")}
                         </Button>
                     </InlineStack>
                 </BlockStack>

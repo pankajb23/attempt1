@@ -13,6 +13,7 @@ import { useState, useCallback } from 'react';
 import '../../css/Custom.css';
 import MainPageOfferDashboardColumns from 'app/lib/data/MainPageDashboardColums';
 import SafeSpan from '../../custom/SafeSpan';
+import { NavigationPage } from 'app/lib/enums/NavigationPage';
 
 export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
     const itemStrings = MainPageOfferDashboardColumns();
@@ -24,7 +25,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
         id: `${item}-${index}`,
         isLocked: index === 0,
     }));
-    
+
     const [selected, setSelected] = useState(0);
     const { mode, setMode } = useSetIndexFiltersMode();
     const onHandleCancel = () => { };
@@ -76,8 +77,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
                             action={{
                                 content: 'Add offer',
                                 onAction: () => {
-                                    console.log('Add offer clicked');
-                                    onShowOfferPage(OfferType.BaseOfferPage);
+                                    onShowOfferPage(NavigationPage.OFFER_PAGE_DASHBOARD);
                                     // Add your action handler here
                                 },
                             }}

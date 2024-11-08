@@ -3,17 +3,18 @@ import {
   Layout,
   BlockStack,
 } from "@shopify/polaris";
-import IndexFiltersDefaultExample from './components/offer/offer_tab';
-import SetupAssistance from "./components/offer/setup_assistance";
+import OfferTabModal from './components/offer/OfferTabModal';
+import SetupAssistance from "./components/offer/SetupAssistance";
 import HelpBottonModal from "./components/common/HelpBottomModal";
 import MainPageOfferHeader from "./components/features/mainpage/MainPageOfferHeader";
 import { useCallback } from "react";
-import OfferOnPage from "./components/offer_tab/OfferPageDashboard";
-import FrequentlyBoughtTogether from "./components/offer_tab/offers/frequently_bought_together";
+import OfferOnPageDashboard from "./components/features/offerdashboard/OfferPageDashboard";
+import FrequentlyBoughtTogether from "./components/features/frequentlyboughttogether/FrequentlyBoughtTogether";
 import { useDispatch, useSelector } from "react-redux";
-import { selectShowAssistanceOnMainPage, updateAssistanceOnMainPage, UserGuidePreferencesInitializer, selectIsLoading } from "app/lib/reducers/UserGuidePreferencesReducer";
+import { selectShowAssistanceOnMainPage,updateAssistanceOnMainPageThunk, UserGuidePreferencesInitializer, selectIsLoading } from "app/lib/reducers/UserGuidePreferencesReducer";
 import { selectUserCurrentPage, navigateTo } from "app/lib/reducers/NavigationPageReducer";
 import { NavigationPage } from "app/lib/enums/NavigationPage";
+
 
 export default function Index() {
   const isLoadingDone = useSelector(state => selectIsLoading(state));
@@ -22,10 +23,12 @@ export default function Index() {
   const dispatch = useDispatch();
 
   const setupShowAssistanceCallback = useCallback((flag: boolean) => {
-    dispatch(updateAssistanceOnMainPage(false));
+    const value:any = updateAssistanceOnMainPageThunk(false)
+    dispatch(value);
   }, [dispatch]);
 
   const navigateToSelector = useSelector(state => selectUserCurrentPage(state));
+
   const navigateToCallback = useCallback((navigateToPage: NavigationPage) => {
     dispatch(navigateTo(navigateToPage));
   }, [dispatch]);
@@ -35,25 +38,24 @@ export default function Index() {
   if (isLoadingDone) {
     console.log("Loading user preferences for the first time");
   } else {
-    console.log("User loading is done navigateToSelector "+ navigateToSelector + " loading done " + isLoadingDone);
+    console.log("nvigateToSelector "+ navigateToSelector);
     const renderOfferPage = () => {
       switch (navigateToSelector) {
         case NavigationPage.MAIN_PAGE:
-
           return (
             <>
               < MainPageOfferHeader navigateToPage={navigateToCallback} />
-              {showAssistanceSelector ? < SetupAssistance showSetupAssistance={setupShowAssistanceCallback} /> : null}
-              <IndexFiltersDefaultExample onShowOfferPage={navigateToCallback} />
+              {showAssistanceSelector ? < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} /> : null}
+              <OfferTabModal onShowOfferPage={navigateToCallback} />
               <HelpBottonModal />
             </>
           );
 
         case NavigationPage.OFFER_PAGE_DASHBOARD:
-          return <OfferOnPage onShowOfferPage={navigateToCallback} />
+          return <OfferOnPageDashboard navigateTo={navigateToCallback} />
 
         case NavigationPage.FREQUENTLY_BOUGHT_TOGETHER:
-          return <FrequentlyBoughtTogether onShowOfferPage={navigateToCallback} />
+          return <FrequentlyBoughtTogether navigateTo={navigateToCallback} />
       }
     }
 

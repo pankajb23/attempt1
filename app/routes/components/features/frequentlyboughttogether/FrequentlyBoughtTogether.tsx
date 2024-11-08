@@ -5,24 +5,25 @@ import {
     Text,
     TextField,
 } from "@shopify/polaris";
-import TopHeadingBanner from "./top_heading_banner";
+import TopHeadingBanner from "../../common/TopHeaderBanner";
 import { useState } from "react";
-import TriggerCheckbox from "./commons/TriggerCheckbox";
-import OfferProductRadioButtonModal from "./commons/OfferProductRadioButtonModal";
-import DiscountModal from "./commons/DiscountsModal";
-import OtherDetailsModal from "./commons/OtherDetailsModal";
+import TriggerCheckbox from "../../offer_tab/offers/commons/TriggerCheckbox";
+import OfferProductRadioButtonModal from "../../offer_tab/offers/commons/OfferProductRadioButtonModal";
+import DiscountModal from "../../offer_tab/offers/commons/DiscountsModal";
+import OtherDetailsModal from "../../offer_tab/offers/commons/OtherDetailsModal";
+import { useTranslation } from "react-i18next";
 
-export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
+export default function FrequentlyBoughtTogether({ navigateTo }) {
+    const { t } = useTranslation();
+
     const [offerName, setOfferName] = useState('')
     const setOfferNameDef = (offer) => {
-        console.log("Setting offer name " + offer + " from " + offerName);
         setOfferName(offerName);
     }
 
     const [isEnabledDiscountTicked, setIsEnabledDiscountedTicked] = useState<boolean>(false);
     const [selectedChoice, setSelectedChoice] = useState<string[]>([]);
 
-    
 
     const handleSelectChoice = (selectedChoice: string[]) => {
         console.log("Selected choices " + selectedChoice);
@@ -32,11 +33,12 @@ export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
     const handleCheckedBoxChange = (enabledDiscountedTicked: boolean) => {
         setIsEnabledDiscountedTicked(enabledDiscountedTicked);
     }
+
     return (
         <>
             <Layout.Section>
                 <BlockStack >
-                    <TopHeadingBanner onShowOfferPage={onShowOfferPage} heading={"Frequently Bought Together"} saveOfferButton={true} />
+                    <TopHeadingBanner navigateTo={navigateTo} heading={t("pages.frequently_bought_together.heading")} saveOfferButton={true} />
                 </BlockStack>
                 <div style={{ marginTop: "16px" }}>
                     <BlockStack gap='200'>
@@ -45,12 +47,12 @@ export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
                                 <BlockStack gap='300' >
                                     <Card>
                                         <Text as="h5" variant="headingSm" fontWeight="bold">
-                                            Offer name - for internal reference
+                                            {t("pages.frequently_bought_together.offer_name.heading")}
                                         </Text>
                                         <TextField
                                             value={offerName}
                                             onChange={setOfferNameDef}
-                                            placeholder="Eg: Upsell for mobile phones"
+                                            placeholder={t("pages.frequently_bought_together.offer_name.placeholder")}
                                             label=""
                                             autoComplete="off"
                                         />
@@ -62,10 +64,8 @@ export default function FrequentlyBoughtTogether({ onShowOfferPage }) {
                                 </BlockStack>
                             </Layout.Section>
                             <Layout.Section variant="oneThird">
-
                             </Layout.Section>
                         </Layout>
-
                     </BlockStack>
                 </div>
             </Layout.Section>
