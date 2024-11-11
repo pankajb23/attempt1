@@ -1,7 +1,7 @@
 
 export interface OtherPriorities {
     defaultWidgetTitle?: string
-    offerPriority?: number
+    offerPriority?: string
 }
 
 // Enum for discount types (radio button options)
@@ -100,7 +100,7 @@ export interface FrequentlyBoughtTogetherType {
     offerName: string
     trigger?: Trigger
     offerProducts?: OfferProductsManual | OfferProductsAutomatic
-    enableDiscount?: DiscountState
+    discountState?: DiscountState
     otherPriorities?: OtherPriorities
 }
 
@@ -108,7 +108,7 @@ export interface FrequentlyBoughtTogetherType {
 
 
 // Helper functions moved outside for reusability
-export const getMockedData = () => ({
+export const getMockedData = (): FrequentlyBoughtTogetherType => ({
     offerName: "Summer Special Bundle",
     trigger: {
         type: "specific_products",
@@ -144,25 +144,10 @@ export const getMockedData = () => ({
                         tag: "beach"
                     }
                 ]
-            },
-            {
-                type: "products",
-                products: [
-                    {
-                        label: "Sunglasses",
-                        link: "/products/sunglasses",
-                        img: "/images/sunglasses.jpg"
-                    },
-                    {
-                        label: "Beach Hat",
-                        link: "/products/beach-hat",
-                        img: "/images/beach-hat.jpg"
-                    }
-                ]
             }
         ]
     },
-    enableDiscount: {
+    discountState: {
         isEnabled: true,
         selectedType: "percentOrFixed",
         config: {
@@ -186,6 +171,6 @@ export const getMockedData = () => ({
     },
     otherPriorities: {
         defaultWidgetTitle: "Frequently Bought Together",
-        offerPriority: 1
+        offerPriority: "1"
     }
 });

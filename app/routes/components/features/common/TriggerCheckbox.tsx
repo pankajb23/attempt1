@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react";
-import { Button, ChoiceList, Text, Card, Tag, LegacyCard, ResourceItem, ResourceList, Avatar, InlineStack, Icon, InlineGrid } from "@shopify/polaris";
+import { Button, ChoiceList, Text, Card, Tag, LegacyCard, ResourceItem, ResourceList, Avatar, Icon, InlineGrid } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import AddProductTagsModal from "./AddProductTagsModal";
 import AddProductsModal from "./AddProductsModal";
 import { ViewIcon, XSmallIcon } from "@shopify/polaris-icons";
-
-
+import { useSelector } from "react-redux";
+import { selectPids, selectTags } from "app/lib/reducers/RestClientReducer";
+import { useTranslation } from "react-i18next";
 
 
 function TagsUI(selectedIds) {
@@ -69,55 +70,16 @@ function SelectedProducts(pids) {
 }
 
 export default function TriggerCheckbox() {
+    const productsArray = useSelector(state => selectPids(state));
+    const tagsArray = useSelector(state => selectTags(state));
+    const {t} = useTranslation();
+    
     const [selected, setSelected] = useState<string[]>(["specific_products"]);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [selectedPids, setSelectedPids] = useState<Set<string>>(new Set());
 
     const shopify = useAppBridge();
-
-    const tagsArray = [
-        "Accessory",
-        "Archived",
-        "Premium",
-        "Snow",
-        "Snowboard",
-        "Sport",
-        "Winter"
-    ];
-
-    const productsArray = [
-        {
-            id: "1",
-            name: "Product One",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",  // Using placeholder image
-            isArchived: false
-        },
-        {
-            id: "2",
-            name: "Product Two",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
-            isArchived: false
-        },
-        {
-            id: "3",
-            name: "Product Three",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
-            isArchived: true
-        },
-        {
-            id: "4",
-            name: "Product Four",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
-            isArchived: false
-        },
-        {
-            id: "5",
-            name: "Product Five",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
-            isArchived: true
-        }
-    ];
-
+    
     const pidsArray = productsArray.filter(pid => selectedPids.has(pid.name));
 
     const handleChange = useCallback((productId: string) => {

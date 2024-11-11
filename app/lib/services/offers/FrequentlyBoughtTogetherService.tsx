@@ -4,13 +4,13 @@ export interface FrequentlyBoughtTogetherDAO {
     // we will not allow duplicates here.
     find(offerName: string, userId: string): Promise<FrequentlyBoughtTogetherType>
     delete(offerName: string, label: string, userId: string): Promise<void>
-    upsert(label: string, userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType>
+    upsert(userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType>
 }
 
 export class MockedFrequentlyBoughtTogetherDAO implements FrequentlyBoughtTogetherDAO {
     private mockedData: FrequentlyBoughtTogetherType = getMockedData();
 
-    upsert(label: string, userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType> {
+    upsert(userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType> {
         this.mockedData = type
         return Promise.resolve(this.mockedData);
     }
@@ -40,8 +40,8 @@ export class FrequentlyBoughtTogetherService {
         return this.dao.delete(offerName, label, userId);
     }
 
-    upsert(label: string, userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType> {
-        return this.dao.upsert(label, userId, type, offerId);
+    upsert(userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType> {
+        return this.dao.upsert(userId, type, offerId);
     }
 }
 

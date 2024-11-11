@@ -3,6 +3,7 @@ import { UserGuidePreferencesService } from '../services/UserGuidePreferencesSer
 import { type UserGuidePreferences } from 'app/types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 const userGuidePreferences: UserGuidePreferencesService = new UserGuidePreferencesService();
 
 // Create async thunks for API calls
@@ -14,9 +15,11 @@ export const updateAssistanceOnMainPageThunk = createAsyncThunk(
             const response = await userGuidePreferences.updateShowAssistanceOnMainPageEnabled(isEnabled);
             console.log("userPreferences post " + isEnabled + " response " + response);
             return isEnabled;
-        } catch (err) {
-            console.error("Update failed:", err);
-            return thunkAPI.rejectWithValue(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                console.error("Update failed:", err);
+                return thunkAPI.rejectWithValue(err.message);
+            }
         }
     }
 );

@@ -2,8 +2,8 @@ import { Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select, Leg
 import { useState, useCallback } from "react";
 import { AlertCircleIcon, XSmallIcon, MenuVerticalIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from "@shopify/app-bridge-react";
-import AddProductsModal from "../../../features/common/AddProductsModal";
-import AutomaticOfferProducts from "../../../features/common/AutomaticOfferProducts";
+import AddProductsModal from "./AddProductsModal";
+import AutomaticOfferProducts from "./AutomaticOfferProducts";
 
 function SelectedProducts(pids) {
     console.log("In selectedProducts " + JSON.stringify(pids));
@@ -94,39 +94,6 @@ export default function OfferProductRadioButtonModal() {
         });
     }, []);
 
-
-    const productsArray = [
-        {
-            id: "1",
-            name: "Product One",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",  // Using placeholder image
-            isArchived: false
-        },
-        {
-            id: "2",
-            name: "Product Two",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
-            isArchived: false
-        },
-        {
-            id: "3",
-            name: "Product Three",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
-            isArchived: true
-        },
-        {
-            id: "4",
-            name: "Product Four",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
-            isArchived: false
-        },
-        {
-            id: "5",
-            name: "Product Five",
-            img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
-            isArchived: true
-        }
-    ];
 
     const pidsArray = productsArray.filter(pid => selectedPids.has(pid.name));
 

@@ -1,12 +1,11 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { FrequentlyBoughtTogetherService } from 'app/lib/services/offers/FrequentlyBoughtTogetherService';
 import {
     type FrequentlyBoughtTogetherType,
     type Trigger,
     type OfferProductsManual,
     type OfferProductsAutomatic,
-    type DiscountState,
-    type OtherPriorities
+    type DiscountState
 } from 'app/routes/components/types/FrequentlyBoughtTogetherTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -57,14 +56,16 @@ export const saveOfferContent = createAsyncThunk(
         try {
             const response = await service.upsert(userId, type, offerId);
             return response;
-        } catch (error) {
-            return rejectWithValue(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return rejectWithValue(error.message);
+            }
         }
     }
 );
 
-const frequentlyBoughtTogetherSlice = createSlice({
-    name: 'frequentlyBoughtTogether',
+const FrequentlyBoughtTogetherSlicer = createSlice({
+    name: 'FrequentlyBoughtTogetherReducer',
     initialState,
     reducers: {
         setInitialState: (state, action: PayloadAction<FrequentlyBoughtTogetherType>) => {
@@ -93,13 +94,21 @@ const frequentlyBoughtTogetherSlice = createSlice({
         },
         updateDiscount: (state, action: PayloadAction<DiscountState>) => {
             if (state.draftContent) {
-                state.draftContent.enableDiscount = action.payload;
+                state.draftContent.discountState = action.payload;
                 state.hasUnsavedChanges = true;
             }
         },
-        updateOtherPriorities: (state, action: PayloadAction<OtherPriorities>) => {
+        updateDiscountState: (state, action: PayloadAction<{field:string, value:any}>) => {
             if (state.draftContent) {
-                state.draftContent.otherPriorities = action.payload;
+                const { field, value } = action.payload;
+                state.draftContent.discountState[field] = value;
+                state.hasUnsavedChanges = true;
+            }
+        },
+        updateOtherPriorities: (state, action: PayloadAction<{ field: string; value: string }>) => {
+            if (state.draftContent) {
+                const { field, value } = action.payload;
+                state.draftContent.otherPriorities[field] = value;
                 state.hasUnsavedChanges = true;
             }
         },
@@ -155,14 +164,19 @@ export const {
     updateTrigger,
     updateOfferProducts,
     updateDiscount,
+    updateDiscountState,
     updateOtherPriorities,
     discardChanges,
     updateDraftContent
-} = frequentlyBoughtTogetherSlice.actions;
+} = FrequentlyBoughtTogetherSlicer.actions;
 
 // Selectors
 export const selectLoading = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) =>
     state.frequentlyBoughtTogether.loading;
+
+export const selectOfferName = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => {
+    return state.frequentlyBoughtTogether.draftContent?.offerName ?? '';
+}
 
 export const selectError = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) =>
     state.frequentlyBoughtTogether.error;
@@ -193,4 +207,4 @@ export const FrequentlyBoughtTogetherInitializer = ({ userId, offerLabel }: { us
     return null;
 };
 
-export default frequentlyBoughtTogetherSlice.reducer;
+export default FrequentlyBoughtTogetherSlicer.reducer;

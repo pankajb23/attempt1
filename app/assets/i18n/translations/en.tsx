@@ -8,8 +8,50 @@ export const en = {
             offer_name:{
                 heading:"Offer name - for internal reference",
                 placeholder:"Eg: Upsell for mobile phones"
+            },
+            checkbox:{
+                percentOrFixed:{
+                    heading: "Percentage or Fixed value",
+                    label:"Discount value",
+                    placeholder: "Optional, Eg. Buy this bundle and get {{discount}} off.",
+                },
+                cheapestItemFree: {
+                    heading:"Cheapest item free",
+                    placeholder:"Optional, Eg. Buy this bundle and get {{free_product}} for free.",
+                },
+                freeShipping:{
+                    heading: "Free shipping",
+                    placeholder:"Get free shipping for your order"
+                }
+            },
+            discount:{
+                label:"Discounts",
+                combination: "Discount combination",
+                combined: "This product discount can be combined with",
+            } 
+        },
+        discount:{
+            enable:{
+                heading:"Enable discount",
+                bundle:"Bundle discount for product page upsell.",
+                discounting:{
+                    heading:"Discount type",
+                    text:"Discount text"
+                }
             }
-            
+        },
+        other:{
+            override:{
+                heading:"Override default widget title that appears in online store",
+                placeholder:"Optional, Eg. Accessories for {{trigger}}"
+            },
+            offer_priority:{
+                heading:"Offer priority",
+                placeholder:"Optional, Eg: 10"
+            },
+            caution:{
+                content:"If more than one offer exists for a trigger product, the highest priority offer will be chosen."
+            }
         }
     },
     offer: {
