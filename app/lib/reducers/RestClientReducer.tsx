@@ -20,13 +20,12 @@ const RestClientSlicer = createSlice({
     initialState,
     reducers: {
         setInitialize: (state, action) => {
-            const { tags, pids, pidsTags } = action.payload;
-
+            const { allTags, products, tags } = action.payload;
             state.loading = false;
             state.error = null;
-            state.tags = tags;
-            state.pids = pids;
-            state.pidsTags = pidsTags;
+            state.tags = allTags;
+            state.pids = products;
+            state.pidsTags = tags;
         }
     }
 });
@@ -45,7 +44,7 @@ export const selectPids = (state) => state.restClientReducer.pids;
 
 export const selectTags = (state) => state.restClientReducer.tags;
 
-
+export const selectVariants = (state) => state.restClientReducer.pidsTags;    
 
 export const ProductCallInitializer = ({ userId }: { userId: string }) => {
     const dispatch = useDispatch();

@@ -50,7 +50,7 @@ const userOnboardingStatesSlicer = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(updateAssistanceOnMainPageThunk.fulfilled, (state, action) => {
-                console.log("userPreferences pressed in extra reducers " + action.payload);
+                // console.log("userPreferences pressed in extra reducers " + action.payload);
                 if (state.preferences) {
                     state.preferences.isShowAssistanceOnMainPageEnabled = action.payload;
                 }

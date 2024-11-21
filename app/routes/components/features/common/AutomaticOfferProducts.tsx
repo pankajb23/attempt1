@@ -13,6 +13,7 @@ export default function AutomaticOfferProducts({ value, handleChange }) {
                         label={label}
                         type="number"
                         value={value}
+                        max={5}
                         onChange={handleChange}
                         autoComplete="off"
                         helpText="You can show a maximum of 5 offer products."

@@ -34,7 +34,7 @@ export const en = {
             enable:{
                 heading:"Enable discount",
                 bundle:"Bundle discount for product page upsell.",
-                discounting:{
+                discount:{
                     heading:"Discount type",
                     text:"Discount text"
                 }
@@ -46,6 +46,7 @@ export const en = {
                 placeholder:"Optional, Eg. Accessories for {{trigger}}"
             },
             offer_priority:{
+                content: "Other priorities",
                 heading:"Offer priority",
                 placeholder:"Optional, Eg: 10"
             },

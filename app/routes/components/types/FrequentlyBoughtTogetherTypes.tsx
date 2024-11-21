@@ -174,3 +174,4 @@ export const getMockedData = (): FrequentlyBoughtTogetherType => ({
         offerPriority: "1"
     }
 });
+// make it more simple,, no array or anything

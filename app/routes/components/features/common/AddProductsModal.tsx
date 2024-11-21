@@ -1,50 +1,27 @@
 import { useState, useCallback, useEffect } from "react";
-import { Checkbox, BlockStack, ResourceItem, LegacyFilters, ResourceList, InlineStack, Text, Thumbnail } from "@shopify/polaris";
+import { BlockStack, LegacyFilters, ResourceList, LegacyCard } from "@shopify/polaris";
 import { Modal, TitleBar } from "@shopify/app-bridge-react";
+import type { ResourceListProps } from "@shopify/polaris";
+// import type { ResourceListSelectedItems 
 
-export default function AddProductsModal({ tagsArray, selectedIds, handleChange, modalId }) {
+export default function AddProductsModal({ allProducts, selectedProducts, addSelectedProducts, modalId, render }) {
+    const [selectedItems, setSelectedItems] = useState<ResourceListProps["selectedItems"]>([]);
     const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
-    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
 
-    const onSelectingTags = useCallback((productId: string) => {
-        setSelectedTags((prev) => {
-            const newSet = new Set(prev);
-            if (newSet.has(productId)) {
-                newSet.delete(productId);
-            } else {
-                newSet.add(productId);
-            }
-            return newSet;
-        });
-    }, []);
-
-    const handleQueryValueRemove = useCallback(
-        () => setQueryValue(undefined),
-        []
-    );
-
-    const handleClearAll = useCallback(() => {
-        handleQueryValueRemove();
-    }, [handleQueryValueRemove]);
-
-    console.log("Pid Modal " + JSON.stringify(tagsArray));
-
-    const newDs = tagsArray.map(pidModal => ({
-        name: pidModal.name,
-        img: pidModal.img
-    })).filter((item) =>
-        !queryValue  // this checks for undefined, null, empty string
-        || item.name.toLowerCase().includes(queryValue.toLowerCase())  // case-insensitive search
-    )
-        .map((item) => ({
-            name: item.name,
-            img: item.img,
-            isChecked: selectedIds.has(name) || selectedTags.has(item.name)
-        }));
-
-    const resourceName = {
-        singular: "tag",
-        plural: "tags",
+    const newDs = () => {
+        if (Array.isArray(allProducts)) {
+            return allProducts.map(modal => ({
+                name: modal.label,
+                pid: modal.pid,
+                tagId: modal.tagId, 
+                img: modal.img
+            })).filter((item) => {
+                return !queryValue  // this checks for undefined, null, empty string
+                    || item.name.toLowerCase().includes(queryValue.toLowerCase())  // case-insensitive search
+            });
+        } else {
+            return [];
+        }
     }
 
     useEffect(() => {
@@ -56,59 +33,62 @@ export default function AddProductsModal({ tagsArray, selectedIds, handleChange,
         document.addEventListener('keydown', handleEscKey);
     });
 
+
+    const handleQueryValueChange = useCallback(
+        (value: string) => setQueryValue(value),
+        []
+    );
+    const handleQueryValueRemove = useCallback(
+        () => setQueryValue(undefined),
+        []
+    );
+
+    const handleClearAll = useCallback(() => {
+        handleQueryValueRemove();
+    }, [handleQueryValueRemove]);
+
+    const resourceName = {
+        singular: "tag",
+        plural: "tags",
+    };
+
     const filterControl = (
         <LegacyFilters
             queryValue={queryValue}
             filters={[]}
             appliedFilters={[]}
-            onQueryChange={setQueryValue}
+            onQueryChange={handleQueryValueChange}
             onQueryClear={handleQueryValueRemove}
             onClearAll={handleClearAll}
         ></LegacyFilters>
     );
 
-    function renderItem(item) {
-        const { name, img, isChecked } = item;
-        console.log("Item " + JSON.stringify(item));
-        const label = <InlineStack gap='200'>
-            <Thumbnail source={img} size="small" alt="img" />
-            <Text as="p" variant="bodySm">{name}</Text>
-        </InlineStack>
-
-        return (
-            <ResourceItem id={name} 
-            verticalAlignment="center"
-            onClick={() => {
-                onSelectingTags(name)
-            }}>
-                <Checkbox
-                    label={label}
-                    checked={isChecked}
-                    onChange={() => { }}
-                />
-            </ResourceItem>
-        );
-    }
 
     return (
         <>
             <Modal id={modalId} variant="large">
                 <TitleBar title="Add product tags">
                     <button variant="primary" onClick={() => {
-                        console.log("Submitting pids " + selectedTags);
-                        selectedTags.forEach(tag =>
-                            handleChange(tag)
-                        )
+                        console.log("Submitting pids " + JSON.stringify(selectedItems));
+                        addSelectedProducts(selectedItems);
                         shopify.modal.toggle(modalId)
                     }}>Add</button>
                 </TitleBar>
                 <BlockStack>
-                    <ResourceList
-                        resourceName={resourceName}
-                        items={newDs}
-                        renderItem={renderItem}
-                        filterControl={filterControl}
-                    />
+                    <LegacyCard>
+                        <ResourceList
+                            resourceName={resourceName}
+                            items={newDs()}
+                            promotedBulkActions={[]}
+                            renderItem={render}
+                            selectedItems={selectedItems}
+                            onSelectionChange={setSelectedItems}
+                            filterControl={filterControl}
+                            showHeader={true}
+                            // emptyState={queryValue && queryValue.length > 0 ? <div> Press add to add value </div> : <div> No defined values </div>}
+                            selectable
+                        />
+                    </LegacyCard>
                 </BlockStack>
             </Modal>
         </>

@@ -6,16 +6,13 @@ export interface Product {
     isArchived: boolean
 }
 
-export interface Tags {
-    priceVariation: string
-    currency: string
-}
-
 export interface ProductTags {
     pid: string
     img: string
     label: string
-    tags: Tags[]
+    priceVariation:string
+    variant:string
+    currency: string
 }
 
 export interface ValueTags {
@@ -71,56 +68,141 @@ export class MockFetchProductDAO implements FetchProductDAO, FetchProductTagsDAO
 
     private tagsMockedData = [
         {
-            pid: "P001",
-            img: "https://example.com/tshirt-blue.jpg",
-            label: "Summer T-Shirt",
-            tags: [
-                { priceVariation: "19.99", currency: "USD" },
-                { priceVariation: "15.99", currency: "EUR" },
-                { priceVariation: "1500", currency: "JPY" }
-            ]
+            "id": "1",
+            "pid": "P001",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",
+            "label": "Summer T-Shirt",
+            "variant" : "S",
+            "priceVariation": "19.99",
+            "currency": "USD"
         },
         {
-            pid: "P002",
-            img: "https://example.com/jeans-black.jpg",
-            label: "Denim Jeans",
-            tags: [
-                { priceVariation: "49.99", currency: "USD" },
-                { priceVariation: "45.99", currency: "EUR" },
-                { priceVariation: "4500", currency: "JPY" }
-            ]
+            "id": "2",
+            "pid": "P001",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",
+            "label": "Summer T-Shirt",
+            "priceVariation": "15.99",
+            "variant" : "SM",
+            "currency": "EUR"
         },
         {
-            pid: "P003",
-            img: "https://example.com/sneakers-white.jpg",
-            label: "Sports Sneakers",
-            tags: [
-                { priceVariation: "79.99", currency: "USD" },
-                { priceVariation: "75.99", currency: "EUR" },
-                { priceVariation: "7500", currency: "JPY" }
-            ]
+            "id": "3",
+            "pid": "P001",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",
+            "label": "Summer T-Shirt",
+            "priceVariation": "1500",
+            "variant" : "XL",
+            "currency": "JPY"
         },
         {
-            pid: "P004",
-            img: "https://example.com/backpack-green.jpg",
-            label: "Travel Backpack",
-            tags: [
-                { priceVariation: "29.99", currency: "USD" },
-                { priceVariation: "25.99", currency: "EUR" },
-                { priceVariation: "2500", currency: "JPY" }
-            ]
+            "id": "4",
+            "pid": "P002",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
+            "label": "Denim Jeans",
+            "variant" : "L",
+            "priceVariation": "49.99",
+            "currency": "USD"
         },
         {
-            pid: "P005",
-            img: "https://example.com/watch-silver.jpg",
-            label: "Smart Watch",
-            tags: [
-                { priceVariation: "199.99", currency: "USD" },
-                { priceVariation: "185.99", currency: "EUR" },
-                { priceVariation: "18500", currency: "JPY" }
-            ]
+            "id": "5",
+            "pid": "P002",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
+            "label": "Denim Jeans",
+            "priceVariation": "45.99",
+            "variant" : "S",
+            "currency": "EUR"
+        },
+        {
+            "id": "6",
+            "pid": "P002",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
+            "label": "Denim Jeans",
+            "priceVariation": "4500",
+            "variant" : "S",
+            "currency": "JPY"
+        },
+        {
+            "id": "7",
+            "pid": "P003",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
+            "label": "Sports Sneakers",
+            "variant" : "SS",
+            "priceVariation": "79.99",
+            "currency": "USD"
+        },
+        {
+            "id": "8",
+            "pid": "P003",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
+            "label": "Sports Sneakers",
+            "variant" : "SL",
+            "priceVariation": "75.99",
+            "currency": "EUR"
+        },
+        {
+            "id": "9",
+            "pid": "P003",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
+            "label": "Sports Sneakers",
+            "variant" : "SL",
+            "priceVariation": "7500",
+            "currency": "JPY"
+        },
+        {
+            "id": "10",
+            "pid": "P004",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
+            "label": "Travel Backpack",
+            "variant" : "SM",
+            "priceVariation": "29.99",
+            "currency": "USD"
+        },
+        {
+            "id": "11",
+            "pid": "P004",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
+            "label": "Travel Backpack",
+            "variant" : "SX",
+            "priceVariation": "25.99",
+            "currency": "EUR"
+        },
+        {
+            "id": "12",
+            "pid": "P004",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
+            "label": "Travel Backpack",
+            "variant" : "SK",
+            "priceVariation": "2500",
+            "currency": "JPY"
+        },
+        {
+            "id": "13",
+            "pid": "P005",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
+            "label": "Smart Watch",
+            "variant" : "SL",
+            "priceVariation": "199.99",
+            "currency": "USD"
+        },
+        {
+            "id": "14",
+            "pid": "P005",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
+            "label": "Smart Watch",
+            "variant" : "SL",
+            "priceVariation": "185.99",
+            "currency": "EUR"
+        },
+        {
+            "id": "15",
+            "pid": "P005",
+            "img": "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
+            "label": "Smart Watch",
+            "variant" : "SL",
+            "priceVariation": "18500",
+            "currency": "JPY"
         }
-    ];
+    ]
 
     private tagsMockedD = [{ tagId: "status-001", label: "Archived" },
     { tagId: "status-003", label: "Premium" },
