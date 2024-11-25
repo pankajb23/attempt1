@@ -17,16 +17,16 @@ function ListItem(props: { id: string; index: number; title: string; img: string
                     <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        style={
-                            snapshot.isDragging
-                                ? { background: "white", ...provided.draggableProps.style }
-                                : provided.draggableProps.style
-                        }
-                    // style={{
-                    //     // ...provided.draggableProps.style,
-                    //     // ...(snapshot.isDragging ? { background: "white" } : {}),
-                    //     // listStyleType: "none"
-                    // }}
+                        // style={
+                        //     snapshot.isDragging
+                        //         ? { background: "white", ...provided.draggableProps.style }
+                        //         : provided.draggableProps.style
+                        // }
+                        style={{
+                            ...provided.draggableProps.style,
+                            ...(snapshot.isDragging ? { background: "white" } : {}),
+                            listStyleType: "none"
+                        }}
                     >
                         <ResourceItem id={id} url={''} >
                             <InlineStack blockAlign="center">
