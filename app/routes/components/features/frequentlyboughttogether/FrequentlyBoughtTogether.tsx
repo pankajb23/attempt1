@@ -4,6 +4,7 @@ import {
     Card,
     Text,
     TextField,
+    InlineError
 } from "@shopify/polaris";
 import TopHeadingBanner from "../../common/TopHeaderBanner";
 import TriggerCheckbox from "../common/TriggerCheckbox";
@@ -48,6 +49,10 @@ export default function FrequentlyBoughtTogether({ navigateTo }) {
     //     dispatch(updateOfferName(name));
     // }, [dispatch]);
 
+    const onSubmit = async (data) => {
+        console.log("data ", data);
+    };
+
     if (isLoading) {
         console.log("Loading rest client for the first time");
     } else {
@@ -55,15 +60,20 @@ export default function FrequentlyBoughtTogether({ navigateTo }) {
         return (
             <>
                 <Layout.Section>
-                    <BlockStack >
-                        <TopHeadingBanner navigateTo={navigateTo} heading={t("pages.frequently_bought_together.heading")} saveOfferButton={true} />
-                    </BlockStack>
-                    <div style={{ marginTop: "16px" }}>
-                        <BlockStack gap='200'>
-                            <Layout>
-                                <Layout.Section>
-                                    <BlockStack gap='300' >
-                                        <FormProvider {...methods}>
+                    <FormProvider {...methods}>
+                        <BlockStack >
+                            <TopHeadingBanner
+                                navigateTo={navigateTo}
+                                heading={t("pages.frequently_bought_together.heading")}
+                                saveOfferButton={true}
+                                onSave={methods.handleSubmit(onSubmit)}
+                            />
+                        </BlockStack>
+                        <div style={{ marginTop: "16px" }}>
+                            <BlockStack gap='200'>
+                                <Layout>
+                                    <Layout.Section>
+                                        <BlockStack gap='300' >
                                             <Card>
                                                 <Text as="h5" variant="headingSm" fontWeight="bold">
                                                     {t("pages.frequently_bought_together.offer_name.heading")}
@@ -71,30 +81,43 @@ export default function FrequentlyBoughtTogether({ navigateTo }) {
                                                 <Controller
                                                     name="offerName"
                                                     control={control}
+                                                    rules={{ required: "Store name is required" }}
                                                     render={({ field: { value, onChange } }) => (
-                                                        <TextField
-                                                            label="Offer Name"
-                                                            value={value}
-                                                            onChange={onChange}
-                                                            placeholder={t("pages.frequently_bought_together.offer_name.placeholder")}
-                                                            error={errors.offerName?.message}
-                                                            autoComplete="off"
-                                                        />
+                                                        <div>
+                                                            <TextField
+                                                                label="Offer Name"
+                                                                value={value}
+                                                                id="offerName"
+                                                                onChange={onChange}
+                                                                placeholder={t("pages.frequently_bought_together.offer_name.placeholder")}
+                                                                error={Boolean(errors.offerName)}
+                                                                autoComplete="off"
+                                                            />
+                                                            {
+                                                                errors.offerName && (
+                                                                    <InlineError
+                                                                        message={errors.offerName.message}
+                                                                        fieldID="offerName"
+                                                                    />
+                                                                )
+                                                            }
+                                                        </div>
                                                     )}
                                                 />
                                             </Card>
                                             <TriggerCheckbox allProducts={productArrays} tags={tags} />
-                                            <OfferProductRadioButtonModal allProducts={productArrays} allTags={tags} allVariants={productVariants}/>
+                                            <OfferProductRadioButtonModal allProducts={productArrays} allTags={tags} allVariants={productVariants} />
                                             <DiscountModal allProducts={productArrays} allTags={tags} />
-                                            <OtherDetailsModal productArray={productArrays} tags={tags} />
-                                        </FormProvider>
-                                    </BlockStack>
-                                </Layout.Section>
-                                <Layout.Section variant="oneThird">
-                                </Layout.Section>
-                            </Layout>
-                        </BlockStack>
-                    </div>
+                                            <OtherDetailsModal />
+                                        </BlockStack>
+
+                                    </Layout.Section>
+                                    <Layout.Section variant="oneThird">
+                                    </Layout.Section>
+                                </Layout>
+                            </BlockStack>
+                        </div>
+                    </FormProvider>
                 </Layout.Section>
             </>
         );

@@ -1,14 +1,13 @@
 import { useEffect } from "react";
-import { ChoiceList, Text, Card } from "@shopify/polaris";
+import { ChoiceList, Text, Card, InlineError } from "@shopify/polaris";
 import { Controller, useFormContext } from "react-hook-form";
 import SelectTags from "../frequentlyboughttogether/SelectTags";
 import SpecificProducts from "../frequentlyboughttogether/SpecificProductsModal";
 
-
 export default function TriggerCheckbox({ allProducts, tags }) {
-    const { control, setValue, watch } = useFormContext();
 
-    const triggerType = watch('trigger.type');
+    const { control, setValue, watch, formState: { errors, isSubmitted } } = useFormContext();
+    const triggerType = watch('trigger.type') ?? "specific_products";
 
     useEffect(() => {
         if (triggerType === 'none' || triggerType === undefined) {
@@ -17,12 +16,38 @@ export default function TriggerCheckbox({ allProducts, tags }) {
     }, []);
 
     const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Offer is triggered for </Text>
+
+    console.log("Trigger type " + triggerType);
+
+    const selectedProducts = watch('trigger.products') || [];
+    const selectedTags = watch('trigger.tags') || [];
+
     const choiceSuffix = () => {
         switch (triggerType) {
             case "specific_products":
-                return <SpecificProducts allProducts={allProducts} />;
+                return <>
+                    <SpecificProducts allProducts={allProducts} />
+                    {
+                        isSubmitted && triggerType === "specific_products" && selectedProducts.length === 0 && (
+                            <InlineError
+                                message="Please select at least one product"
+                                fieldID="trigger-type"
+                            />
+                        )
+                    }
+                </>;
             case "tags":
-                return <SelectTags allTags={tags} />;
+                return <>
+                    <SelectTags allTags={tags} />
+                    {
+                        isSubmitted && triggerType === "tags" && selectedTags.length === 0 && (
+                            <InlineError
+                                message="Please select at least one tag"
+                                fieldID="trigger-type"
+                            />
+                        )
+                    }
+                </>;
             case "all_products":
                 return (<>
                     {/* @ts-ignore */}
@@ -30,6 +55,24 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                 </>);
         }
     }
+
+
+    const validateTriggerSelection = (value) => {
+        switch (value) {
+            case "specific_products":
+                if (!selectedProducts.length) {
+                    return "Please select at least one product";
+                }
+                break;
+            case "tags":
+                if (!selectedTags.length) {
+                    return "Please select at least one tag";
+                }
+                break;
+        }
+        return true;
+    };
+
     return (
         <>
             <Card>
@@ -38,11 +81,21 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                     <Controller
                         name="trigger.type"
                         control={control}
+                        rules={{
+                            validate: validateTriggerSelection
+                        }}
                         render={({ field }) => (
                             <ChoiceList
                                 title={title}
                                 selected={[field.value]}
-                                onChange={([selected]) => field.onChange(selected)}
+                                onChange={([selected]) => {
+                                    field.onChange(selected);
+                                    if (selected === 'specific_products') {
+                                        setValue('trigger.tags', []);
+                                    } else if (selected === 'tags') {
+                                        setValue('trigger.products', []);
+                                    }
+                                }}
                                 choices={[
                                     {
                                         label: "Specific products",
@@ -57,6 +110,7 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                                         value: "all_products",
                                     },
                                 ]}
+
                             />
                         )}
                     />

@@ -35,31 +35,31 @@ export interface FetchTagsDao {
 export class MockFetchProductDAO implements FetchProductDAO, FetchProductTagsDAO, FetchTagsDao {
     private mockData = [
         {
-            pid: "1",
+            pid: "0",
             label: "Product One",
             img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/gift_card_200x200.png?v=1728612434",  // Using placeholder image
             isArchived: false
         },
         {
-            pid: "2",
+            pid: "1",
             label: "Product Two",
             img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/files/snowboard_wax_200x200.png?v=1728612437",
             isArchived: false
         },
         {
-            pid: "3",
+            pid: "2",
             label: "Product Three",
             img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4d41-83f0-7f417b02831d_200x200.jpg?v=1728612435",
             isArchived: true
         },
         {
-            pid: "4",
+            pid: "3",
             label: "Product Four",
             img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4a36-82af-50df8fe31c69_200x200.jpg?v=1728612434",
             isArchived: false
         },
         {
-            pid: "5",
+            pid: "4",
             label: "Product Five",
             img: "https://cdn.shopify.com/s/files/1/0802/4820/9601/f…9-4fe1-b333-0d1548b43c06_200x200.jpg?v=1728612436",
             isArchived: true

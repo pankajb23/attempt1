@@ -3,7 +3,7 @@ import { ChevronLeftIcon } from "@shopify/polaris-icons";
 import { NavigationPage } from "app/lib/enums/NavigationPage";
 import { useTranslation } from "react-i18next";
 
-export default function TopHeadingBanner({ navigateTo, heading, saveOfferButton }) {
+export default function TopHeadingBanner({ navigateTo, heading, saveOfferButton,  onSave }) {
     const {t} =  useTranslation();
     return (
         <>
@@ -14,7 +14,7 @@ export default function TopHeadingBanner({ navigateTo, heading, saveOfferButton 
                 <div style={{ width: '96%', paddingBottom:'4px', marginBottom:'4px' }}>
                     <InlineGrid columns="1fr auto">
                         <Text as="h5" variant="headingLg"> {heading}</Text>
-                        {saveOfferButton ? <Button variant="primary">{t("offer.save")}</Button> : null}
+                        {saveOfferButton ? <Button variant="primary" onClick={onSave}> {t("offer.save")}</Button> : null}
                     </InlineGrid>
                 </div>
             </InlineStack>

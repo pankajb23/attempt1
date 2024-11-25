@@ -18,7 +18,6 @@ function SelectedProducts(selectedPids, all, handleProductChange) {
                     renderItem={(item) => {
                         const { pid, label, img } = item;
                         const media = <Avatar customer size="md" name={label} source={img} />
-
                         return (
                             <ResourceItem
                                 id={pid}

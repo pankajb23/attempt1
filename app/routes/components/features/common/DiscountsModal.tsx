@@ -124,7 +124,7 @@ const DiscountDetails = ({ discountedChoice }) => {
                             value={value}
                             onChange={() => { }}
                             autoComplete="off"
-                            placeholder={t("pages.frequently_bought_together.checkbox.percentOrFixed.placeholder")}
+                            
                             connectedRight={
                                 <Select
                                     value={"%"}
@@ -147,6 +147,7 @@ const DiscountDetails = ({ discountedChoice }) => {
                         <TextField
                             label={discountedText}
                             value={value}
+                            placeholder={t("pages.frequently_bought_together.checkbox.percentOrFixed.placeholder")}
                             onChange={onChange}
                             autoComplete="off"
                         />

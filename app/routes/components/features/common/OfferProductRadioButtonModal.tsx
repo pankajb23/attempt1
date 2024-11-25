@@ -8,69 +8,17 @@ import { useSelector } from "react-redux";
 import { selectPids } from "app/lib/reducers/RestClientReducer";
 import { Controller, useFormContext } from "react-hook-form";
 import NestedProductVariantsModal from "./NestedProductVariantsModal";
-
-function SelectedProducts(selectedPids, all, handleProductChange) {
-    if (selectedPids === undefined || all === undefined) {
-        return null;
-    }
-    const pids = all.filter(pid => selectedPids.has(pid.pid));
-    console.log("Selected pids " + JSON.stringify(pids));
-    return (
-        <div style={{ marginTop: '10px' }}>
-            <LegacyCard >
-                <ResourceList
-                    resourceName={{ singular: 'product', plural: 'products' }}
-                    items={pids}
-                    renderItem={(item) => {
-                        const { pid, label, img } = item;
-                        const media = <Avatar customer size="md" name={label} source={img} />
-
-                        return (
-                            <ResourceItem
-                                id={pid}
-                                name={label}
-                                media={media}
-                                url={''}
-                                accessibilityLabel={`View details for ${label}`}
-                            >
-                                <InlineGrid columns={["twoThirds", "oneThird"]}>
-                                    <InlineStack>
-                                        <div style={{ width: '90%' }}>
-                                            <Text variant="bodyMd" fontWeight="regular" as="h3">
-                                                {label}
-                                            </Text>
-                                        </div>
-                                    </InlineStack>
-                                    <InlineGrid columns={4} gap="0">
-                                        <div></div>
-                                        <div></div>
-                                        <div>
-                                            <Icon source={ViewIcon} />
-                                        </div>
-                                        <div>
-                                            {/* @ts-ignore */}
-                                            <Button variant="plain" icon={XSmallIcon} onClick={() => {
-                                                handleProductChange(pid)
-                                            }} />
-                                        </div>
-                                    </InlineGrid>
-                                </InlineGrid>
-                            </ResourceItem>
-                        );
-                    }}
-                />
-            </LegacyCard>
-        </div>
-    )
-}
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import SelectedProducts from "./SelectedProductsDraggable";
 
 export default function OfferProductRadioButtonModal({ allProducts, allTags, allVariants }) {
-    const { control, setValue, watch } = useFormContext();
+    const { control, watch } = useFormContext();
 
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
     const handleProductChange = useCallback((productIds: string | string[]) => {
         setSelectedIds((prev) => {
+            console.log("Incoming data " + JSON.stringify(productIds));
             if (Array.isArray(productIds)) {
                 return new Set(productIds);
             } else {
@@ -86,8 +34,10 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
     }, []);
 
 
-    const offerType = watch('offerProducts.type');
-    const manualOfferType = watch('offerProducts.assets.type') ?? "tags";
+    console.log("selectedIds ", [...selectedIds]);
+
+    const offerType = watch('offerProducts.type') ?? "products";
+    const manualOfferType = watch('offerProducts.assets.type') ?? "products";
 
     const [selected, setSelected] = useState<string[]>(['manual']);
     const handleChange = useCallback((value: string[]) => setSelected(value), []);
@@ -114,6 +64,13 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
     },
         [],
     );
+
+    const [orderedPids, setOrderedPids] = useState([]);
+
+    const handleReorder = (newOrder: string[]) => {
+        console.log("newOrder " + JSON.stringify(newOrder))
+        setOrderedPids(newOrder);
+    };
 
     const handlePidChanges = useCallback((pid: string) => {
         setSelectedPids((prev) => {
@@ -153,7 +110,7 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
                 if (manualOfferType === "tags") {
                     console.log("manualOfferType " + manualOfferType);
                     return (
-                        <NestedProductVariantsModal allVariants={allVariants} modalId={nestedModalId}/>
+                        <NestedProductVariantsModal allVariants={allVariants} modalId={nestedModalId} />
                     );
 
                 } else {
@@ -212,10 +169,10 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
                                 {/** @ts-ignore */}
                                 <Button variant="secondary" onClick={() => {
                                     console.log("manualOfferType " + manualOfferType);
-                                    if(manualOfferType === "tags"){
+                                    if (manualOfferType === "tags") {
                                         console.log("Clicking select variants")
                                         shopify.modal.show(nestedModalId);
-                                    }else{
+                                    } else {
                                         console.log("Clicking select products")
                                         shopify.modal.show(modalId);
                                     }
@@ -235,7 +192,8 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
                                     )}
                                 />
                             </InlineStack>
-                            {SelectedProducts(selectedIds, allProducts, handleProductChange)}
+                            <SelectedProducts selectedPids={[...selectedIds]} all={allProducts}/>
+                            {/* {SelectedProducts(selectedIds, allProducts, handleProductChange, handleReorder)} */}
                         </div>
                     ) : null
                 }

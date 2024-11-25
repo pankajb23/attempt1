@@ -8,12 +8,20 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
     const [selectedItems, setSelectedItems] = useState<ResourceListProps["selectedItems"]>([]);
     const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
 
+    const handleSelectedItemsChange = useCallback(
+        (selectedItems: ResourceListProps["selectedItems"]) => {
+            console.log("Selected items " + JSON.stringify(selectedItems));
+            setSelectedItems(selectedItems);
+        },
+        []
+    );
+
     const newDs = () => {
         if (Array.isArray(allProducts)) {
             return allProducts.map(modal => ({
                 name: modal.label,
                 pid: modal.pid,
-                tagId: modal.tagId, 
+                tagId: modal.tagId,
                 img: modal.img
             })).filter((item) => {
                 return !queryValue  // this checks for undefined, null, empty string
@@ -60,10 +68,10 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
             onQueryChange={handleQueryValueChange}
             onQueryClear={handleQueryValueRemove}
             onClearAll={handleClearAll}
-        ></LegacyFilters>
+        />
     );
 
-
+    // console.log("all DS "+ JSON.stringify(newDs()));
     return (
         <>
             <Modal id={modalId} variant="large">
@@ -82,10 +90,9 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
                             promotedBulkActions={[]}
                             renderItem={render}
                             selectedItems={selectedItems}
-                            onSelectionChange={setSelectedItems}
+                            onSelectionChange={handleSelectedItemsChange}
                             filterControl={filterControl}
                             showHeader={true}
-                            // emptyState={queryValue && queryValue.length > 0 ? <div> Press add to add value </div> : <div> No defined values </div>}
                             selectable
                         />
                     </LegacyCard>
