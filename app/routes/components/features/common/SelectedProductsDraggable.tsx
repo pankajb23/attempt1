@@ -3,14 +3,14 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { XSmallIcon, ViewIcon, DragHandleIcon } from '@shopify/polaris-icons';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-function ListItem(props:{ id: string; index: number; title: string; img: string }) {
+function ListItem(props: { id: string; index: number; title: string; img: string }) {
     const { id, index, title, img } = props;
-    console.log("ListItem ", id, index, title, img);
+    console.log("ListItem ", id, index, title);
     const draggableId = id;
 
     console.log("Type:", typeof draggableId, "Value:", draggableId);
     return (
-        <Draggable draggableId={draggableId} index={index}>
+        <Draggable draggableId={id} index={index}>
             {(provided, snapshot) => {
                 console.log("Provided index", JSON.stringify(provided.dragHandleProps), draggableId, index);
                 return (
@@ -19,14 +19,14 @@ function ListItem(props:{ id: string; index: number; title: string; img: string 
                         {...provided.draggableProps}
                         style={
                             snapshot.isDragging
-                              ? { background: "white", ...provided.draggableProps.style }
-                              : provided.draggableProps.style
-                          }
-                        // style={{
-                        //     // ...provided.draggableProps.style,
-                        //     // ...(snapshot.isDragging ? { background: "white" } : {}),
-                        //     // listStyleType: "none"
-                        // }}
+                                ? { background: "white", ...provided.draggableProps.style }
+                                : provided.draggableProps.style
+                        }
+                    // style={{
+                    //     // ...provided.draggableProps.style,
+                    //     // ...(snapshot.isDragging ? { background: "white" } : {}),
+                    //     // listStyleType: "none"
+                    // }}
                     >
                         <ResourceItem id={id} url={''} >
                             <InlineStack blockAlign="center">
@@ -96,29 +96,21 @@ export default function SelectedProducts({ selectedPids, all }) {
     return (
         <LegacyCard>
             <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="selected-products-list">
+                <Droppable droppableId="root">
                     {provided => {
                         return (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
-                                {(() => {
-                                    const seenPids = new Set();
-                                    return items.map((item, index) => {
-                                        if (seenPids.has(item.pid)) {
-                                            console.log("Duplicate found:", item.pid);
-                                        }
-                                        seenPids.add(item.pid);
-                                        console.log("Item ", item, index);
-                                        return (
-                                            <ListItem
-                                                key={getKey(item.pid)}
-                                                id={getKey(item.pid)}
-                                                index={index}
-                                                title={item.label}
-                                                img={item.img}
-                                            />
-                                        );
-                                    });
-                                })()}
+                                {items.map((item, index) => {
+                                    return (
+                                        <ListItem
+                                            key={item.pid}
+                                            id={item.pid}
+                                            index={index}
+                                            title={item.label}
+                                            img={item.img}
+                                        />
+                                    );
+                                })}
                                 {provided.placeholder}
                             </div>
                         );
