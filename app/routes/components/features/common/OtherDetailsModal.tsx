@@ -31,7 +31,7 @@ export default function OtherDetailsModal() {
     )
 
     const widgetTitle = watch("otherPriorities.defaultWidgetTitle");
-    const offerPriority = watch("otherPriorities.offerPriority");
+    const offerPriority = watch("otherPriorities.offerPriority") ;
 
     return (
         <>

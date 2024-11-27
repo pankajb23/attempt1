@@ -43,6 +43,7 @@ export const en = {
         other:{
             override:{
                 heading:"Override default widget title that appears in online store",
+                content: "Widget title",
                 placeholder:"Optional, Eg. Accessories for {{trigger}}"
             },
             offer_priority:{

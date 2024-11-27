@@ -74,7 +74,6 @@ const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
 
 const DiscountDetails = ({ discountedChoice }) => {
     const { t } = useTranslation();
-    const value = "5";
     const { control, watch } = useFormContext();
 
     const discountedText = (
@@ -108,7 +107,7 @@ const DiscountDetails = ({ discountedChoice }) => {
         }
     }
     )();
-    const discountedTextvalue = watch(name) ?? value;
+    const discountedTextvalue = watch(name);
     return (
         <>
             <BlockStack gap="600">
@@ -124,7 +123,6 @@ const DiscountDetails = ({ discountedChoice }) => {
                             value={value}
                             onChange={() => { }}
                             autoComplete="off"
-                            
                             connectedRight={
                                 <Select
                                     value={"%"}
@@ -146,9 +144,13 @@ const DiscountDetails = ({ discountedChoice }) => {
                     render={({ field: { onChange, value } }) => (
                         <TextField
                             label={discountedText}
-                            value={value}
+                            value={value || ''}
                             placeholder={t("pages.frequently_bought_together.checkbox.percentOrFixed.placeholder")}
-                            onChange={onChange}
+                            onChange={(newValue) => {
+                                // Sanitize the input value
+                                const sanitizedValue = String(newValue).trim();
+                                onChange(sanitizedValue);
+                            }}
                             autoComplete="off"
                         />
                     )}

@@ -10,11 +10,15 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
 
     const handleSelectedItemsChange = useCallback(
         (selectedItems: ResourceListProps["selectedItems"]) => {
-            console.log("Selected items " + JSON.stringify(selectedItems));
+            console.log("Selected items ", selectedItems);
             setSelectedItems(selectedItems);
         },
         []
     );
+
+    useEffect(() => {
+        setSelectedItems(selectedProducts || []);
+    }, [selectedProducts]);
 
     const newDs = () => {
         if (Array.isArray(allProducts)) {
@@ -71,13 +75,12 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
         />
     );
 
-    // console.log("all DS "+ JSON.stringify(newDs()));
     return (
         <>
             <Modal id={modalId} variant="large">
                 <TitleBar title="Add product tags">
                     <button variant="primary" onClick={() => {
-                        console.log("Submitting pids " + JSON.stringify(selectedItems));
+                        // console.log("Submitting pids " + JSON.stringify(selectedItems));
                         addSelectedProducts(selectedItems);
                         shopify.modal.toggle(modalId)
                     }}>Add</button>

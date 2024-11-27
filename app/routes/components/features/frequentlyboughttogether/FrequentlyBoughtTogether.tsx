@@ -15,48 +15,36 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { ProductCallInitializer, selectIsLoading, selectPids, selectTags, selectVariants } from "app/lib/reducers/RestClientReducer";
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { FrequentlyBoughtTogetherType } from "../../types/FrequentlyBoughtTogetherTypes";
+import type { FrequentlyBoughtTogetherType } from "../../types/FrequentlyBoughtTogetherTypes";
 
 export default function FrequentlyBoughtTogether({ navigateTo }) {
     const methods = useForm<FrequentlyBoughtTogetherType>({
         defaultValues: {
             offerName: "",
-            trigger: {
-                type: "all_products",
-                label: "All Products"
-            },
-            offerProducts: {
-                type: "automatic",
-                maxProducts: 3
-            }
+            trigger: {},
+            offerProducts: {},
+            otherPriorities: {},
+            discountState: {}
         }
     });
 
-    const { register, control, handleSubmit, setValue, watch, formState: { errors } } = methods;
+    const { control, formState: { errors } } = methods;
 
     const { t } = useTranslation();
-    // const isLoading = useSelector(Initializer());
     ProductCallInitializer({ userId: "alpha-beta-gamma" });
     const productArrays = useSelector(state => selectPids(state));
     const tags = useSelector(state => selectTags(state));
     const isLoading = useSelector(state => selectIsLoading(state));
     const productVariants = useSelector(state => selectVariants(state));
 
-    // const offerNameSelector = useSelector(selectOfferName);
-    // const dispatch = useDispatch();
-
-    // const offerNameChangeDispatcher = useCallback((name: string) => {
-    //     dispatch(updateOfferName(name));
-    // }, [dispatch]);
 
     const onSubmit = async (data) => {
-        console.log("data ", data);
+        console.log("data ", JSON.stringify(data));
     };
 
     if (isLoading) {
         console.log("Loading rest client for the first time");
     } else {
-        console.log("Rest client already loaded " + JSON.stringify(productArrays) + " tags " + JSON.stringify(tags));
         return (
             <>
                 <Layout.Section>

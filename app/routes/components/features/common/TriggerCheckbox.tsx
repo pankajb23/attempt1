@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { ChoiceList, Text, Card, InlineError } from "@shopify/polaris";
 import { Controller, useFormContext } from "react-hook-form";
 import SelectTags from "../frequentlyboughttogether/SelectTags";
@@ -6,19 +5,11 @@ import SpecificProducts from "../frequentlyboughttogether/SpecificProductsModal"
 
 export default function TriggerCheckbox({ allProducts, tags }) {
 
-    const { control, setValue, watch, formState: { errors, isSubmitted } } = useFormContext();
-    const triggerType = watch('trigger.type') ?? "specific_products";
-
-    useEffect(() => {
-        if (triggerType === 'none' || triggerType === undefined) {
-            setValue('trigger.type', "specific_products");
-        }
-    }, []);
+    const { control, setValue, watch, formState: { isSubmitted } } = useFormContext();
 
     const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Offer is triggered for </Text>
 
-    console.log("Trigger type " + triggerType);
-
+    const triggerType = watch('trigger.type') ?? "specific_products";
     const selectedProducts = watch('trigger.products') || [];
     const selectedTags = watch('trigger.tags') || [];
 
@@ -56,23 +47,6 @@ export default function TriggerCheckbox({ allProducts, tags }) {
         }
     }
 
-
-    const validateTriggerSelection = (value) => {
-        switch (value) {
-            case "specific_products":
-                if (!selectedProducts.length) {
-                    return "Please select at least one product";
-                }
-                break;
-            case "tags":
-                if (!selectedTags.length) {
-                    return "Please select at least one tag";
-                }
-                break;
-        }
-        return true;
-    };
-
     return (
         <>
             <Card>
@@ -81,9 +55,6 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                     <Controller
                         name="trigger.type"
                         control={control}
-                        rules={{
-                            validate: validateTriggerSelection
-                        }}
                         render={({ field }) => (
                             <ChoiceList
                                 title={title}

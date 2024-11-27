@@ -36,7 +36,7 @@ export default RestClientSlicer.reducer;
 export const { setInitialize } = RestClientSlicer.actions;
 
 export const selectIsLoading = (state) => {
-    console.log("state " + JSON.stringify(state));
+    // console.log("state " + JSON.stringify(state));
     return state.restClientReducer.loading;
 }
 
