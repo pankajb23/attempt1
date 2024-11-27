@@ -1,7 +1,8 @@
 import { Button, Text, Tag, ResourceItem } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import AddProductsModal from "../common/AddProductsModal";
+import { useFormContext } from "react-hook-form";
 
 function TagsUI(selectedIds, allTags, handleTagsChange) {
     const tags = allTags.filter(tag => selectedIds.has(tag.tagId));
@@ -19,17 +20,22 @@ function TagsUI(selectedIds, allTags, handleTagsChange) {
     );
 }
 
-export default function SelectTags({ allTags }) {
+export default function SelectTags({ allTags, tags }) {
     const shopify = useAppBridge();
-    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+    const { setValue } = useFormContext();
+    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set(tags));
+    
 
-    console.log("all tags " + JSON.stringify(allTags));
+    useEffect(() => {
+        setSelectedTags(new Set(tags));
+    }, [tags]);
 
     const handleTagsChange = useCallback((tags: string | string[]) => {
         setSelectedTags(prevTags => {
             // If input is array, just replace all tags
             const newTags = new Set(prevTags);
             if (Array.isArray(tags)) {
+                setValue('trigger.tags', tags);
                 return new Set(tags);
             } else {
                 if (newTags.has(tags)) {
@@ -37,6 +43,7 @@ export default function SelectTags({ allTags }) {
                 } else {
                     newTags.add(tags);
                 }
+                setValue('trigger.tags', newTags);
                 return newTags;
             }
         });
@@ -47,7 +54,9 @@ export default function SelectTags({ allTags }) {
 
     return (<>
         {/* @ts-ignore */}
-        <Button variant="secondary" onClick={() => shopify.modal.show(modalId)}>
+        <Button variant="secondary" onClick={() => {
+            shopify.modal.show(modalId)
+        }}>
             <Text as="p" fontWeight="bold" variant="bodySm">Select Tags</Text>
         </Button>
         <br />
@@ -61,6 +70,7 @@ export default function SelectTags({ allTags }) {
 
 function renderItem(item) {
     const { tagId, name } = item;
+    console.log("Rendering item ", JSON.stringify(item));
     return (
         <ResourceItem
             id={tagId}

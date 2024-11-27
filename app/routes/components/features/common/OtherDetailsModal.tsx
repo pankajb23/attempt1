@@ -1,16 +1,13 @@
-import { createSelector } from "@reduxjs/toolkit";
 import { BlockStack, Card, TextField, Text } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";
-import { selectDraftContent, updateOtherPriorities } from "app/lib/reducers/offers/FrequentlyBoughtTogetherReducer";
-import { useSelector, useDispatch } from "react-redux";
-import { useForm, useFormContext, Controller } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 
 export default function OtherDetailsModal() {
 
 
     const { t } = useTranslation();
 
-    const { control, setValue, watch } = useFormContext();
+    const { control, watch } = useFormContext();
 
     const overrideTextFieldLabel = (
         <Text as="p" variant="bodySm" fontWeight="bold">
@@ -31,7 +28,7 @@ export default function OtherDetailsModal() {
     )
 
     const widgetTitle = watch("otherPriorities.defaultWidgetTitle");
-    const offerPriority = watch("otherPriorities.offerPriority") ;
+    const offerPriority = watch("otherPriorities.offerPriority");
 
     return (
         <>

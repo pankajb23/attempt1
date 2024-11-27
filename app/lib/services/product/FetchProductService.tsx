@@ -16,6 +16,7 @@ export interface ProductTags {
 }
 
 export interface ValueTags {
+    id: string
     tagId: string
     label: string
 }
@@ -204,12 +205,13 @@ export class MockFetchProductDAO implements FetchProductDAO, FetchProductTagsDAO
         }
     ]
 
-    private tagsMockedD = [{ tagId: "status-001", label: "Archived" },
-    { tagId: "status-003", label: "Premium" },
-    { tagId: "status-023", label: "Snow" },
-    { tagId: "status-033", label: "Snowboard" },
-    { tagId: "status-043", label: "Sport" },
-    { tagId: "status-053", label: "Winter" }
+    private tagsMockedD = [
+        { id: "0", tagId: "status-001", label: "Archived" },
+        { id: "1", tagId: "status-003", label: "Premium" },
+        { id: "2", tagId: "status-023", label: "Snow" },
+        { id: "3", tagId: "status-033", label: "Snowboard" },
+        { id: "4", tagId: "status-043", label: "Sport" },
+        { id: "5", tagId: "status-053", label: "Winter" }
     ];
 
     findPids(userId: string, label?: string): Promise<Product[]> {

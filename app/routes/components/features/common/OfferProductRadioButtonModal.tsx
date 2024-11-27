@@ -1,71 +1,50 @@
 import { Thumbnail, Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select, ResourceItem } from "@shopify/polaris";
-import { useCallback} from "react";
+import { useCallback } from "react";
 import { AlertCircleIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from "@shopify/app-bridge-react";
 import AddProductsModal from "./AddProductsModal";
 import AutomaticOfferProducts from "./AutomaticOfferProducts";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { Controller, useFormContext} from "react-hook-form";
 import NestedProductVariantsModal from "./NestedProductVariantsModal";
 import SelectedProducts from "./SelectedProductsDraggable";
 
 export default function OfferProductRadioButtonModal({ allProducts, allTags, allVariants }) {
-    const { control, setValue, watch } = useFormContext();
+    const { control, setValue, watch, getValues } = useFormContext();
     const shopify = useAppBridge();
 
     const modalId = "my-product-modalId-draggable";
     const nestedModalId = "my-nested-product-modalId";
 
-    const offerType = watch('offerProducts.type') ?? "products";
+    const offerType = watch('offerProducts.type') ?? "automatic";
     const manualOfferType = watch('offerProducts.assets.type') ?? "products";
 
-    const selectedPidsArray = useWatch({
-        name: 'offerProducts.assets.products',
-        defaultValue: []
-    });
+    const selectedPidsArray = watch('offerProducts.assets.products') || [];
+
+    // console.log("Selected pids " + selectedPidsArray);
     const selectedIds = new Set(selectedPidsArray);;
 
     const handleProductChange = useCallback((productIds: string | string[]) => {
+        console.log("products", productIds);
+
         if (Array.isArray(productIds)) {
-            setValue('offerProducts.assets.products', productIds, {
-                shouldDirty: false  // Prevent unnecessary form state updates
-            });
+            setValue('offerProducts.assets.products', productIds);
         } else {
             const newSet = new Set(selectedPidsArray);
             newSet.has(productIds) ? newSet.delete(productIds) : newSet.add(productIds);
-            setValue('offerProducts.assets.products', [...newSet], {
-                shouldDirty: false
-            });
+            setValue('offerProducts.assets.products', [...newSet]);
         }
     }, [setValue, selectedPidsArray]);
 
     const handleDragEnd = useCallback(({ source, destination }) => {
         if (!destination) return;
-        setValue('offerProducts.assets.products', (currentProducts) => {
-            const newProducts = [...currentProducts];
-            const [temp] = newProducts.splice(source.index, 1);
-            newProducts.splice(destination.index, 0, temp);
-            return newProducts;
-        });
+        const currentProducts = getValues('offerProducts.assets.products') || [];
+        const newProducts = [...currentProducts];
+        const [temp] = newProducts.splice(source.index, 1);
+        newProducts.splice(destination.index, 0, temp);
+
+        setValue('offerProducts.assets.products', newProducts);
     }, [setValue]);
 
-    const handleSelectedProductsPids = useCallback((productId: string) => {
-        setValue('offerProducts.assets.products', (currentProducts = []) => {
-            const productsSet = new Set(currentProducts);
-
-            // Toggle the product
-            if (productsSet.has(productId)) {
-                productsSet.delete(productId);
-            } else {
-                productsSet.add(productId);
-            }
-
-            return Array.from(productsSet);
-        }, {
-            shouldDirty: false
-        });
-    }, [setValue]);
-
-    // console.log("selectedIds ", [...selectedIds]);
 
     const automaticOption =
         (
@@ -119,6 +98,7 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
                     <Controller
                         name="offerProducts.type"
                         control={control}
+                        defaultValue={offerType}
                         render={({ field: { onChange, value } }) => (
                             < ChoiceList
                                 title={<Text as="p" variant="headingSm" fontWeight="bold">Select offer products</Text>}
@@ -152,6 +132,7 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
                                 </Button>
                                 <Controller
                                     name="offerProducts.assets.type"
+                                    defaultValue={manualOfferType}
                                     control={control}
                                     render={({ field: { onChange, value } }) => (
                                         <Select
@@ -168,7 +149,7 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
                                 all={allProducts}
                                 selectedProductsPids={selectedPidsArray}
                                 handleDragEnd={handleDragEnd}
-                                handleProductChange={handleSelectedProductsPids}
+                                handleProductChange={handleProductChange}
                             />
                         </div>
                     ) : null

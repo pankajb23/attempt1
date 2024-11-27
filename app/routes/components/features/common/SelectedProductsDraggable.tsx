@@ -61,31 +61,33 @@ export default function SelectedProducts({ selectedPids, all, selectedProductsPi
     const getKey = (pid) => `draggable-${pid}`;
 
     return (
-        <LegacyCard>
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="alpha-delta-omega">
-                    {provided => {
-                        return (
-                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                                {items.map((item, index) => {
-                                    return (
-                                        <ListItem
-                                            key={getKey(item.pid)}
-                                            id={getKey(item.pid)}
-                                            pid={item.pid}
-                                            index={index}
-                                            title={item.label}
-                                            img={item.img}
-                                            handleProductChange={handleProductChange}
-                                        />
-                                    )
-                                })}
-                                {provided.placeholder}
-                            </div>
-                        );
-                    }}
-                </Droppable>
-            </DragDropContext>
-        </LegacyCard>
+        <div style={{ marginTop: "10px" }}>
+            <LegacyCard >
+                <DragDropContext onDragEnd={handleDragEnd}>
+                    <Droppable droppableId="alpha-delta-omega">
+                        {provided => {
+                            return (
+                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                    {items.map((item, index) => {
+                                        return (
+                                            <ListItem
+                                                key={getKey(item.pid)}
+                                                id={getKey(item.pid)}
+                                                pid={item.pid}
+                                                index={index}
+                                                title={item.label}
+                                                img={item.img}
+                                                handleProductChange={handleProductChange}
+                                            />
+                                        )
+                                    })}
+                                    {provided.placeholder}
+                                </div>
+                            );
+                        }}
+                    </Droppable>
+                </DragDropContext>
+            </LegacyCard>
+        </div>
     );
 };

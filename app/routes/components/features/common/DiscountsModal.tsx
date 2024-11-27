@@ -1,10 +1,10 @@
 import { BlockStack, Text, Checkbox, ChoiceList, TextField, Select, Card } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";
-import { Controller, set, useFormContext } from "react-hook-form";
+import { Controller,  useFormContext } from "react-hook-form";
 
 const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
     const { t } = useTranslation();
-    const { control, setValue, watch } = useFormContext();
+    const { control,  watch } = useFormContext();
 
     const productDiscountValue = watch("config.discountCombination.productDiscounts") ?? false;
     const shippingDiscountValue = watch("config.discountCombination.shippingDiscounts") ?? false;
@@ -26,7 +26,7 @@ const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
                 <BlockStack>
                     {!skip.has("other-product-discounts") && (
                         <Controller
-                            name="config.discountCombination.productDiscounts"
+                            name="discountState.discountCombination.productDiscounts"
                             control={control}
                             defaultValue={productDiscountValue}
                             render={({ field: { onChange, value } }) => (
@@ -40,7 +40,7 @@ const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
                     )}
                     {!skip.has("shipping-discounts") && (
                         <Controller
-                            name="config.discountCombination.shippingDiscounts"
+                            name="discountState.discountCombination.shippingDiscounts"
                             control={control}
                             defaultValue={shippingDiscountValue}
                             render={({ field: { onChange, value } }) => (
@@ -54,7 +54,7 @@ const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
                     )}
                     {!skip.has("order-discounts") && (
                         <Controller
-                            name="config.discountCombination.orderDiscounts"
+                            name="discountState.discountCombination.orderDiscounts"
                             control={control}
                             defaultValue={orderDiscountValue}
                             render={({ field: { onChange, value } }) => (
@@ -88,19 +88,19 @@ const DiscountDetails = ({ discountedChoice }) => {
                 return {
                     isEnabled: true,
                     selectedType: 'percentOrFixed',
-                    name: 'config.discountText',
+                    name: 'discountState.discountText',
                 }
             case 'cheapestItemFree':
                 return {
                     isEnabled: false,
                     selectedType: 'cheapestItemFree',
-                    name: 'config.discountText',
+                    name: 'discountState.discountText',
                 }
             case 'freeShipping':
                 return {
                     isEnabled: false,
                     selectedType: 'freeShipping',
-                    name: 'config.discountText',
+                    name: 'discountState.discountText',
                 }
             default:
                 return null;
@@ -108,12 +108,13 @@ const DiscountDetails = ({ discountedChoice }) => {
     }
     )();
     const discountedTextvalue = watch(name);
+    const discountedUnit = watch("discountState.discountUnit") ?? "%";
     return (
         <>
             <BlockStack gap="600">
                 {isEnabled && <Controller
                     control={control}
-                    name="config.discountText"
+                    name="discountState.discountValue"
                     render={({ field: { onChange, value } }) => (
                         <TextField
                             label={<Text as="p" variant="bodySm" fontWeight="bold">
@@ -121,18 +122,25 @@ const DiscountDetails = ({ discountedChoice }) => {
                             </Text>}
                             type="number"
                             value={value}
-                            onChange={() => { }}
+                            onChange={onChange}
                             autoComplete="off"
+                            placeholder="Discount value"
                             connectedRight={
-                                <Select
-                                    value={"%"}
-                                    label="Weight unit"
-                                    onChange={() => { }}
-                                    labelHidden
-                                    options={["%", "Inr"]}
-                                />
+                                <Controller
+                                    control={control}
+                                    name="discountState.discountUnit"
+                                    defaultValue={discountedUnit}
+                                    render={({ field: { onChange, value } }) =>
+                                        <Select
+                                            value={value}
+                                            label="Weight unit"
+                                            onChange={onChange}
+                                            labelHidden
+                                            options={["%", "Inr"]}
+                                        />
+                                    }
+                                    />
                             }
-
                         />
                     )}
                 />

@@ -9,15 +9,16 @@ export default function TriggerCheckbox({ allProducts, tags }) {
 
     const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Offer is triggered for </Text>
 
-    const triggerType = watch('trigger.type') ?? "specific_products";
+    const triggerType = watch('trigger.type') ?? "all_products";
     const selectedProducts = watch('trigger.products') || [];
     const selectedTags = watch('trigger.tags') || [];
+
 
     const choiceSuffix = () => {
         switch (triggerType) {
             case "specific_products":
                 return <>
-                    <SpecificProducts allProducts={allProducts} />
+                    <SpecificProducts allProducts={allProducts} selectedProducts={selectedProducts}/>
                     {
                         isSubmitted && triggerType === "specific_products" && selectedProducts.length === 0 && (
                             <InlineError
@@ -29,7 +30,7 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                 </>;
             case "tags":
                 return <>
-                    <SelectTags allTags={tags} />
+                    <SelectTags allTags={tags} tags={selectedTags}/>
                     {
                         isSubmitted && triggerType === "tags" && selectedTags.length === 0 && (
                             <InlineError
@@ -55,6 +56,7 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                     <Controller
                         name="trigger.type"
                         control={control}
+                        defaultValue={triggerType}
                         render={({ field }) => (
                             <ChoiceList
                                 title={title}

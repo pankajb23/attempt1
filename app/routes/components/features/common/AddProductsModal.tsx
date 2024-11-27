@@ -5,18 +5,25 @@ import type { ResourceListProps } from "@shopify/polaris";
 // import type { ResourceListSelectedItems 
 
 export default function AddProductsModal({ allProducts, selectedProducts, addSelectedProducts, modalId, render }) {
-    const [selectedItems, setSelectedItems] = useState<ResourceListProps["selectedItems"]>([]);
+    const selectedProductsAsArray: string[] = [...selectedProducts];
+
+    const [selectedItems, setSelectedItems] = useState<ResourceListProps["selectedItems"]>(selectedProductsAsArray);
     const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
+
+
+    useEffect(() => {
+        setSelectedItems(selectedProducts || []);
+    }, [selectedProducts]);
 
     const handleSelectedItemsChange = useCallback(
         (selectedItems: ResourceListProps["selectedItems"]) => {
-            console.log("Selected items ", selectedItems);
             setSelectedItems(selectedItems);
         },
         []
     );
 
     useEffect(() => {
+        // console.log("reacting to change ", selectedProducts);
         setSelectedItems(selectedProducts || []);
     }, [selectedProducts]);
 
@@ -77,12 +84,11 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
 
     return (
         <>
-            <Modal id={modalId} variant="large">
+            <Modal id={modalId} variant="large" >
                 <TitleBar title="Add product tags">
                     <button variant="primary" onClick={() => {
-                        // console.log("Submitting pids " + JSON.stringify(selectedItems));
                         addSelectedProducts(selectedItems);
-                        shopify.modal.toggle(modalId)
+                        shopify.modal.hide(modalId)
                     }}>Add</button>
                 </TitleBar>
                 <BlockStack>
@@ -92,7 +98,7 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
                             items={newDs()}
                             promotedBulkActions={[]}
                             renderItem={render}
-                            selectedItems={selectedItems}
+                            selectedItems={Array.from(selectedItems) || []}
                             onSelectionChange={handleSelectedItemsChange}
                             filterControl={filterControl}
                             showHeader={true}
