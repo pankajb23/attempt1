@@ -1,6 +1,6 @@
 export const en = {
     offers: {
-        literal: "offers"
+        literal: "Offers"
     },
     pages:{
         frequently_bought_together:{

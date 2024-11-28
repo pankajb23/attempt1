@@ -25,6 +25,7 @@ export default function OfferWidgets() {
             content: t("offer.widget.carts.addOn.content"),
             img: "https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Cart+Addon.png",
             grps: "Cart",
+            badge: "Pop-up",
             offerType: NavigationPage.CART_ADDON,
         },
         {
@@ -33,6 +34,7 @@ export default function OfferWidgets() {
             content: t("offer.widget.carts.upsell_downsell.content"),
             img: "	https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Funnel.png",
             grps: "Cart",
+            badge: "Pop-up",
             offerType: NavigationPage.CART_UPSELL_DOWNSELL,
         },
         {

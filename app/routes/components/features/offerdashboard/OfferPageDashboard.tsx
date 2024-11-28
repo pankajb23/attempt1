@@ -32,7 +32,7 @@ export default function OfferOnPageDashboard({ navigateTo }) {
     <>
       <Layout.Section>
         <BlockStack>
-          <TopHeadingBanner navigateTo={navigateTo} heading={t("offer.add")} saveOfferButton={false} />
+          <TopHeadingBanner navigateTo={navigateTo} heading={t("offer.add")} saveOfferButton={false} onSave={() => {console.log("Should not have come here.")}}/>
           <InlineStack>
             {/** @ts-ignore*/}
             <Tabs tabs={boldTabs} selected={selected} onSelect={handleTabChange}>

@@ -7,7 +7,6 @@ import { useFormContext } from "react-hook-form";
 function TagsUI(selectedIds, allTags, handleTagsChange) {
     const tags = allTags.filter(tag => selectedIds.has(tag.tagId));
 
-    console.log("Selected ids " + JSON.stringify(selectedIds) + " all tags " + JSON.stringify(allTags) + " tags " + JSON.stringify(tags));
     return (
         Array.from(tags).map(tag => (
             <Tag

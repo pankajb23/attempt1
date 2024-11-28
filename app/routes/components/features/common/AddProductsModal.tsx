@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from "react";
 import { BlockStack, LegacyFilters, ResourceList, LegacyCard } from "@shopify/polaris";
 import { Modal, TitleBar } from "@shopify/app-bridge-react";
 import type { ResourceListProps } from "@shopify/polaris";
-// import type { ResourceListSelectedItems 
 
 export default function AddProductsModal({ allProducts, selectedProducts, addSelectedProducts, modalId, render }) {
     const selectedProductsAsArray: string[] = [...selectedProducts];
@@ -23,7 +22,6 @@ export default function AddProductsModal({ allProducts, selectedProducts, addSel
     );
 
     useEffect(() => {
-        // console.log("reacting to change ", selectedProducts);
         setSelectedItems(selectedProducts || []);
     }, [selectedProducts]);
 

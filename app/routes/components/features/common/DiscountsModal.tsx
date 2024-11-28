@@ -1,18 +1,15 @@
 import { BlockStack, Text, Checkbox, ChoiceList, TextField, Select, Card } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";
-import { Controller,  useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
     const { t } = useTranslation();
-    const { control,  watch } = useFormContext();
+    const { control, watch } = useFormContext();
 
     const productDiscountValue = watch("config.discountCombination.productDiscounts") ?? false;
     const shippingDiscountValue = watch("config.discountCombination.shippingDiscounts") ?? false;
     const orderDiscountValue = watch("config.discountCombination.orderDiscounts") ?? false;
 
-    // setValue("config.discountCombination.productDiscounts", productDiscountValue);
-    // setValue("config.discountCombination.shippingDiscounts", shippingDiscountValue);
-    // setValue("config.discountCombination.orderDiscounts", orderDiscountValue);
 
     return (
         <div>
@@ -72,7 +69,7 @@ const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
     );
 };
 
-const DiscountDetails = ({ discountedChoice }) => {
+const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHaveMinimumCartValueTextField }) => {
     const { t } = useTranslation();
     const { control, watch } = useFormContext();
 
@@ -139,13 +136,32 @@ const DiscountDetails = ({ discountedChoice }) => {
                                             options={["%", "Inr"]}
                                         />
                                     }
-                                    />
+                                />
                             }
                         />
                     )}
                 />
                 }
-                <Controller
+                {shouldHaveMinimumCartValueTextField &&
+                    <Controller
+                        control={control}
+                        name="discountState.minCartValue"
+                        render={({ field: { onChange, value } }) => (
+                            <TextField
+                                label={<Text as="h1" variant="bodySm" fontWeight="bold">
+                                    Minimum cart value for discount to apply
+                                </Text>}
+                                type="number"
+                                value={value}
+                                onChange={onChange}
+                                autoComplete="off"
+                                placeholder="0"
+                                suffix="Rs."
+                            />
+                        )}
+                    />
+                }
+                {!shouldHaveMinimumCartValueTextField && <Controller
                     name={name}
                     control={control}
                     defaultValue={discountedTextvalue}
@@ -153,7 +169,7 @@ const DiscountDetails = ({ discountedChoice }) => {
                         <TextField
                             label={discountedText}
                             value={value || ''}
-                            placeholder={t("pages.frequently_bought_together.checkbox.percentOrFixed.placeholder")}
+                            placeholder={discountTextPlaceHolder}
                             onChange={(newValue) => {
                                 // Sanitize the input value
                                 const sanitizedValue = String(newValue).trim();
@@ -163,14 +179,14 @@ const DiscountDetails = ({ discountedChoice }) => {
                         />
                     )}
                 />
+                }
                 <AllCheckbox />
             </BlockStack>
         </>
     );
-
 };
 
-export default function DiscountModal({ allProducts, allTags }) {
+export default function DiscountModal({ allProducts, allTags, checkboxHelpText, choices, discountTextPlaceholder, shouldHaveMinimumCartValueTextField=false}) {
     const { t } = useTranslation();
     const { control, watch } = useFormContext();
 
@@ -189,17 +205,11 @@ export default function DiscountModal({ allProducts, allTags }) {
                         control={control}
                         render={({ field: { onChange, value, ref } }) => (
                             <Checkbox
-                                label={<>
-                                    <Text variant="bodyMd" fontWeight="bold" as="h3">
-                                        {t("pages.discount.enable.heading")}
-                                    </Text>
-                                    <Text variant="bodySm" as="p">
-                                        {t("pages.discount.enable.bundle")}
-                                    </Text>
-                                </>}
+                                label={<Text variant="bodyMd" fontWeight="bold" as="h3">{t("pages.discount.enable.heading")}</Text>}
                                 checked={value}
                                 onChange={onChange}
                                 ref={ref}
+                                helpText={<Text variant="bodySm" as="p">{checkboxHelpText}</Text>}
                             />
                         )}
                     />
@@ -212,11 +222,7 @@ export default function DiscountModal({ allProducts, allTags }) {
                                     title={<Text variant="bodyMd" fontWeight="bold" as="h3">
                                         {t("pages.discount.enable.discount.heading")}
                                     </Text>}
-                                    choices={[
-                                        { label: t("pages.frequently_bought_together.checkbox.percentOrFixed.heading"), value: 'percentOrFixed' },
-                                        { label: t("pages.frequently_bought_together.checkbox.cheapestItemFree.heading"), value: 'cheapestItemFree' },
-                                        { label: t("pages.frequently_bought_together.checkbox.freeShipping.heading"), value: 'freeShipping' }
-                                    ]}
+                                    choices={choices}
                                     selected={[value]}
                                     onChange={(selected) => onChange(selected[0])}
                                 />
@@ -224,7 +230,7 @@ export default function DiscountModal({ allProducts, allTags }) {
                         />
                     )}
                     {isEnableDiscountSelected && (
-                        <DiscountDetails discountedChoice={discountedChoice} />
+                        <DiscountDetails discountedChoice={discountedChoice} discountTextPlaceHolder={discountTextPlaceholder} shouldHaveMinimumCartValueTextField={shouldHaveMinimumCartValueTextField}/>
                     )}
                 </BlockStack>
             </Card>

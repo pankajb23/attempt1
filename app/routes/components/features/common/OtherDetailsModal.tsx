@@ -45,7 +45,7 @@ export default function OtherDetailsModal() {
                                 value={value}
                                 onChange={onChange}
                                 autoComplete="off"
-                                placeholder={t("pages.other.override.content")}
+                                placeholder={t("pages.other.override.placeholder")}
                             />
                         )}
                     />

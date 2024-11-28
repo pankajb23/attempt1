@@ -30,6 +30,7 @@ export default function WidgetManager({ filter, navigateTo }) {
                             key={w.id}
                             navigateTo={navigateTo}
                             offerType={w.offerType}
+                            badge={w.badge}
                         />
                     ))}
                 </InlineStack>

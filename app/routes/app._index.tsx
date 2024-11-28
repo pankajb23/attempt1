@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectShowAssistanceOnMainPage,updateAssistanceOnMainPageThunk, UserGuidePreferencesInitializer, selectIsLoading } from "app/lib/reducers/UserGuidePreferencesReducer";
 import { selectUserCurrentPage, navigateTo } from "app/lib/reducers/NavigationPageReducer";
 import { NavigationPage } from "app/lib/enums/NavigationPage";
+import ProductsAddOnPage from "./components/features/productsAddOn/ProductsAddOnPage";
+import CartsAddOnPage from "./components/features/cartAddsOn/CartsAddOnPage";
 
 
 export default function Index() {
@@ -45,7 +47,7 @@ export default function Index() {
           return (
             <>
               < MainPageOfferHeader navigateToPage={navigateToCallback} />
-              {showAssistanceSelector ? < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} /> : null}
+                {showAssistanceSelector ? < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} /> : null}
               <OfferTabModal onShowOfferPage={navigateToCallback} />
               <HelpBottonModal />
             </>
@@ -56,6 +58,12 @@ export default function Index() {
 
         case NavigationPage.FREQUENTLY_BOUGHT_TOGETHER:
           return <FrequentlyBoughtTogether navigateTo={navigateToCallback} />
+        
+        case NavigationPage.PRODUCTS_ADDON:
+          return <ProductsAddOnPage navigateTo={navigateToCallback} />
+        
+        case NavigationPage.CART_ADDON:
+          return <CartsAddOnPage navigateTo={navigateToCallback} />
       }
     }
 
