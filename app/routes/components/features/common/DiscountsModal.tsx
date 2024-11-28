@@ -79,24 +79,24 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
         </Text>
     );
 
-    const { isEnabled, selectedType, name } = (() => {
+    const { isEnabled, name } = (() => {
         switch (discountedChoice) {
             case 'percentOrFixed':
                 return {
                     isEnabled: true,
-                    selectedType: 'percentOrFixed',
+                    // selectedType: 'percentOrFixed',
                     name: 'discountState.discountText',
                 }
             case 'cheapestItemFree':
                 return {
                     isEnabled: false,
-                    selectedType: 'cheapestItemFree',
+                    // selectedType: 'cheapestItemFree',
                     name: 'discountState.discountText',
                 }
             case 'freeShipping':
                 return {
                     isEnabled: false,
-                    selectedType: 'freeShipping',
+                    // selectedType: 'freeShipping',
                     name: 'discountState.discountText',
                 }
             default:

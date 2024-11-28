@@ -3,9 +3,10 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { useState, useCallback, useEffect } from "react";
 import AddProductsModal from "../common/AddProductsModal";
 import { useFormContext } from "react-hook-form";
+import type { ValueTags } from "app/lib/services/product/FetchProductService";
 
 function TagsUI(selectedIds, allTags, handleTagsChange) {
-    const tags = allTags.filter(tag => selectedIds.has(tag.tagId));
+    const tags: ValueTags[] = allTags.filter(tag => selectedIds.has(tag.tagId));
 
     return (
         Array.from(tags).map(tag => (
@@ -23,7 +24,7 @@ export default function SelectTags({ allTags, tags }) {
     const shopify = useAppBridge();
     const { setValue } = useFormContext();
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set(tags));
-    
+
 
     useEffect(() => {
         setSelectedTags(new Set(tags));

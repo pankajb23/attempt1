@@ -4,8 +4,7 @@ import {
     Text,
     BlockStack,
     Card,
-    Badge,
-    InlineGrid
+    Badge
 } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";
 
