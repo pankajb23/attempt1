@@ -4,11 +4,14 @@ import { AlertCircleIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from "@shopify/app-bridge-react";
 import AddProductsModal from "./AddProductsModal";
 import AutomaticOfferProducts from "./AutomaticOfferProducts";
-import { Controller, useFormContext} from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import NestedProductVariantsModal from "./NestedProductVariantsModal";
 import SelectedProducts from "./SelectedProductsDraggable";
 
-export default function OfferProductRadioButtonModal({ allProducts, allTags, allVariants }) {
+export default function OfferProductRadioButtonModal({ allProducts, 
+        allTags, 
+        allVariants,
+         toolTipContent = "Frequently bought together is an unobtrusive widget and automatic recommendations are available." }) {
     const { control, setValue, watch, getValues } = useFormContext();
     const shopify = useAppBridge();
 
@@ -51,7 +54,7 @@ export default function OfferProductRadioButtonModal({ allProducts, allTags, all
             <>
                 <InlineStack>
                     <Text as="p" variant="bodyMd" > Automatic </Text>
-                    <Tooltip content="Frequently bought together is an unobtrusive widget and automatic recommendations are available.">
+                    <Tooltip content="">
                         <Icon source={AlertCircleIcon} tone="base" />
                     </Tooltip>
                 </InlineStack>

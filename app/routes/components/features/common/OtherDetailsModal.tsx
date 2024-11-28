@@ -2,7 +2,7 @@ import { BlockStack, Card, TextField, Text } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";
 import { useFormContext, Controller } from "react-hook-form";
 
-export default function OtherDetailsModal() {
+export default function OtherDetailsModal({widgetTitleArg=undefined, widgetPlaceHolder=undefined}) {
 
 
     const { t } = useTranslation();
@@ -27,7 +27,7 @@ export default function OtherDetailsModal() {
         </Text>
     )
 
-    const widgetTitle = watch("otherPriorities.defaultWidgetTitle");
+    const widgetTitle = watch("otherPriorities.defaultWidgetTitle") ?? widgetTitleArg;
     const offerPriority = watch("otherPriorities.offerPriority");
 
     return (
@@ -45,7 +45,7 @@ export default function OtherDetailsModal() {
                                 value={value}
                                 onChange={onChange}
                                 autoComplete="off"
-                                placeholder={t("pages.other.override.placeholder")}
+                                placeholder={widgetPlaceHolder || t("pages.other.override.placeholder")}
                             />
                         )}
                     />
