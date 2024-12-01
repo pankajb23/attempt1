@@ -3,7 +3,7 @@
 client_id = "80cd4a853faeec3441d5fada915afdab"
 name = "testing-01"
 handle = "testing-1542"
-application_url = "https://f6ad-2401-4900-1f36-1472-6d38-c22e-713f-67d3.ngrok-free.app"
+application_url = "https://4ea2-122-161-52-231.ngrok-free.app"
 embedded = true
 
 [access_scopes]
@@ -12,9 +12,9 @@ scopes = "write_products, read_cart_transforms, write_cart_transforms, read_chec
 
 [auth]
 redirect_urls = [
-  "https://f6ad-2401-4900-1f36-1472-6d38-c22e-713f-67d3.ngrok-free.app/auth/callback",
-  "https://f6ad-2401-4900-1f36-1472-6d38-c22e-713f-67d3.ngrok-free.app/auth/shopify/callback",
-  "https://f6ad-2401-4900-1f36-1472-6d38-c22e-713f-67d3.ngrok-free.app/api/auth/callback"
+  "https://4ea2-122-161-52-231.ngrok-free.app/auth/callback",
+  "https://4ea2-122-161-52-231.ngrok-free.app/auth/shopify/callback",
+  "https://4ea2-122-161-52-231.ngrok-free.app/api/auth/callback"
 ]
 
 [webhooks]

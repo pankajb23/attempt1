@@ -61,7 +61,7 @@ export default function CartUpsellDownsellPage({ navigateTo }) {
                                         <BlockStack gap='300' >
                                             <OfferNameModal placeholder={t("pages.frequently_bought_together.offer_name.placeholder")} />
                                             <TriggerCheckbox allProducts={productArrays} tags={tags} />
-                                            <OfferProductModal />
+                                            <OfferProductModal allProducts={productArrays}/>
                                             <UpsellFunnelDiscount />
                                             <OtherDetailsModal />
                                         </BlockStack>

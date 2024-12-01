@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { Thumbnail, Button, Text, LegacyCard, ResourceItem, ResourceList, Avatar, Icon, InlineGrid, InlineStack } from "@shopify/polaris";
-import { useAppBridge } from "@shopify/app-bridge-react";
 import { ViewIcon, XSmallIcon } from "@shopify/polaris-icons";
 import AddProductsModal from "../common/AddProductsModal";
 import { useFormContext } from "react-hook-form";
@@ -11,7 +10,7 @@ function SelectedProducts(selectedPids, all, handleProductChange) {
     }
     const pids = all.filter(pid => selectedPids.has(pid.pid));
     return (
-        <div style={{ marginTop: '10px' }}>
+        <div style={{ marginTop: '4px', marginBottom:'4px' }}>
             <LegacyCard >
                 <ResourceList
                     resourceName={{ singular: 'product', plural: 'products' }}
@@ -60,18 +59,15 @@ function SelectedProducts(selectedPids, all, handleProductChange) {
 }
 
 
-function AddProductModalComponent({ allProducts, selectedIds, handleProductChange, showText }) {
+function AddProductModalComponent({ allProducts, selectedIds, handleProductChange, modalId }) {
     return (
-        <div style={{ marginTop: '10px' }}>
-            {showText &&
-                <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
-            }
-            <AddProductsModal allProducts={allProducts} selectedProducts={selectedIds} addSelectedProducts={handleProductChange} modalId={"my-product-modal"} render={renderItem} />
+        <div >
+            <AddProductsModal allProducts={allProducts} selectedProducts={selectedIds} addSelectedProducts={handleProductChange} modalId={modalId} render={renderItem} />
         </div>
     );
 }
 
-export default function SpecificProducts({ allProducts, selectedProducts, property, modalId, showButton }) {
+export default function ProductsModal({ allProducts, selectedProducts, property, modalId }) {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set(selectedProducts));
 
     const { setValue } = useFormContext();
@@ -79,8 +75,6 @@ export default function SpecificProducts({ allProducts, selectedProducts, proper
     useEffect(() => {
         setSelectedIds(new Set(selectedProducts));
     }, [selectedProducts])
-
-    const shopify = useAppBridge();
 
     const handleProductChange = useCallback((products: string | string[]) => {
         setSelectedIds((prev) => {
@@ -101,16 +95,9 @@ export default function SpecificProducts({ allProducts, selectedProducts, proper
         });
     }, []);
 
-    return (<div style={{ marginTop: '6px' }}>
-
-        {showButton &&
-            /* @ts-ignore */
-            <Button variant="secondary" onClick={() => shopify.modal.show(modalId)}>
-                <Text as="h6" fontWeight="bold" variant="headingSm">Select products</Text>
-            </Button>
-        }
+    return (<div >
         {SelectedProducts(selectedIds, allProducts, handleProductChange)}
-        <AddProductModalComponent allProducts={allProducts} selectedIds={selectedIds} handleProductChange={handleProductChange} showText={showButton} />
+        <AddProductModalComponent allProducts={allProducts} selectedIds={selectedIds} handleProductChange={handleProductChange} modalId={modalId}/>
     </div>);
 }
 

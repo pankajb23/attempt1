@@ -14,6 +14,8 @@ import OfferNameModal from "../common/OfferNameModal";
 import OfferProductModal from "./OfferProductModal";
 import { useTranslation } from "react-i18next";
 import SideModal from "../frequentlyboughttogether/SideModal";
+
+
 export default function ProductsAddOnPage({ navigateTo }) {
     const methods = useForm<FrequentlyBoughtTogetherType>({
         defaultValues: {

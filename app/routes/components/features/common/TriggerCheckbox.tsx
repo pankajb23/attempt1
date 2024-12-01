@@ -18,7 +18,13 @@ export default function TriggerCheckbox({ allProducts, tags }) {
         switch (triggerType) {
             case "specific_products":
                 return <>
-                    <SpecificProducts allProducts={allProducts} selectedProducts={selectedProducts}/>
+                    <SpecificProducts 
+                        allProducts={allProducts} 
+                        selectedProducts={selectedProducts}
+                        modalId={"my-product-modal"}
+                        property={"trigger.products"}
+                        showButton={true}
+                    />
                     {
                         isSubmitted && triggerType === "specific_products" && selectedProducts.length === 0 && (
                             <InlineError
