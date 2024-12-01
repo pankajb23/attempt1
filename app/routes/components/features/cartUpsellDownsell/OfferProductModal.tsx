@@ -112,17 +112,6 @@ function ProductSelection({ allProducts, index, modalId }) {
     );
 }
 
-function AddOfferButton({ index }) {
-    return (
-        <BlockStack gap="300">
-            {/** @ts-ignore */}
-            <Button variant="primary">
-                <Text as="p" variant="bodyMd" fontWeight="bold"> Add offer</Text>
-            </Button>
-            <Text as="legend" variant="bodyMd" > Show another upsell or downsell when offer #{index} is accepted or declined. </Text>
-        </BlockStack>
-    );
-}
 
 function OfferBlock({ index, allProducts }) {
     const { watch, setValue } = useFormContext();
@@ -156,6 +145,8 @@ function OfferBlock({ index, allProducts }) {
                             <Text as="h5" variant="headingMd" fontWeight="bold"> {`Offer #${index}A, #${index}B`}</Text>
                             <Button variant="plain" icon={DeleteIcon} onClick={() => { setValue(`offerProducts.${index}`, null) }} />
                         </InlineGrid>
+
+                        {/** @ts-ignore */}
                         <Tabs fitted tabs={tabs} selected={isOfferAcceptedOrDeclined ? 0 : 1} onSelect={(c) => {
                             console.log("Selected tab ", c);
                             setValue(`offerProducts.${index}.isAcceptedOrDeclined`, c);

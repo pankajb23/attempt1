@@ -10,7 +10,7 @@ function SelectedProducts(selectedPids, all, handleProductChange) {
     }
     const pids = all.filter(pid => selectedPids.has(pid.pid));
     return (
-        <div style={{ marginTop: '4px', marginBottom:'4px' }}>
+        <div style={{ marginTop: '4px', marginBottom: '4px' }}>
             <LegacyCard >
                 <ResourceList
                     resourceName={{ singular: 'product', plural: 'products' }}
@@ -93,11 +93,11 @@ export default function ProductsModal({ allProducts, selectedProducts, property,
                 return newPids;
             }
         });
-    }, []);
+    }, [setValue]);
 
     return (<div >
         {SelectedProducts(selectedIds, allProducts, handleProductChange)}
-        <AddProductModalComponent allProducts={allProducts} selectedIds={selectedIds} handleProductChange={handleProductChange} modalId={modalId}/>
+        <AddProductModalComponent allProducts={allProducts} selectedIds={selectedIds} handleProductChange={handleProductChange} modalId={modalId} />
     </div>);
 }
 
