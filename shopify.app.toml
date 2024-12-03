@@ -3,18 +3,18 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://reader-motorcycles-jobs-cst.trycloudflare.com"
+application_url = "https://bumper-ending-fresh-constructed.trycloudflare.com"
 embedded = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products, read_cart_transforms, write_cart_transforms, read_checkout_branding_settings, write_checkout_branding_settings, read_customers, write_customers, read_discounts, write_discounts, read_locations, write_locations, read_orders, write_orders, storefronts"
 
 [auth]
 redirect_urls = [
-  "https://reader-motorcycles-jobs-cst.trycloudflare.com/auth/callback",
-  "https://reader-motorcycles-jobs-cst.trycloudflare.com/auth/shopify/callback",
-  "https://reader-motorcycles-jobs-cst.trycloudflare.com/api/auth/callback"
+  "https://bumper-ending-fresh-constructed.trycloudflare.com/auth/callback",
+  "https://bumper-ending-fresh-constructed.trycloudflare.com/auth/shopify/callback",
+  "https://bumper-ending-fresh-constructed.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
