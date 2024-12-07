@@ -1,13 +1,13 @@
 import { Page, BlockStack } from "@shopify/polaris"
-import { CustomizePageType } from "./components/types/CustomizeTypes";
+import { CustomizePageType } from "../components/types/CustomizeTypes";
 import { useState, useCallback } from "react";
-import LandingPageModal from "./components/customize/LandingPage";
-import CommonSettingsModal from "./components/customize/commonSettings/CommonSettings";
-import FrequentlyBoughtTogetherWidgetPage from "./components/customize/frequentlyBoughtTogether/FrequentlyBoughtTogetherWidgetPage";
-import ProductsAddOnWidget from "./components/customize/productAddsOn/ProductsAddOnWidget";
-import CartAddOnsPage from "./components/customize/cartAddOns/CartAddOnsPage";
-import UpsellFunnelPage from "./components/customize/upsellFunnel/UpsellFunnelPage";
-import ThankYouPageAddOns from "./components/customize/thankYouPageAdsOns/ThankYouPageAddOns";
+import LandingPageModal from "../components/customize/LandingPage";
+import CommonSettingsModal from "../components/customize/commonSettings/CommonSettings";
+import FrequentlyBoughtTogetherWidgetPage from "../components/customize/frequentlyBoughtTogether/FrequentlyBoughtTogetherWidgetPage";
+import ProductsAddOnWidget from "../components/customize/productAddsOn/ProductsAddOnWidget";
+import CartAddOnsPage from "../components/customize/cartAddOns/CartAddOnsPage";
+import UpsellFunnelPage from "../components/customize/upsellFunnel/UpsellFunnelPage";
+import ThankYouPageAddOns from "../components/customize/thankYouPageAdsOns/ThankYouPageAddOns";
 
 export default function CustomizeMainPage() {
   const [page, setPage] = useState(CustomizePageType.LandingPage);
@@ -26,7 +26,7 @@ export default function CustomizeMainPage() {
     );
   }
 
-  console.log("page"  ,page);
+  console.log("page", page);
   const showPage = (page: CustomizePageType) => {
     switch (page) {
       case CustomizePageType.LandingPage:
@@ -43,15 +43,15 @@ export default function CustomizeMainPage() {
 
       case CustomizePageType.CartAddOns:
         return customPage(<CartAddOnsPage navigateToPage={navigateToCallback} />, false);
-      
+
       case CustomizePageType.UpsellFunnel:
-        return customPage(<UpsellFunnelPage navigateToPage={navigateToCallback} />, false);  
-      
+        return customPage(<UpsellFunnelPage navigateToPage={navigateToCallback} />, false);
+
       case CustomizePageType.ThankYouPageAddOns:
         return customPage(<ThankYouPageAddOns navigateToPage={navigateToCallback} />, false);
 
       default:
-        throw new Error("Invalid page");  
+        throw new Error("Invalid page");
     }
   };
 

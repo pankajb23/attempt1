@@ -11,7 +11,7 @@ import {
 import type { TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
 import SafeSpan from '../custom/SafeSpan';
-import '../../css/Custom.css';
+import '../../routes/css/Custom.css';
 import MainPageOfferDashboardColumns from 'app/lib/data/MainPageDashboardColums';
 import { useTranslation } from "react-i18next";
 import { NavigationPage } from 'app/lib/enums/NavigationPage';

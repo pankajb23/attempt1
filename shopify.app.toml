@@ -3,18 +3,23 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://bumper-ending-fresh-constructed.trycloudflare.com"
+application_url = "https://reviewed-surfaces-principles-flight.trycloudflare.com"
 embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "delta-store-test01.myshopify.com"
+include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products, read_cart_transforms, write_cart_transforms, read_checkout_branding_settings, write_checkout_branding_settings, read_customers, write_customers, read_discounts, write_discounts, read_locations, write_locations, read_orders, write_orders, storefronts"
+scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://bumper-ending-fresh-constructed.trycloudflare.com/auth/callback",
-  "https://bumper-ending-fresh-constructed.trycloudflare.com/auth/shopify/callback",
-  "https://bumper-ending-fresh-constructed.trycloudflare.com/api/auth/callback"
+  "https://reviewed-surfaces-principles-flight.trycloudflare.com/auth/callback",
+  "https://reviewed-surfaces-principles-flight.trycloudflare.com/auth/shopify/callback",
+  "https://reviewed-surfaces-principles-flight.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -26,7 +31,3 @@ api_version = "2024-10"
 
 [pos]
 embedded = false
-
-[build]
-dev_store_url = "delta-store-test01.myshopify.com"
-automatically_update_urls_on_dev = true

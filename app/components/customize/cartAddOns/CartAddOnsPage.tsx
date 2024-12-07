@@ -1,8 +1,8 @@
 import { Layout, BlockStack, Card, Text, InlineGrid, TextField } from "@shopify/polaris";
 import { FormProvider, useForm, useFormContext, Controller } from "react-hook-form";
-import TopHeadingBanner from "app/routes/components/common/TopHeaderBanner";
-import HelpBottonModal from "app/routes/components/common/HelpBottomModal";
-import { CustomizePageType, type TranslationComponent } from "app/routes/components/types/CustomizeTypes";
+import TopHeadingBanner from "../../common/TopHeaderBanner";
+import HelpBottonModal from "../../common/HelpBottomModal";
+import { CustomizePageType, type TranslationComponent } from "../../types/CustomizeTypes";
 import { Component } from "../frequentlyBoughtTogether/TextAndTranslations";
 import StylingModal from "./StylingModal";
 import SettingsModal from "./SettingsModal";

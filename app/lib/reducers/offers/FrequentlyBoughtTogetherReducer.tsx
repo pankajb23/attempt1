@@ -6,7 +6,7 @@ import {
     type OfferProductsManual,
     type OfferProductsAutomatic,
     type DiscountState
-} from 'app/routes/components/types/FrequentlyBoughtTogetherTypes';
+} from 'app/components/types/FrequentlyBoughtTogetherTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { setInitialState } from '../UserGuidePreferencesReducer';

@@ -2,21 +2,20 @@ import {
     Layout,
     BlockStack
 } from "@shopify/polaris";
-import TopHeadingBanner from "../../common/TopHeaderBanner";
-import TriggerCheckbox from "../common/TriggerCheckbox";
-import DiscountModal from "../common/DiscountsModal";
-import OtherDetailsModal from "../common/OtherDetailsModal";
 import { useSelector } from "react-redux";
 import { ProductCallInitializer, selectIsLoading, selectPids, selectTags, selectVariants } from "app/lib/reducers/RestClientReducer";
 import { FormProvider, useForm } from 'react-hook-form';
-import type { FrequentlyBoughtTogetherType } from "../../types/FrequentlyBoughtTogetherTypes";
-import OfferNameModal from "../common/OfferNameModal";
-import { useTranslation } from "react-i18next";
-import SideModal from "../frequentlyboughttogether/SideModal";
-import OfferProductRadioButtonModal from "../common/OfferProductRadioButtonModal";
-import EnableDiscountModal from "./EnableDiscountModal";
+import type { FrequentlyBoughtTogetherType } from "../types/FrequentlyBoughtTogetherTypes";
+import TopHeadingBanner from "../common/TopHeaderBanner";
+import OfferNameModal from "../features/common/OfferNameModal";
+import TriggerCheckbox from "../features/common/TriggerCheckbox";
+import SideModal from "../features/frequentlyboughttogether/SideModal";
+import OfferProductRadioButtonModal from "../features/common/OfferProductRadioButtonModal";
+import PostPurchaseDiscountModal from "./PostPurchaseDiscountModal";
+import OtherDetails from "./OtherDetails";
 
-export default function ThankyouAddOnPage({ navigateTo }) {
+export default function PostPurchaseUpsellPage({ navigateTo }) {
+
     const methods = useForm<FrequentlyBoughtTogetherType>({
         defaultValues: {
             offerName: "",
@@ -27,8 +26,6 @@ export default function ThankyouAddOnPage({ navigateTo }) {
         }
     });
 
-
-    const { t } = useTranslation();
 
     ProductCallInitializer({ userId: "alpha-beta-gamma" });
     const productArrays = useSelector(state => selectPids(state));
@@ -41,10 +38,6 @@ export default function ThankyouAddOnPage({ navigateTo }) {
         console.log("data ", JSON.stringify(data));
     };
 
-    const choices = [
-        { label: t("pages.frequently_bought_together.checkbox.percentOrFixed.heading"), value: 'percentOrFixed' },
-        { label: t("pages.frequently_bought_together.checkbox.freeShipping.heading"), value: 'freeShipping' }
-    ];
     if (isLoading) {
         console.log("Loading rest client for the first time");
     } else {
@@ -55,7 +48,7 @@ export default function ThankyouAddOnPage({ navigateTo }) {
                         <BlockStack >
                             <TopHeadingBanner
                                 navigateTo={navigateTo}
-                                heading="Thank you page add-ons"
+                                heading="Post purchase upsell"
                                 saveOfferButton={true}
                                 onSave={methods.handleSubmit(onSubmit)}
                             />
@@ -67,18 +60,21 @@ export default function ThankyouAddOnPage({ navigateTo }) {
                                         <BlockStack gap='300' >
                                             <OfferNameModal placeholder="E.g Upsell for mobile phones" />
                                             <TriggerCheckbox allProducts={productArrays} tags={tags} />
-                                            <OfferProductRadioButtonModal allProducts={productArrays} allTags={tags} allVariants={productVariants} />
-                                            <EnableDiscountModal />
-                                            <OtherDetailsModal 
-                                                widgetTitleArg={"Override default widget title that appears in online store"} 
-                                                widgetPlaceHolder={"Optional, Eg. You might alo like these"}/>
+                                            <OfferProductRadioButtonModal
+                                                allProducts={productArrays}
+                                                allTags={tags}
+                                                allVariants={productVariants}
+                                                toolTipContent="Post purchase upsell is an unobtrusive widget and automatic recommendations are available." />
+
+                                            <PostPurchaseDiscountModal />
+                                            <OtherDetails />
                                         </BlockStack>
 
                                     </Layout.Section>
                                     <Layout.Section variant="oneThird">
-                                    <SideModal heading={"Thank you page add-ons"}
-                                            explanation={"This works with the standard thank you page and when checkout extensibility is not used."}
-                                            img={"https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Thankyou+page.png"} />
+                                        <SideModal heading={"Post purchase upsell"}
+                                            explanation={"Please note this feature is only with Shopify payments and credit card / PayPal Express and available in selected countries for stores that use Shopify’s payment gateway."}
+                                            img={"https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Post+Purchase.png"} />
                                     </Layout.Section>
                                 </Layout>
                             </BlockStack>

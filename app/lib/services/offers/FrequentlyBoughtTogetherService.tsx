@@ -1,4 +1,4 @@
-import { type FrequentlyBoughtTogetherType, getMockedData } from "app/routes/components/types/FrequentlyBoughtTogetherTypes"
+import { type FrequentlyBoughtTogetherType, getMockedData } from "app/components/types/FrequentlyBoughtTogetherTypes"
 
 export interface FrequentlyBoughtTogetherDAO {
     // we will not allow duplicates here.

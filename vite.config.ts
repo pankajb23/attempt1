@@ -1,7 +1,14 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import dotenv from "dotenv";
 
+try{
+  dotenv.config({ path: "./.env" });
+  // console.log("configs", JSON.stringify(configs));
+}catch(e){
+  console.log("error in dotenv", e);
+}
 // Related: https://github.com/remix-run/remix/issues/2835#issuecomment-1144102176
 // Replace the HOST env var with SHOPIFY_APP_URL so that it doesn't break the remix server. The CLI will eventually
 // stop passing in HOST, so we can remove this workaround after the next major release.
@@ -16,6 +23,9 @@ if (
 
 const host = new URL(process.env.SHOPIFY_APP_URL || "http://localhost")
   .hostname;
+
+console.log("host pankaj host ", host);
+// console.log("process", JSON.stringify(process.env));
 
 let hmrConfig;
 if (host === "localhost") {
@@ -41,10 +51,11 @@ export default defineConfig({
     fs: {
       // See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
       allow: ["app", "node_modules"],
-    },
+    }
   },
   plugins: [
     remix({
+      appDirectory: "app",
       ignoredRouteFiles: ["**/.*"],
     }),
     tsconfigPaths(),

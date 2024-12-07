@@ -23,18 +23,6 @@ export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
 
   return (
-// <<<<<<< HEAD
-//     <AppProvider isEmbeddedApp apiKey={apiKey}>
-//       <NavMenu>
-//         <Link to="/app" rel="home">
-//           Home
-//         </Link>
-//         <Link to="/app/additional">Additional page</Link>
-//       </NavMenu>
-//       <Outlet />
-//     </AppProvider>
-//   );
-// =======
     <ReduxProvider store={store}>
       <I18nextProvider i18n={i18n}>
         <AppProvider isEmbeddedApp apiKey={apiKey}>
@@ -50,7 +38,6 @@ export default function App() {
     </ReduxProvider>
   );
 
-// >>>>>>> origin/main
 }
 
 // Shopify needs Remix to catch some thrown responses, so that their headers are included in the response.
