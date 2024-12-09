@@ -7,40 +7,37 @@ import OfferTabModal from '../components/offer/OfferTabModal';
 import SetupAssistance from "../components/offer/SetupAssistance";
 import HelpBottonModal from "../components/common/HelpBottomModal";
 import MainPageOfferHeader from "../components/features/mainpage/MainPageOfferHeader";
-import { useCallback } from "react";
 import OfferOnPageDashboard from "../components/features/offerdashboard/OfferPageDashboard";
 import FrequentlyBoughtTogether from "../components/features/frequentlyboughttogether/FrequentlyBoughtTogether";
-import { useDispatch, useSelector } from "react-redux";
-import { selectShowAssistanceOnMainPage, updateAssistanceOnMainPageThunk, UserGuidePreferencesInitializer, selectIsLoading } from "app/lib/reducers/UserGuidePreferencesReducer";
-import { selectUserCurrentPage, navigateTo } from "app/lib/reducers/NavigationPageReducer";
 import { NavigationPage } from "app/lib/enums/NavigationPage";
 import ProductsAddOnPage from "../components/features/productsAddOn/ProductsAddOnPage";
 import CartsAddOnPage from "../components/features/cartAddsOn/CartsAddOnPage";
 import PostPurchaseUpsellPage from "../components/postPurchaseUpsell/PostPurchaseUpsellPage";
 import ThankyouAddOnPage from "../components/features/thankyouPageAddOns/ThankyouAddOnPage";
 import CartUpsellDownsellPage from "../components/features/cartUpsellDownsell/CartUpsellDownsellPage";
-
+import { useStoreContext } from "app/lib/context/StoreContext";
+import { useCallback, useState } from "react";
 
 export default function Index() {
-  const isLoadingDone = useSelector(state => selectIsLoading(state));
 
-  const showAssistanceSelector = useSelector(state => selectShowAssistanceOnMainPage(state));
-  const dispatch = useDispatch();
+  const { modalsAndStoreId, updateModalsAndStoreId } = useStoreContext();
+  const isLoading = modalsAndStoreId.isLoading;
+  const mainPageModalState = modalsAndStoreId.mainPageModalState ?? true;
+  const [navigateTo, setNavigateTo] = useState(NavigationPage.MAIN_PAGE);
+
 
   const setupShowAssistanceCallback = useCallback((flag: boolean) => {
-    const value: any = updateAssistanceOnMainPageThunk(false)
-    dispatch(value);
-  }, [dispatch]);
-
-  const navigateToSelector = useSelector(state => selectUserCurrentPage(state));
+    updateModalsAndStoreId((prevState) => ({
+      mainPageModalState: flag
+    }));
+  }, [updateModalsAndStoreId]);
 
   const navigateToCallback = useCallback((navigateToPage: NavigationPage) => {
-    dispatch(navigateTo(navigateToPage));
-  }, [dispatch]);
+    setNavigateTo(navigateToPage);
+  }, []);
 
-  UserGuidePreferencesInitializer({ userId: "alpha-beta-gamma" })
 
-  function wrapBottom(content) {
+  const wrapBottom = (content) => {
     return (
       <>
         {content}
@@ -49,17 +46,17 @@ export default function Index() {
     );
   }
 
-  if (isLoadingDone) {
+  if (isLoading) {
     console.log("Loading user preferences for the first time");
   } else {
-    console.log("nvigateToSelector " + navigateToSelector);
+    console.log("nvigateToSelector " + mainPageModalState);
     const renderOfferPage = () => {
-      switch (navigateToSelector) {
+      switch (navigateTo) {
         case NavigationPage.MAIN_PAGE:
           return (
             <>
               < MainPageOfferHeader navigateToPage={navigateToCallback} />
-              {showAssistanceSelector ? < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} /> : null}
+              {mainPageModalState ? < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} /> : null}
               <OfferTabModal onShowOfferPage={navigateToCallback} />
               <HelpBottonModal />
             </>

@@ -2,10 +2,12 @@ import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import dotenv from "dotenv";
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
 
 try{
   dotenv.config({ path: "./.env" });
-  // console.log("configs", JSON.stringify(configs));
 }catch(e){
   console.log("error in dotenv", e);
 }
@@ -44,6 +46,11 @@ if (host === "localhost") {
   };
 }
 
+// Get the directory of the current file
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 export default defineConfig({
   server: {
     port: Number(process.env.PORT || 3000),
@@ -55,6 +62,42 @@ export default defineConfig({
   },
   plugins: [
     remix({
+      routes(defineRoutes) {
+        return defineRoutes(route => {
+          // Manually define routes based on file system
+          const routesDir = path.resolve(__dirname, 'app', 'routes', 'store');
+
+          function addRoutes(dir: string, basePath: string = '') {
+            const files = fs.readdirSync(dir);
+
+            files.forEach(file => {
+              const fullPath = path.join(dir, file);
+              const stat = fs.statSync(fullPath);
+
+              if (stat.isDirectory()) {
+                // Recursively add nested routes
+                addRoutes(fullPath, path.join(basePath, file));
+              } else if (file.endsWith('.tsx') || file.endsWith('.ts')) {
+                // Convert filename to route path
+                const routeName = file.replace(/\.(tsx|ts)$/, '');
+                const routePath = routeName === 'index' 
+                  ? basePath || '/'
+                  : path.join(basePath, routeName).replace(/\\/g, '/');
+
+                // Add route
+                console.log("routePath", routePath);
+                route(
+                  routePath, 
+                  path.relative(path.resolve(__dirname, 'app'), fullPath)
+                );
+              }
+            });
+          }
+
+          // Start route discovery from routes directory
+          addRoutes(routesDir);
+        });
+      },
       appDirectory: "app",
       ignoredRouteFiles: ["**/.*"],
     }),

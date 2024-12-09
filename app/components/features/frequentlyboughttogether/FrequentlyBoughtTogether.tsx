@@ -8,30 +8,18 @@ import OfferProductRadioButtonModal from "../common/OfferProductRadioButtonModal
 import DiscountModal from "../common/DiscountsModal";
 import OtherDetailsModal from "../common/OtherDetailsModal";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import { ProductCallInitializer, selectIsLoading, selectPids, selectTags, selectVariants } from "app/lib/reducers/RestClientReducer";
 import { FormProvider, useForm } from 'react-hook-form';
-import type { FrequentlyBoughtTogetherType } from "../../types/FrequentlyBoughtTogetherTypes";
 import SideModal from "./SideModal";
 import OfferNameModal from "../common/OfferNameModal";
 
-export default function FrequentlyBoughtTogether({ navigateTo }) {
-    const methods = useForm<FrequentlyBoughtTogetherType>({
+export default function FrequentlyBoughtTogether({ navigateTo, id=null, data = null }) {
+    const methods = useForm({
         defaultValues: {
-            offerName: "",
-            trigger: {},
-            offerProducts: {},
-            otherPriorities: {},
-            discountState: {}
+            data
         }
     });
 
     const { t } = useTranslation();
-    ProductCallInitializer({ userId: "alpha-beta-gamma" });
-    const productArrays = useSelector(state => selectPids(state));
-    const tags = useSelector(state => selectTags(state));
-    const isLoading = useSelector(state => selectIsLoading(state));
-    const productVariants = useSelector(state => selectVariants(state));
 
 
     const onSubmit = async (data) => {
@@ -43,6 +31,7 @@ export default function FrequentlyBoughtTogether({ navigateTo }) {
         { label: t("pages.frequently_bought_together.checkbox.cheapestItemFree.heading"), value: 'cheapestItemFree' },
         { label: t("pages.frequently_bought_together.checkbox.freeShipping.heading"), value: 'freeShipping' }
     ];
+    
 
     if (isLoading) {
         console.log("Loading rest client for the first time");

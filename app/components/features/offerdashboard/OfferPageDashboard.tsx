@@ -12,7 +12,6 @@ import TopHeadingBanner from "../../common/TopHeaderBanner";
 import { OfferTabs } from "app/lib/data/OfferPageVariations";
 import { useTranslation } from "react-i18next";
 import WidgetManager from "./widget/WidgetManager";
-import HelpBottonModal from "../../common/HelpBottomModal";
 
 export default function OfferOnPageDashboard({ navigateTo }) {
   const {t} = useTranslation();
@@ -39,7 +38,6 @@ export default function OfferOnPageDashboard({ navigateTo }) {
               <WidgetManager filter={OfferTabs[selected].id} navigateTo={navigateTo} />
             </Tabs>
           </InlineStack>
-          <HelpBottonModal />
         </BlockStack>
       </Layout.Section>
     </>

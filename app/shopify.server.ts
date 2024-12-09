@@ -6,7 +6,9 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
+import { PrismaClient } from '@prisma/client';
 import prisma from "./db.server";
+
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -25,6 +27,9 @@ const shopify = shopifyApp({
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
 });
+
+
+export const prismaClient = new PrismaClient()
 
 export default shopify;
 export const apiVersion = ApiVersion.October24;

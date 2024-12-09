@@ -30,3 +30,36 @@ model Session {
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
 }
+
+model Store {
+  id           String     @id @default(uuid()) // id for local storage.
+  shopId       String     @unique // a unique shopify id. 
+  name         String
+  contactEmail String
+  createdAt    DateTime
+  offers       Offer[]
+  helpModals   HelpModals?
+}
+
+model HelpModals {
+  id                  String  @id @default(uuid())
+  storeId             String  @unique
+  store               Store   @relation(fields: [storeId], references: [id])
+  mainPageModalClose  Boolean @default(false)
+  offerPageModalClose Boolean @default(false)
+}
+
+model Offer {
+  offerId      String         @id
+  storeId      String
+  store        Store          @relation(fields: [storeId], references: [id]) //Foreign key
+  offerName    String
+  offerType    String
+  offerContent OfferContent[]
+}
+
+model OfferContent {
+  offerId      String  @id
+  offer        Offer   @relation(fields: [offerId], references: [offerId]) //Foreign key
+  offerContent String?
+}

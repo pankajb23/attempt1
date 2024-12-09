@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://reviewed-surfaces-principles-flight.trycloudflare.com"
+application_url = "https://salvation-fruits-balanced-guides.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products, read_users"
 
 [auth]
 redirect_urls = [
-  "https://reviewed-surfaces-principles-flight.trycloudflare.com/auth/callback",
-  "https://reviewed-surfaces-principles-flight.trycloudflare.com/auth/shopify/callback",
-  "https://reviewed-surfaces-principles-flight.trycloudflare.com/api/auth/callback"
+  "https://salvation-fruits-balanced-guides.trycloudflare.com/auth/callback",
+  "https://salvation-fruits-balanced-guides.trycloudflare.com/auth/shopify/callback",
+  "https://salvation-fruits-balanced-guides.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
