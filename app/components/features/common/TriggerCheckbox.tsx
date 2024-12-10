@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import SelectTags from "../frequentlyboughttogether/SelectTags";
 import SpecificProducts from "../frequentlyboughttogether/SpecificProductsModal";
 
-export default function TriggerCheckbox({ allProducts, tags }) {
+export default function TriggerCheckbox() {
 
     const { control, setValue, watch, formState: { isSubmitted } } = useFormContext();
 
@@ -13,15 +13,12 @@ export default function TriggerCheckbox({ allProducts, tags }) {
     const selectedProducts = watch('trigger.products') || [];
     const selectedTags = watch('trigger.tags') || [];
 
-
     const choiceSuffix = () => {
         switch (triggerType) {
             case "specific_products":
                 return <>
-                    <SpecificProducts 
-                        allProducts={allProducts} 
+                    <SpecificProducts
                         selectedProducts={selectedProducts}
-                        modalId={"my-product-modal"}
                         property={"trigger.products"}
                         showButton={true}
                     />
@@ -36,7 +33,7 @@ export default function TriggerCheckbox({ allProducts, tags }) {
                 </>;
             case "tags":
                 return <>
-                    <SelectTags allTags={tags} tags={selectedTags}/>
+                    <SelectTags tags={selectedTags} />
                     {
                         isSubmitted && triggerType === "tags" && selectedTags.length === 0 && (
                             <InlineError

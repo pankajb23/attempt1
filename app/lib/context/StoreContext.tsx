@@ -3,12 +3,12 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 export const StoreContext = createContext(null);
 
 export function StoreProvider({ children }) {
-    const [modalsAndStoreId, setModalsAndStoreId] = useState({ isLoading: true });
+    const [storeDetails, setStoreDetails] = useState({ isLoading: true });
 
     const updateModalsAndStoreId = useCallback((updater) => {
         // If updater is a function, call it with the previous state
         if (typeof updater === 'function') {
-            setModalsAndStoreId(prevState => {
+            setStoreDetails(prevState => {
                 const newState = updater(prevState);
                 const finalState = { ...prevState, ...newState };
                 console.log("Updating state: ", newState, finalState, prevState);
@@ -16,15 +16,15 @@ export function StoreProvider({ children }) {
             });
         } else {
             // If it's not a function, merge it with the existing state
-            setModalsAndStoreId(prevState => {
+            setStoreDetails(prevState => {
                 console.log("Updating state:", updater);
                 return { ...prevState, ...updater };
             });
         }
     }, []);
 
-    console.log("State to persist", modalsAndStoreId)
-    if (modalsAndStoreId.storeId !== undefined) {
+    console.log("State to persist", storeDetails)
+    if (storeDetails.storeId !== undefined) {
         const uri = `/api/storeId/modals/update`;
         const stateToPresist = async (uri, modalsAndStoreId) => {
             const response = await fetch(`${uri}`, {
@@ -34,8 +34,8 @@ export function StoreProvider({ children }) {
                 },
                 body: JSON.stringify({
                     storeId: modalsAndStoreId.storeId,
-                    mainPageModalClose: modalsAndStoreId.mainPageModalState,
-                    offerPageModalClose: modalsAndStoreId.offerPageModalState
+                    mainPageModalState: modalsAndStoreId.mainPageModalState,
+                    offerPageModalState: modalsAndStoreId.offerPageModalState
                 }),
             });
             if (!response.ok) {
@@ -46,7 +46,7 @@ export function StoreProvider({ children }) {
 
         };
 
-        stateToPresist(uri, modalsAndStoreId).then((result) => {
+        stateToPresist(uri, storeDetails).then((result) => {
             console.log("Response from stateToPresist: ", result);
         }).catch((error) => {
             console.error("Error from stateToPresist: ", error);
@@ -57,7 +57,7 @@ export function StoreProvider({ children }) {
 
 
     return (
-        <StoreContext.Provider value={{ modalsAndStoreId, setModalsAndStoreId, updateModalsAndStoreId }}>
+        <StoreContext.Provider value={{ modalsAndStoreId: storeDetails, setModalsAndStoreId: setStoreDetails, updateModalsAndStoreId }}>
             {children}
         </StoreContext.Provider>
     );

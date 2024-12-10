@@ -2,6 +2,11 @@ import {
   Page,
   Layout,
   BlockStack,
+  SkeletonPage,
+  LegacyCard,
+  SkeletonBodyText,
+  TextContainer,
+  SkeletonDisplayText,
 } from "@shopify/polaris";
 import OfferTabModal from '../components/offer/OfferTabModal';
 import SetupAssistance from "../components/offer/SetupAssistance";
@@ -18,11 +23,12 @@ import CartUpsellDownsellPage from "../components/features/cartUpsellDownsell/Ca
 import { useStoreContext } from "app/lib/context/StoreContext";
 import { useCallback, useState } from "react";
 
+
 export default function Index() {
 
   const { modalsAndStoreId, updateModalsAndStoreId } = useStoreContext();
   const isLoading = modalsAndStoreId.isLoading;
-  const mainPageModalState = modalsAndStoreId.mainPageModalState ?? true;
+  const mainPageModalState = modalsAndStoreId.mainPageModalState;
   const [navigateTo, setNavigateTo] = useState(NavigationPage.MAIN_PAGE);
 
 
@@ -49,15 +55,36 @@ export default function Index() {
   if (isLoading) {
     console.log("Loading user preferences for the first time");
   } else {
-    console.log("nvigateToSelector " + mainPageModalState);
+    console.log("nvigateToSelector " + mainPageModalState, isLoading);
     const renderOfferPage = () => {
       switch (navigateTo) {
         case NavigationPage.MAIN_PAGE:
           return (
             <>
               < MainPageOfferHeader navigateToPage={navigateToCallback} />
-              {mainPageModalState ? < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} /> : null}
-              <OfferTabModal onShowOfferPage={navigateToCallback} />
+              {
+                mainPageModalState === undefined ? (
+                  <SkeletonPage>
+                    <Layout>
+                      <Layout.Section>
+                        <LegacyCard sectioned>
+                          <TextContainer>
+                            <SkeletonDisplayText size="small" />
+                            <SkeletonBodyText />
+                          </TextContainer>
+                        </LegacyCard>
+                      </Layout.Section>
+                    </Layout>
+                  </SkeletonPage>
+                ) : (
+                  mainPageModalState ?
+                    (<>
+                      < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} />
+                      <OfferTabModal onShowOfferPage={navigateToCallback} />
+                    </>) :
+                    (<OfferTabModal onShowOfferPage={navigateToCallback} />)
+                )
+              }
               <HelpBottonModal />
             </>
           );

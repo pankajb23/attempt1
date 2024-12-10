@@ -14,8 +14,9 @@ export function fetchStoreInfo(updateModalsAndStoreId) {
                 updateModalsAndStoreId({
                     isLoading: false,
                     storeId: resp.data.storeId,
-                    mainPageModalState: !resp.data.helpModal.mainPageModalClose,
-                    offerPageModalState: !resp.data.helpModal.offerPageModalClose
+                    mainPageModalState: resp.data.helpModal.mainPageModalState,
+                    offerPageModalState: resp.data.helpModal.mainPageModalState,
+                    tags: resp.data.tagsData
                 });
 
             } else {

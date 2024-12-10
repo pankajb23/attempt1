@@ -29,5 +29,5 @@ export const PaginatedDataList = ({ page, findPage, setDataItems }) => {
     } else {
         setDataItems({ success: true, content: data.items });
     }
-
 }
+

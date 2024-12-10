@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { prismaClient, authenticate } from "app/shopify.server";
 import { json } from "@remix-run/node";
+import { TagsData } from "../tags";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const { admin } = await authenticate.admin(request);
@@ -21,7 +22,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             }
         }`
     );
+    
+    
     const data = await response.json();
+    const tagsData = await TagsData(admin);
     const store = await prismaClient.store.upsert({
         where: { shopId: data.data.shop.id },
         update: {},
@@ -44,5 +48,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         where: { storeId: store.id }
     });
 
-    return json({ success: true, data: { storeId: store.id, offers: offers, helpModal: helpModals } });
+    return json({ success: true, data: { storeId: store.id, offers: offers, helpModal: helpModals, tagsData: [...tagsData] } });
 };

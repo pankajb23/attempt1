@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://salvation-fruits-balanced-guides.trycloudflare.com"
+application_url = "https://resulting-accent-temporary-need.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_users"
 
 [auth]
 redirect_urls = [
-  "https://salvation-fruits-balanced-guides.trycloudflare.com/auth/callback",
-  "https://salvation-fruits-balanced-guides.trycloudflare.com/auth/shopify/callback",
-  "https://salvation-fruits-balanced-guides.trycloudflare.com/api/auth/callback"
+  "https://resulting-accent-temporary-need.trycloudflare.com/auth/callback",
+  "https://resulting-accent-temporary-need.trycloudflare.com/auth/shopify/callback",
+  "https://resulting-accent-temporary-need.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

@@ -1,12 +1,12 @@
-import { Button, Text, Tag, ResourceItem } from "@shopify/polaris";
+import { Button, Text, Tag } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useState, useCallback, useEffect } from "react";
-import AddProductsModal from "../common/AddProductsModal";
 import { useFormContext } from "react-hook-form";
 import type { ValueTags } from "app/lib/services/product/FetchProductService";
+import { useStoreContext } from "app/lib/context/StoreContext";
 
-function TagsUI(selectedIds, allTags, handleTagsChange) {
-    const tags: ValueTags[] = allTags.filter(tag => selectedIds.has(tag.tagId));
+function TagsUI(selectedTags, allTags, handleTagsChange) {
+    const tags: ValueTags[] = allTags.filter(tag => selectedTags.has(tag.id));
 
     return (
         Array.from(tags).map(tag => (
@@ -20,22 +20,36 @@ function TagsUI(selectedIds, allTags, handleTagsChange) {
     );
 }
 
-export default function SelectTags({ allTags, tags }) {
+export default function SelectTags({ tags }) {
     const shopify = useAppBridge();
     const { setValue } = useFormContext();
-    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set(tags));
+    const { modalsAndStoreId } = useStoreContext();
+    const allTags = modalsAndStoreId.tags.map((tag, index) => {
+        return {
+            id: index,
+            label: tag
+        }
+    });
+    const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(new Set(tags));
 
+    const findTagsForIds = (ids: string[]) => {
+        return allTags.filter(tag => ids.includes(tag.id)).map(tag => tag.label);
+    }
+
+    const findIdsForTags = (tags: string[]) => {
+        return allTags.filter(tag => tags.includes(tag.label)).map(tag => tag.id);
+    }
 
     useEffect(() => {
-        setSelectedTags(new Set(tags));
+        setSelectedTagIds(new Set(tags));
     }, [tags]);
 
     const handleTagsChange = useCallback((tags: string | string[]) => {
-        setSelectedTags(prevTags => {
+        setSelectedTagIds(prevTags => {
             // If input is array, just replace all tags
             const newTags = new Set(prevTags);
             if (Array.isArray(tags)) {
-                setValue('trigger.tags', tags);
+                setValue('trigger.tags', findTagsForIds(tags));
                 return new Set(tags);
             } else {
                 if (newTags.has(tags)) {
@@ -43,40 +57,37 @@ export default function SelectTags({ allTags, tags }) {
                 } else {
                     newTags.add(tags);
                 }
-                setValue('trigger.tags', newTags);
+                setValue('trigger.tags', findTagsForIds([...newTags]));
                 return newTags;
             }
         });
     }, []);
 
-    const modalId = "my-modal";
-
 
     return (<>
         {/* @ts-ignore */}
-        <Button variant="secondary" onClick={() => {
-            shopify.modal.show(modalId)
+        <Button variant="secondary" onClick={async () => {
+            const picker = await shopify.picker({
+                heading: 'Select Tags',
+                multiple: true,
+                items: allTags.map(tag => {
+                    return {
+                        id: tag.id,
+                        heading: tag.label,
+                        selected: selectedTagIds.has(tag.id),
+                    }
+                })
+            });
+            const selected = await picker.selected;
+            console.log("Selected tags", selected , "tags ", findTagsForIds(selected));
+
         }}>
             <Text as="p" fontWeight="bold" variant="bodySm">Select Tags</Text>
         </Button>
         <br />
-        {TagsUI(selectedTags, allTags, handleTagsChange)}
+        {TagsUI(selectedTagIds, allTags, handleTagsChange)}
         <div style={{ marginTop: '10px' }} >
             <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
-            <AddProductsModal allProducts={allTags} selectedProducts={selectedTags} addSelectedProducts={handleTagsChange} modalId={modalId} render={renderItem} />
         </div>
     </>);
-}
-
-function renderItem(item) {
-    const { tagId, name } = item;
-    console.log("Rendering item ", JSON.stringify(item));
-    return (
-        <ResourceItem
-            id={tagId}
-            onClick={() => { }}
-        >
-            <Text as="p" variant="bodySm">{name}</Text>
-        </ResourceItem>
-    );
 }

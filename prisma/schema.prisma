@@ -45,8 +45,8 @@ model HelpModals {
   id                  String  @id @default(uuid())
   storeId             String  @unique
   store               Store   @relation(fields: [storeId], references: [id])
-  mainPageModalClose  Boolean @default(false)
-  offerPageModalClose Boolean @default(false)
+  mainPageModalState  Boolean @default(true) // true means show otherwise hide
+  offerPageModalState Boolean @default(true) // true means show otherwise hide
 }
 
 model Offer {
