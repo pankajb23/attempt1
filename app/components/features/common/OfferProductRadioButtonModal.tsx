@@ -1,51 +1,66 @@
-import { Thumbnail, Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select, ResourceItem } from "@shopify/polaris";
+import { Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select } from "@shopify/polaris";
 import { useCallback } from "react";
 import { AlertCircleIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from "@shopify/app-bridge-react";
-import AddProductsModal from "./AddProductsModal";
-import AutomaticOfferProducts from "./AutomaticOfferProducts";
 import { Controller, useFormContext } from "react-hook-form";
-import NestedProductVariantsModal from "./NestedProductVariantsModal";
 import SelectedProducts from "./SelectedProductsDraggable";
+import { type BaseResource } from "@shopify/app-bridge/actions/ResourcePicker";
 
-export default function OfferProductRadioButtonModal({ allProducts, 
-        allTags, 
-        allVariants,
-         toolTipContent = "Frequently bought together is an unobtrusive widget and automatic recommendations are available." }) {
-    const { control, setValue, watch, getValues } = useFormContext();
+export interface ProductArray {
+    title: string
+    pid: string
+    img: string
+}
+
+export interface VariantsArray extends ProductArray {
+    variants: ProductArray[]
+}
+
+const OfferType = "offerProducts.type";
+const OfferAssets = "offerProducts.assets";
+const OfferAssetsProducts = "offerProducts.assets.products";
+const OfferAssetsVariants = "offerProducts.assets.variants";
+const OfferAssetsType = "offerProducts.assets.type";
+
+
+export default function OfferProductRadioButtonModal({ toolTipContent = "Frequently bought together is an unobtrusive widget and automatic recommendations are available." }) {
+    const { control, setValue, watch } = useFormContext();
     const shopify = useAppBridge();
 
-    const modalId = "my-product-modalId-draggable";
-    const nestedModalId = "my-nested-product-modalId";
+    // const modalId = "my-product-modalId-draggable";
+    // const nestedModalId = "my-nested-product-modalId";
 
-    const offerType = watch('offerProducts.type') ?? "automatic";
-    const manualOfferType = watch('offerProducts.assets.type') ?? "products";
+    const offerType = watch(OfferType) ?? "automatic";
+    const manualOfferType = watch(OfferAssetsType) ?? "products";
 
-    const selectedPidsArray = watch('offerProducts.assets.products') || [];
+    // const [selectedPropertyArray, setSelectedPropertyArray] = useState([]);
+    let property = manualOfferType === "products" ? OfferAssetsProducts : OfferAssetsVariants;
 
-    // console.log("Selected pids " + selectedPidsArray);
-    const selectedIds = new Set(selectedPidsArray);;
+    const selectedPidsArray: ProductArray[] = (watch(OfferAssetsProducts) ?? []) as ProductArray[];
+    const selectedVariantsArray: VariantsArray[] = (watch(OfferAssetsVariants) ?? []) as VariantsArray[];
 
-    const handleProductChange = useCallback((productIds: string | string[]) => {
-        console.log("products", productIds);
+    const pidsArray = manualOfferType === "products" ? selectedPidsArray : selectedVariantsArray;
 
-        if (Array.isArray(productIds)) {
-            setValue('offerProducts.assets.products', productIds);
-        } else {
-            const newSet = new Set(selectedPidsArray);
-            newSet.has(productIds) ? newSet.delete(productIds) : newSet.add(productIds);
-            setValue('offerProducts.assets.products', [...newSet]);
-        }
-    }, [setValue, selectedPidsArray]);
+    const handleProductChange = useCallback((pid: string) => {
+        console.log("pid", pid);
+
+        const newSet = (pidsArray) as (ProductArray[] | VariantsArray[]);
+        const updatedSet = newSet.filter((p) => p.pid !== pid);
+
+        setValue(property, updatedSet);
+    }, [setValue, selectedPidsArray, selectedVariantsArray]);
 
     const handleDragEnd = useCallback(({ source, destination }) => {
         if (!destination) return;
-        const currentProducts = getValues('offerProducts.assets.products') || [];
+
+        const currentProducts =  watch(property) ?? [];
+
         const newProducts = [...currentProducts];
+        console.log("pidsArray", pidsArray, "newProducts", newProducts, "currentProducts", currentProducts, "source", source, "destination", destination, "selectedPidsArray", selectedPidsArray, "selectedVariantsArray", selectedVariantsArray);
         const [temp] = newProducts.splice(source.index, 1);
         newProducts.splice(destination.index, 0, temp);
 
-        setValue('offerProducts.assets.products', newProducts);
+        setValue(property, newProducts);
     }, [setValue]);
 
 
@@ -63,35 +78,9 @@ export default function OfferProductRadioButtonModal({ allProducts,
 
     const selectOption = [
         { label: 'by Products', value: 'products' },
-        // { label: 'by Variants', value: 'tags' },
+        { label: 'by Variants', value: 'variants' },
     ];
 
-    const changingPlyCardAtTheBottom = (() => {
-        switch (offerType) {
-            case 'manual':
-                if (manualOfferType === "tags") {
-                    return (
-                        <NestedProductVariantsModal allVariants={allVariants} modalId={nestedModalId} />
-                    );
-                } else {
-                    return (
-                        <AddProductsModal
-                            allProducts={allProducts}
-                            selectedProducts={selectedIds}
-                            addSelectedProducts={handleProductChange}
-                            modalId={modalId}
-                            render={renderItem}
-                        />
-                    );
-                }
-            case 'automatic':
-                return (
-                    <AutomaticOfferProducts />
-                );
-            default:
-                return null;
-        }
-    });
 
     return (
         <>
@@ -124,11 +113,71 @@ export default function OfferProductRadioButtonModal({ allProducts,
                         <div style={{ marginTop: '10px' }}>
                             <InlineStack gap='200'>
                                 {/** @ts-ignore */}
-                                <Button variant="secondary" onClick={() => {
-                                    if (manualOfferType === "tags") {
-                                        shopify.modal.show(nestedModalId);
+                                <Button variant="secondary" onClick={async () => {
+                                    if (manualOfferType === "variants") {
+                                        let selectionIds: BaseResource[] = selectedVariantsArray.map((p) => {
+                                            return {
+                                                id: p.pid,
+                                                variants: p.variants.map((v) => ({ id: v.pid }))
+                                            };
+                                        })
+
+                                        console.log("selected Ids --> ", selectionIds);
+
+                                        const selectedPIds = await shopify.resourcePicker({
+                                            type: "product",
+                                            multiple: true,
+                                            selectionIds: selectionIds,
+                                            action: 'select',
+                                            filter: {
+                                                variants: true
+                                            }
+                                        });
+                                        if (selectedPIds !== undefined) {
+                                            const pidVariantsArray: VariantsArray[] = selectedPIds.map((p, index) => {
+                                                return {
+                                                    title: p.title,
+                                                    pid: p.id,
+                                                    img: p.images[0]?.originalSrc ?? null,
+                                                    variants: p.variants.map((v, vIndex) => {
+                                                        return {
+                                                            title: v.title,
+                                                            pid: v.id,
+                                                            img: null
+                                                        }
+                                                    })
+                                                }
+                                            });
+                                            console.log("unique variants", pidVariantsArray);
+                                            setValue(OfferAssetsVariants, pidVariantsArray);
+                                        }
                                     } else {
-                                        shopify.modal.show(modalId);
+                                        let selectionIds: BaseResource[] = selectedPidsArray.map((p) => {
+                                            return {
+                                                id: p.pid
+                                            }
+                                        })
+                                        const selectedIds = await shopify.resourcePicker({
+                                            type: "product",
+                                            multiple: true,
+                                            selectionIds: selectionIds,
+                                            action: 'select',
+                                            filter: {
+                                                variants: false
+                                            }
+                                        });
+                                        if (selectedIds !== undefined) {
+                                            console.log("selectedIds products", selectedIds);
+                                            const pids = selectedIds.map((p) => {
+                                                return {
+                                                    pid: p.id,
+                                                    title: p.title,
+                                                    img: p.images[0]?.originalSrc ?? null,
+                                                }
+                                            });
+                                            console.log("setting pids", pids)
+                                            setValue(OfferAssetsProducts, pids);
+                                        }
                                     }
                                 }}>
                                     <Text as="p" variant="bodyMd" fontWeight="bold"> Select products</Text>
@@ -147,35 +196,20 @@ export default function OfferProductRadioButtonModal({ allProducts,
                                     )}
                                 />
                             </InlineStack>
+
                             <SelectedProducts
-                                selectedPids={[...selectedIds]}
-                                all={allProducts}
-                                selectedProductsPids={selectedPidsArray}
+                                selectedPids={pidsArray}
                                 handleDragEnd={handleDragEnd}
                                 handleProductChange={handleProductChange}
                             />
                         </div>
                     ) : null
                 }
-                {changingPlyCardAtTheBottom()}
+
                 <div style={{ marginTop: '14px' }}>
                     <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
                 </div>
             </Card >
         </>
-    );
-}
-
-function renderItem(item) {
-    const { pid, name, img } = item;
-    const thumbnail = <Thumbnail source={img} size="small" alt="img" />
-    return (
-        <ResourceItem
-            id={pid}
-            media={thumbnail}
-            onClick={() => { }}
-        >
-            <Text as="p" variant="bodySm">{name}</Text>
-        </ResourceItem>
     );
 }

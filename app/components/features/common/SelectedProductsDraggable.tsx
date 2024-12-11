@@ -1,9 +1,10 @@
-import { Tooltip, Text, Icon, InlineStack, Button, LegacyCard, ResourceItem, InlineGrid, Avatar } from "@shopify/polaris";
+import { Tooltip, Text, Icon, InlineStack, Button, LegacyCard, ResourceItem, InlineGrid, Avatar, BlockStack, Tag } from "@shopify/polaris";
 import { XSmallIcon, ViewIcon, DragHandleIcon } from '@shopify/polaris-icons';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { type ProductArray } from "./OfferProductRadioButtonModal";
 
-function ListItem(props: { id: string; index: number; pid: string, title: string; img: string, handleProductChange: (pid: string) => void }) {
-    const { id, index, pid, title, img, handleProductChange } = props;
+function ListItem(props: { id: string; index: number; pid: string, title: string; img: string, variants: ProductArray[], handleProductChange: (pid: string) => void }) {
+    const { id, index, pid, title, img, variants, handleProductChange } = props;
     return (
         <Draggable draggableId={id} index={index}>
             {(provided, snapshot) => {
@@ -18,14 +19,25 @@ function ListItem(props: { id: string; index: number; pid: string, title: string
                     >
                         <ResourceItem id={id} url={''} >
                             <InlineGrid columns={["twoThirds", "oneThird"]}>
-                                <InlineStack blockAlign="center">
+                                <InlineStack blockAlign="center" gap="100" direction="row">
                                     <div {...provided.dragHandleProps}>
                                         <Tooltip content="Drag to reorder list items">
                                             <Icon source={DragHandleIcon} />
                                         </Tooltip>
                                     </div>
                                     <Avatar size="md" source={img} />
-                                    <Text as="p">{title}</Text>
+                                    <div style={{ paddingLeft: '5px' }}>
+                                        <BlockStack gap="100">
+                                            <Text as="p">{title}</Text>
+                                            <InlineStack>
+                                                {variants?.map((variant, index) => {
+                                                    return (
+                                                        <Tag key={index}> {variant.title}</Tag>
+                                                    );
+                                                })}
+                                            </InlineStack>
+                                        </BlockStack>
+                                    </div>
                                 </InlineStack>
                                 <InlineGrid columns={4} gap="0">
                                     <div></div>
@@ -49,15 +61,13 @@ function ListItem(props: { id: string; index: number; pid: string, title: string
     );
 }
 
-export default function SelectedProducts({ selectedPids, all, selectedProductsPids, handleDragEnd, handleProductChange }) {
+export default function SelectedProducts({ selectedPids, handleDragEnd, handleProductChange }) {
 
-    if (selectedPids === undefined || all === undefined || all.length === 0 || selectedPids.length === 0) {
+    if (selectedPids === undefined || selectedPids.length === 0 || (selectedPids.length === 1 && selectedPids[0] === undefined)) {
         return null;
     }
-
-    const productMap = new Map(all.map(product => [product.pid, product]));
-    const items = selectedProductsPids.map(pid => productMap.get(pid))
-
+    
+    console.log("SelectedPids ", selectedPids);
     const getKey = (pid) => `draggable-${pid}`;
 
     return (
@@ -68,15 +78,17 @@ export default function SelectedProducts({ selectedPids, all, selectedProductsPi
                         {provided => {
                             return (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {items.map((item, index) => {
+                                    {selectedPids.map((item, index) => {
+                                        console.log("item --> ", item);
                                         return (
                                             <ListItem
                                                 key={getKey(item.pid)}
                                                 id={getKey(item.pid)}
                                                 pid={item.pid}
                                                 index={index}
-                                                title={item.label}
+                                                title={item.title}
                                                 img={item.img}
+                                                variants={item.variants ?? null}
                                                 handleProductChange={handleProductChange}
                                             />
                                         )

@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://resulting-accent-temporary-need.trycloudflare.com"
+application_url = "https://missions-invalid-bureau-m.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_users"
 
 [auth]
 redirect_urls = [
-  "https://resulting-accent-temporary-need.trycloudflare.com/auth/callback",
-  "https://resulting-accent-temporary-need.trycloudflare.com/auth/shopify/callback",
-  "https://resulting-accent-temporary-need.trycloudflare.com/api/auth/callback"
+  "https://missions-invalid-bureau-m.trycloudflare.com/auth/callback",
+  "https://missions-invalid-bureau-m.trycloudflare.com/auth/shopify/callback",
+  "https://missions-invalid-bureau-m.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

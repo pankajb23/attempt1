@@ -186,7 +186,7 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
     );
 };
 
-export default function DiscountModal({ allProducts, allTags, checkboxHelpText, choices, discountTextPlaceholder, shouldHaveMinimumCartValueTextField=false}) {
+export default function DiscountModal({ checkboxHelpText, choices, discountTextPlaceholder, shouldHaveMinimumCartValueTextField=false}) {
     const { t } = useTranslation();
     const { control, watch } = useFormContext();
 
