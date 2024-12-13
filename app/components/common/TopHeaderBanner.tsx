@@ -12,7 +12,7 @@ interface TopHeadingBannerProps {
     mainPage?: any;
 }
 
-export default function TopHeadingBanner({ navigateTo, heading, saveOfferButton, onSave, saveButtonContent=undefined, mainPage = NavigationPage.MAIN_PAGE }: TopHeadingBannerProps) {
+export default function TopHeadingBanner({ navigateTo, heading, saveOfferButton, onSave, saveButtonContent = undefined, mainPage = NavigationPage.MAIN_PAGE }: TopHeadingBannerProps) {
     const { t } = useTranslation();
     return (
         <>

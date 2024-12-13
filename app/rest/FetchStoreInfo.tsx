@@ -1,4 +1,4 @@
-export function fetchStoreInfo(updateModalsAndStoreId) {
+export function fetchStoreInfo(updateStoreDetails) {
     const fetchStoreInfo = async () => {
         try {
             const response = await fetch("/api/offers/all", {
@@ -11,12 +11,13 @@ export function fetchStoreInfo(updateModalsAndStoreId) {
             if (response.ok) {
                 const resp = await response.json();
                 console.log("response", resp);
-                updateModalsAndStoreId({
+                updateStoreDetails({
                     isLoading: false,
                     storeId: resp.data.storeId,
                     mainPageModalState: resp.data.helpModal.mainPageModalState,
                     offerPageModalState: resp.data.helpModal.mainPageModalState,
-                    tags: resp.data.tagsData
+                    tags: resp.data.tagsData,
+                    offers: resp.data.offers,
                 });
 
             } else {

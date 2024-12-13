@@ -1,3 +1,10 @@
+export enum OfferType {
+  All = "All",
+  Product = "Product page offers",
+  Cart = "Cart page offers",
+  Post = "Post purchase offers",
+}
+
 export const OfferTabs = [
     {
       id: 'All',

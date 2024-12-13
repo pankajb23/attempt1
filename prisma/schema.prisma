@@ -50,16 +50,20 @@ model HelpModals {
 }
 
 model Offer {
-  offerId      String         @id
+  offerId      String         @id @default(uuid())
   storeId      String
   store        Store          @relation(fields: [storeId], references: [id]) //Foreign key
   offerName    String
   offerType    String
-  offerContent OfferContent[]
+  offerContent String?
+  status       String         @default("active")
+  createdAt    DateTime       @default(now())
+
+  @@unique([storeId, offerName])
 }
 
-model OfferContent {
-  offerId      String  @id
-  offer        Offer   @relation(fields: [offerId], references: [offerId]) //Foreign key
-  offerContent String?
-}
+// model OfferContent {
+//   offerId      String  @id
+//   offer        Offer   @relation(fields: [offerId], references: [offerId]) //Foreign key
+//   offerContent String?
+// }

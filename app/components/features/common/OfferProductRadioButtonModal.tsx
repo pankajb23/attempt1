@@ -5,7 +5,7 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { Controller, useFormContext } from "react-hook-form";
 import SelectedProducts from "./SelectedProductsDraggable";
 import { type BaseResource } from "@shopify/app-bridge/actions/ResourcePicker";
-
+import AutomaticOfferProducts from "./AutomaticOfferProducts";
 export interface ProductArray {
     title: string
     pid: string
@@ -17,7 +17,6 @@ export interface VariantsArray extends ProductArray {
 }
 
 const OfferType = "offerProducts.type";
-const OfferAssets = "offerProducts.assets";
 const OfferAssetsProducts = "offerProducts.assets.products";
 const OfferAssetsVariants = "offerProducts.assets.variants";
 const OfferAssetsType = "offerProducts.assets.type";
@@ -27,14 +26,15 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
     const { control, setValue, watch } = useFormContext();
     const shopify = useAppBridge();
 
-    // const modalId = "my-product-modalId-draggable";
-    // const nestedModalId = "my-nested-product-modalId";
+    const offerTemp = watch(OfferType);
+    const manualOfferTypeTemp = watch(OfferAssetsType);
+    // console.log("offerTemp", offerTemp, "manualOfferTypeTemp", manualOfferTypeTemp);
 
-    const offerType = watch(OfferType) ?? "automatic";
-    const manualOfferType = watch(OfferAssetsType) ?? "products";
 
-    // const [selectedPropertyArray, setSelectedPropertyArray] = useState([]);
-    let property = manualOfferType === "products" ? OfferAssetsProducts : OfferAssetsVariants;
+    const offerType = offerTemp ?? "automatic";
+    const manualOfferType = manualOfferTypeTemp ?? "products";
+
+    const property = manualOfferType === "products" ? OfferAssetsProducts : OfferAssetsVariants;
 
     const selectedPidsArray: ProductArray[] = (watch(OfferAssetsProducts) ?? []) as ProductArray[];
     const selectedVariantsArray: VariantsArray[] = (watch(OfferAssetsVariants) ?? []) as VariantsArray[];
@@ -42,8 +42,6 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
     const pidsArray = manualOfferType === "products" ? selectedPidsArray : selectedVariantsArray;
 
     const handleProductChange = useCallback((pid: string) => {
-        console.log("pid", pid);
-
         const newSet = (pidsArray) as (ProductArray[] | VariantsArray[]);
         const updatedSet = newSet.filter((p) => p.pid !== pid);
 
@@ -52,14 +50,15 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
 
     const handleDragEnd = useCallback(({ source, destination }) => {
         if (!destination) return;
+        const property = (watch(OfferAssetsType) ?? "products") === "products" ? OfferAssetsProducts : OfferAssetsVariants;
 
-        const currentProducts =  watch(property) ?? [];
+        const currentProducts = watch(property) ?? [];
 
         const newProducts = [...currentProducts];
-        console.log("pidsArray", pidsArray, "newProducts", newProducts, "currentProducts", currentProducts, "source", source, "destination", destination, "selectedPidsArray", selectedPidsArray, "selectedVariantsArray", selectedVariantsArray);
         const [temp] = newProducts.splice(source.index, 1);
-        newProducts.splice(destination.index, 0, temp);
 
+        newProducts.splice(destination.index, 0, temp);
+        // console.log("newProducts", newProducts, "source", source, "destination", destination, "property", property, "currentProducts", currentProducts, "manualOfferType", manualOfferType);
         setValue(property, newProducts);
     }, [setValue]);
 
@@ -69,7 +68,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
             <>
                 <InlineStack>
                     <Text as="p" variant="bodyMd" > Automatic </Text>
-                    <Tooltip content="">
+                    <Tooltip content={toolTipContent}>
                         <Icon source={AlertCircleIcon} tone="base" />
                     </Tooltip>
                 </InlineStack>
@@ -150,6 +149,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                             });
                                             console.log("unique variants", pidVariantsArray);
                                             setValue(OfferAssetsVariants, pidVariantsArray);
+                                            setValue(OfferAssetsProducts, null);
                                         }
                                     } else {
                                         let selectionIds: BaseResource[] = selectedPidsArray.map((p) => {
@@ -177,13 +177,14 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                             });
                                             console.log("setting pids", pids)
                                             setValue(OfferAssetsProducts, pids);
+                                            setValue(OfferAssetsVariants, null);
                                         }
                                     }
                                 }}>
                                     <Text as="p" variant="bodyMd" fontWeight="bold"> Select products</Text>
                                 </Button>
                                 <Controller
-                                    name="offerProducts.assets.type"
+                                    name={OfferAssetsType}
                                     defaultValue={manualOfferType}
                                     control={control}
                                     render={({ field: { onChange, value } }) => (
@@ -203,7 +204,9 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                 handleProductChange={handleProductChange}
                             />
                         </div>
-                    ) : null
+                    ) : <>
+                        <AutomaticOfferProducts />
+                    </>
                 }
 
                 <div style={{ marginTop: '14px' }}>

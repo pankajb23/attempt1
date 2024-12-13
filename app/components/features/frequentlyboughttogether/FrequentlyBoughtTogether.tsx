@@ -11,20 +11,42 @@ import { useTranslation } from "react-i18next";
 import { FormProvider, useForm } from 'react-hook-form';
 import SideModal from "./SideModal";
 import OfferNameModal from "../common/OfferNameModal";
+import { useStoreContext } from "app/lib/context/StoreContext";
 
 export default function FrequentlyBoughtTogether({ navigateTo, id = null, data = null }) {
+
+    // const d = data === null ? { defaultValue: {} } : { defaultValues: { data } };
+    // const methods = useForm(d);
+    const { t } = useTranslation();
+    
+    const { modalsAndStoreId } = useStoreContext();
+    const storeId = modalsAndStoreId.storeId;
+
+    console.log("StopreId", storeId);
+    const onSubmit = async (data) => {
+        console.log("data and shipping d", JSON.stringify(data));
+        const response = await fetch(`api/offers/save?storeId=${storeId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        if(!response.ok){
+            shopify.toast.show(`Failed to save offer ${data.offerName} successfully`, { duration: 2000, isError: true });
+        }
+        const content = await response.json();
+        console.log("content", content);
+        shopify.toast.show(`Offer ${data.offerName} saved successfully`, { duration: 1000 });
+    };
+
+    const onError = (errors) => { console.log("errors", errors); };
+
     const methods = useForm({
         defaultValues: {
             data
         }
     });
-
-    const { t } = useTranslation();
-
-
-    const onSubmit = async (data) => {
-        console.log("data ", JSON.stringify(data));
-    };
 
     const choices = [
         { label: t("pages.frequently_bought_together.checkbox.percentOrFixed.heading"), value: 'percentOrFixed' },
@@ -42,7 +64,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, id = null, data =
                             navigateTo={navigateTo}
                             heading={t("pages.frequently_bought_together.heading")}
                             saveOfferButton={true}
-                            onSave={methods.handleSubmit(onSubmit)}
+                            onSave={methods.handleSubmit(onSubmit, onError)}
                         />
                     </BlockStack>
                     <div style={{ marginTop: "16px" }}>
@@ -51,7 +73,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, id = null, data =
                                 <Layout.Section>
                                     <BlockStack gap='300' >
                                         <OfferNameModal placeholder={t("pages.frequently_bought_together.offer_name.placeholder")} />
-                                        <TriggerCheckbox />
+                                        <TriggerCheckbox offerType={'frequently_bought_together'} />
                                         <OfferProductRadioButtonModal />
                                         <DiscountModal
                                             checkboxHelpText={t("pages.discount.enable.bundle")}

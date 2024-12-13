@@ -3,10 +3,11 @@ import { Controller, useFormContext } from "react-hook-form";
 import SelectTags from "../frequentlyboughttogether/SelectTags";
 import SpecificProducts from "../frequentlyboughttogether/SpecificProductsModal";
 
-export default function TriggerCheckbox() {
+export default function TriggerCheckbox({offerType}) {
 
     const { control, setValue, watch, formState: { isSubmitted } } = useFormContext();
 
+    setValue('offer.type', offerType);
     const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Offer is triggered for </Text>
 
     const triggerType = watch('trigger.type') ?? "all_products";

@@ -16,7 +16,6 @@ function SelectedProducts(pids, handleProductChange) {
                     resourceName={{ singular: 'product', plural: 'products' }}
                     items={[...pids]}
                     renderItem={(item) => {
-                        console.log("Item", item);
                         const { pid, title, img } = item;
                         const media = <Avatar customer size="md" name={title} source={img} />
                         return (

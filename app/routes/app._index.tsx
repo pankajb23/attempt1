@@ -55,7 +55,7 @@ export default function Index() {
   if (isLoading) {
     console.log("Loading user preferences for the first time");
   } else {
-    console.log("nvigateToSelector " + mainPageModalState, isLoading);
+    // console.log("nvigateToSelector " + mainPageModalState, isLoading);
     const renderOfferPage = () => {
       switch (navigateTo) {
         case NavigationPage.MAIN_PAGE:

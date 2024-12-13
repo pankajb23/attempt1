@@ -12,7 +12,7 @@ import type { TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
 import '../../css/Custom.css';
 import MainPageOfferDashboardColumns from 'app/lib/data/MainPageDashboardColums';
-import SafeSpan from '../../custom/SafeSpan';
+// import SafeSpan from '../../custom/SafeSpan';
 import { NavigationPage } from 'app/lib/enums/NavigationPage';
 
 export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
@@ -38,10 +38,10 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
         [],
     );
 
-    const styledTabs = tabs.map(tab => ({
-        ...tab,
-        content: <SafeSpan className='bold-text'>{tab.content}</SafeSpan>
-    }));
+    // const styledTabs = tabs.map(tab => ({
+    //     ...tab,
+    //     content: <SafeSpan className='bold-text'>{tab.content}</SafeSpan>
+    // }));
 
 
     {/** @ts-ignore */ }
@@ -59,7 +59,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
                             disabled: false,
                             loading: false,
                         }}
-                        tabs={styledTabs}
+                        tabs={tabs}
                         selected={selected}
                         onSelect={setSelected}
                         canCreateNewView={false}

@@ -5,7 +5,7 @@ export const StoreContext = createContext(null);
 export function StoreProvider({ children }) {
     const [storeDetails, setStoreDetails] = useState({ isLoading: true });
 
-    const updateModalsAndStoreId = useCallback((updater) => {
+    const updateStoreDetails = useCallback((updater) => {
         // If updater is a function, call it with the previous state
         if (typeof updater === 'function') {
             setStoreDetails(prevState => {
@@ -23,7 +23,7 @@ export function StoreProvider({ children }) {
         }
     }, []);
 
-    console.log("State to persist", storeDetails)
+    // console.log("State to persist", storeDetails)
     if (storeDetails.storeId !== undefined) {
         const uri = `/api/storeId/modals/update`;
         const stateToPresist = async (uri, modalsAndStoreId) => {
@@ -47,7 +47,7 @@ export function StoreProvider({ children }) {
         };
 
         stateToPresist(uri, storeDetails).then((result) => {
-            console.log("Response from stateToPresist: ", result);
+            // console.log("Response from stateToPresist: ", result);
         }).catch((error) => {
             console.error("Error from stateToPresist: ", error);
         });
@@ -57,7 +57,7 @@ export function StoreProvider({ children }) {
 
 
     return (
-        <StoreContext.Provider value={{ modalsAndStoreId: storeDetails, setModalsAndStoreId: setStoreDetails, updateModalsAndStoreId }}>
+        <StoreContext.Provider value={{ modalsAndStoreId: storeDetails, setModalsAndStoreId: setStoreDetails, updateModalsAndStoreId: updateStoreDetails }}>
             {children}
         </StoreContext.Provider>
     );

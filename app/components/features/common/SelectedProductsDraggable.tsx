@@ -29,7 +29,7 @@ function ListItem(props: { id: string; index: number; pid: string, title: string
                                     <div style={{ paddingLeft: '5px' }}>
                                         <BlockStack gap="100">
                                             <Text as="p">{title}</Text>
-                                            <InlineStack>
+                                            <InlineStack wrap>
                                                 {variants?.map((variant, index) => {
                                                     return (
                                                         <Tag key={index}> {variant.title}</Tag>
@@ -67,7 +67,7 @@ export default function SelectedProducts({ selectedPids, handleDragEnd, handlePr
         return null;
     }
     
-    console.log("SelectedPids ", selectedPids);
+    // console.log("SelectedPids ", selectedPids);
     const getKey = (pid) => `draggable-${pid}`;
 
     return (
@@ -79,7 +79,6 @@ export default function SelectedProducts({ selectedPids, handleDragEnd, handlePr
                             return (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
                                     {selectedPids.map((item, index) => {
-                                        console.log("item --> ", item);
                                         return (
                                             <ListItem
                                                 key={getKey(item.pid)}

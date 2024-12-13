@@ -1,6 +1,6 @@
 import type { HeadersFunction, LoaderFunctionArgs, ActionFunctionArgs, } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError, useFetcher } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useRouteError} from "@remix-run/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
@@ -52,10 +52,6 @@ export function Pages() {
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
   const queryClient = new QueryClient();
-  // const {getSessionToken} = useSessionToken();
-  const fetcher = useFetcher<typeof action>();
-  console.log("Fetcher ---> ", JSON.stringify(fetcher));
-
 
   return (
     <ReduxProvider store={store}>

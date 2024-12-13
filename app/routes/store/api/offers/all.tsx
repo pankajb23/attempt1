@@ -19,11 +19,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
                     shopifyPlus
                 }
                 setupRequired
+                # currencyFormats{
+                #     moneyFormat # this is what we need. 
+                #     moneyInEmailsFormat
+                #     moneyWithCurrencyFormat
+                #     moneyWithCurrencyInEmailsFormat
+                # }
+                currencyCode
             }
         }`
     );
-    
-    
+
+
     const data = await response.json();
     const tagsData = await TagsData(admin);
     const store = await prismaClient.store.upsert({
@@ -36,6 +43,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             createdAt: new Date(data.data.shop.createdAt)
         }
     });
+
     const helpModals = await prismaClient.helpModals.upsert({
         where: { storeId: store.id },
         update: {},
@@ -44,9 +52,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }
     });
 
-    const offers = await prismaClient.offer.findFirst({
-        where: { storeId: store.id }
+
+    const allOffers = await prismaClient.offer.findMany({
+        where: {
+            storeId: store.id,
+        }
     });
 
-    return json({ success: true, data: { storeId: store.id, offers: offers, helpModal: helpModals, tagsData: [...tagsData] } });
+    console.log("allOffers", allOffers);
+    return json({ success: true, data: { storeId: store.id, helpModal: helpModals, tagsData: [...tagsData], currencyformats: data.data.currencyCode, offers: allOffers } });
 };
