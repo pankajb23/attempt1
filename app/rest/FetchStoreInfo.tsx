@@ -18,6 +18,7 @@ export function fetchStoreInfo(updateStoreDetails) {
                     offerPageModalState: resp.data.helpModal.mainPageModalState,
                     tags: resp.data.tagsData,
                     offers: resp.data.offers,
+                    customPages: resp.data.customPages,
                 });
 
             } else {

@@ -59,6 +59,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }
     });
 
-    console.log("allOffers", allOffers);
-    return json({ success: true, data: { storeId: store.id, helpModal: helpModals, tagsData: [...tagsData], currencyformats: data.data.currencyCode, offers: allOffers } });
+    const customPages = await prismaClient.widget.findMany({
+        where: {
+            storeId: store.id,
+        },
+        select: {
+            type: true,
+            content: true
+        }
+    });
+
+    return json({ success: true, data: { storeId: store.id, helpModal: helpModals, tagsData: [...tagsData], currencyformats: data.data.currencyCode, offers: allOffers, customPages: customPages } });
 };

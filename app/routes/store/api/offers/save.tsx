@@ -15,9 +15,11 @@ export const action: ActionFunction = async ({ params, request }) => {
     console.log("incoming body ---> ", JSON.stringify(body));
     console.log("offer name ---> ", body.offerName);
     console.log("offer type ---> ", body.offer.type);
+    console.log("offerId ---> ", offerId);
+
     let response;
     try {
-        if (offerId !== undefined) {
+        if (offerId !== undefined && offerId !== null) {
             response = await prismaClient.offer.update({
                 where: {
                     offerId: offerId
@@ -37,14 +39,11 @@ export const action: ActionFunction = async ({ params, request }) => {
                     offerType: body.offer.type,
                     storeId: storeId,
                     offerContent: JSON.stringify(body)
-                },
-                select: {
-                    offerId: true
                 }
             });
         }
        
-        // console.log("offer upsert id ->  ", response);
+        console.log("offer upsert id ->  ", response);
         return json({ status: 200, data: { message: "Offer saved successfully!", response: response } });
     } catch (error) {
         console.error(error);

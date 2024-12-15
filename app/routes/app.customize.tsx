@@ -18,7 +18,7 @@ export default function CustomizeMainPage() {
 
   function customPage(content, isNarrow) {
     return (
-      <Page narrowWidth={isNarrow}>
+      <Page narrowWidth={isNarrow} fullWidth>
         <BlockStack>
           {content}
         </BlockStack>
@@ -36,7 +36,7 @@ export default function CustomizeMainPage() {
         return customPage(<CommonSettingsModal navigateToPage={navigateToCallback} />, false);
 
       case CustomizePageType.FrequentlyBoughtTogether:
-        return customPage(<FrequentlyBoughtTogetherWidgetPage navigateToPage={navigateToCallback} />, false);
+        return customPage(<FrequentlyBoughtTogetherWidgetPage navigateToPage={navigateToCallback} />, true);
 
       case CustomizePageType.ProductAddOns:
         return customPage(<ProductsAddOnWidget navigateToPage={navigateToCallback} />, false);

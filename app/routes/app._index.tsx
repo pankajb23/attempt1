@@ -22,7 +22,7 @@ import ThankyouAddOnPage from "../components/features/thankyouPageAddOns/Thankyo
 import CartUpsellDownsellPage from "../components/features/cartUpsellDownsell/CartUpsellDownsellPage";
 import { useStoreContext } from "app/lib/context/StoreContext";
 import { useCallback, useState } from "react";
-
+import type { Offer } from "app/types";
 
 export default function Index() {
 
@@ -30,7 +30,7 @@ export default function Index() {
   const isLoading = modalsAndStoreId.isLoading;
   const mainPageModalState = modalsAndStoreId.mainPageModalState;
   const [navigateTo, setNavigateTo] = useState(NavigationPage.MAIN_PAGE);
-
+  const [offer, setOffer] = useState<Offer>(null);
 
   const setupShowAssistanceCallback = useCallback((flag: boolean) => {
     updateModalsAndStoreId((prevState) => ({
@@ -42,6 +42,10 @@ export default function Index() {
     setNavigateTo(navigateToPage);
   }, []);
 
+  const openPage = useCallback((navigateTo:NavigationPage, offer: Offer) => {
+    setNavigateTo(navigateTo);
+    setOffer(offer);
+  }, []);
 
   const wrapBottom = (content) => {
     return (
@@ -80,9 +84,9 @@ export default function Index() {
                   mainPageModalState ?
                     (<>
                       < SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} />
-                      <OfferTabModal onShowOfferPage={navigateToCallback} />
+                      <OfferTabModal onShowOfferPage={navigateToCallback} openPage={openPage}/>
                     </>) :
-                    (<OfferTabModal onShowOfferPage={navigateToCallback} />)
+                    (<OfferTabModal onShowOfferPage={navigateToCallback} openPage={openPage}/>)
                 )
               }
               <HelpBottonModal />
@@ -90,25 +94,25 @@ export default function Index() {
           );
 
         case NavigationPage.OFFER_PAGE_DASHBOARD:
-          return wrapBottom(<OfferOnPageDashboard navigateTo={navigateToCallback} />);
+          return wrapBottom(<OfferOnPageDashboard navigateTo={navigateToCallback}/>);
 
         case NavigationPage.FREQUENTLY_BOUGHT_TOGETHER:
-          return wrapBottom(<FrequentlyBoughtTogether navigateTo={navigateToCallback} />);
+          return wrapBottom(<FrequentlyBoughtTogether navigateTo={navigateToCallback} offer={offer}/>);
 
         case NavigationPage.PRODUCTS_ADDON:
-          return wrapBottom(<ProductsAddOnPage navigateTo={navigateToCallback} />);
+          return wrapBottom(<ProductsAddOnPage navigateTo={navigateToCallback}/>);
 
         case NavigationPage.CART_UPSELL_DOWNSELL:
-          return wrapBottom(<CartUpsellDownsellPage navigateTo={navigateToCallback} />);
+          return wrapBottom(<CartUpsellDownsellPage navigateTo={navigateToCallback}/>);
 
         case NavigationPage.CART_ADDON:
-          return wrapBottom(<CartsAddOnPage navigateTo={navigateToCallback} />);
+          return wrapBottom(<CartsAddOnPage navigateTo={navigateToCallback}/>);
 
         case NavigationPage.POST_PURCHASE_UPSELL:
-          return wrapBottom(<PostPurchaseUpsellPage navigateTo={navigateToCallback} />);
+          return wrapBottom(<PostPurchaseUpsellPage navigateTo={navigateToCallback}/>);
 
         case NavigationPage.THANK_YOU_ADD_ON:
-          return wrapBottom(<ThankyouAddOnPage navigateTo={navigateToCallback} />);
+          return wrapBottom(<ThankyouAddOnPage navigateTo={navigateToCallback}/>);
       }
     }
 

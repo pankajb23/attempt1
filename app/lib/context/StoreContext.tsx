@@ -24,6 +24,7 @@ export function StoreProvider({ children }) {
     }, []);
 
     // console.log("State to persist", storeDetails)
+    //TODO redudant call to persist state
     if (storeDetails.storeId !== undefined) {
         const uri = `/api/storeId/modals/update`;
         const stateToPresist = async (uri, modalsAndStoreId) => {

@@ -4,7 +4,7 @@ import { Layout, Text, Card, InlineGrid, Button } from "@shopify/polaris";
 function CardModal(modal: CardModalProps, navigateToPage) {
     return (
         <>
-            <Layout.Section>
+            <Layout.Section key={modal.modalType}>
                 <Card roundedAbove="sm" >
                     <InlineGrid columns="1fr auto">
                         <Text variant="headingSm" fontWeight="bold" as="h5">{modal.heading}</Text>

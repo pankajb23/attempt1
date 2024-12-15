@@ -7,9 +7,10 @@ import PositionModal from "./PositionModal";
 import TextAndTranslations from "./TextAndTranslations";
 import StylingModal from "./StylingModal";
 import SettingsModal from "./SettingsModal";
+import { useStoreContext } from "../../../lib/context/StoreContext";
 
 export default function FrequentlyBoughtTogetherWidgetPage({ navigateToPage }) {
-    const methods = useForm({});
+    
 
     const translationComponents: TranslationComponent[] = [
         {
@@ -42,7 +43,14 @@ export default function FrequentlyBoughtTogetherWidgetPage({ navigateToPage }) {
             heading: "Cart page discount message",
             defaultValue: "Your discount will be applied at checkout"
         }
-    ]
+    ];
+
+    const {modalsAndStoreId} = useStoreContext();
+
+    const methods = useForm({
+        defaultValues: modalsAndStoreId.customPages
+    });
+
     return (
         <Layout>
             <Layout.Section>

@@ -32,13 +32,14 @@ model Session {
 }
 
 model Store {
-  id           String     @id @default(uuid()) // id for local storage.
-  shopId       String     @unique // a unique shopify id. 
+  id           String      @id @default(uuid()) // id for local storage.
+  shopId       String      @unique // a unique shopify id. 
   name         String
   contactEmail String
   createdAt    DateTime
   offers       Offer[]
   helpModals   HelpModals?
+  widgets      Widget[]
 }
 
 model HelpModals {
@@ -50,20 +51,24 @@ model HelpModals {
 }
 
 model Offer {
-  offerId      String         @id @default(uuid())
+  offerId      String   @id @default(uuid())
   storeId      String
-  store        Store          @relation(fields: [storeId], references: [id]) //Foreign key
+  store        Store    @relation(fields: [storeId], references: [id]) //Foreign key
   offerName    String
   offerType    String
   offerContent String?
-  status       String         @default("active")
-  createdAt    DateTime       @default(now())
+  status       String   @default("active")
+  createdAt    DateTime @default(now())
 
   @@unique([storeId, offerName])
 }
 
-// model OfferContent {
-//   offerId      String  @id
-//   offer        Offer   @relation(fields: [offerId], references: [offerId]) //Foreign key
-//   offerContent String?
-// }
+model Widget {
+  id      Int @id @default(autoincrement())
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id])
+  type    String
+  content String
+
+  @@unique([storeId, type])
+}

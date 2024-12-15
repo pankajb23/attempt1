@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://perl-delight-applied-spin.trycloudflare.com"
+application_url = "https://tracy-collins-recording-serving.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_users"
 
 [auth]
 redirect_urls = [
-  "https://perl-delight-applied-spin.trycloudflare.com/auth/callback",
-  "https://perl-delight-applied-spin.trycloudflare.com/auth/shopify/callback",
-  "https://perl-delight-applied-spin.trycloudflare.com/api/auth/callback"
+  "https://tracy-collins-recording-serving.trycloudflare.com/auth/callback",
+  "https://tracy-collins-recording-serving.trycloudflare.com/auth/shopify/callback",
+  "https://tracy-collins-recording-serving.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

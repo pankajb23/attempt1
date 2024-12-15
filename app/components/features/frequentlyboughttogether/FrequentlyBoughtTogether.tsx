@@ -13,26 +13,24 @@ import SideModal from "./SideModal";
 import OfferNameModal from "../common/OfferNameModal";
 import { useStoreContext } from "app/lib/context/StoreContext";
 
-export default function FrequentlyBoughtTogether({ navigateTo, id = null, data = null }) {
+export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
 
-    // const d = data === null ? { defaultValue: {} } : { defaultValues: { data } };
-    // const methods = useForm(d);
     const { t } = useTranslation();
-    
+
     const { modalsAndStoreId } = useStoreContext();
     const storeId = modalsAndStoreId.storeId;
 
-    console.log("StopreId", storeId);
     const onSubmit = async (data) => {
-        console.log("data and shipping d", JSON.stringify(data));
-        const response = await fetch(`api/offers/save?storeId=${storeId}`, {
+        console.log("data and shipping", offer?.offerId);
+        const uri = offer?.offerId === undefined ? `api/offers/save?storeId=${storeId}` : `api/offers/update?storeId=${storeId}&offerId=${offer.offerId}`;
+        const response = await fetch(`${uri}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
-        if(!response.ok){
+        if (!response.ok) {
             shopify.toast.show(`Failed to save offer ${data.offerName} successfully`, { duration: 2000, isError: true });
         }
         const content = await response.json();
@@ -41,12 +39,10 @@ export default function FrequentlyBoughtTogether({ navigateTo, id = null, data =
     };
 
     const onError = (errors) => { console.log("errors", errors); };
-
     const methods = useForm({
-        defaultValues: {
-            data
-        }
+        defaultValues: offer?.offerContent ? JSON.parse(offer.offerContent): null
     });
+
 
     const choices = [
         { label: t("pages.frequently_bought_together.checkbox.percentOrFixed.heading"), value: 'percentOrFixed' },

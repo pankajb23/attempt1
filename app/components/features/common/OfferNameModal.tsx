@@ -3,8 +3,12 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from "react-i18next";
 
 export default function OfferNameModal({ placeholder }) {
-    const { control, formState: { errors } } = useFormContext();
+    const { control, watch,getValues, formState: { errors } } = useFormContext();
     const { t } = useTranslation();
+    const property = "offerName";
+    const propertyValue = watch(property);
+    console.log("propertyValue", propertyValue, "p ", getValues());
+
     return (
         <Card>
             <Text as="h4" variant="headingMd" fontWeight="bold">
@@ -13,6 +17,7 @@ export default function OfferNameModal({ placeholder }) {
             <Controller
                 name="offerName"
                 control={control}
+                defaultValue={propertyValue}
                 rules={{ required: "Store name is required" }}
                 render={({ field: { value, onChange } }) => (
                     <div>
