@@ -1,5 +1,5 @@
-import { BlockStack, Card, InlineStack, Text, Select, InlineGrid } from "@shopify/polaris";
-
+import { BlockStack, Card, Text, Select, InlineGrid, Divider } from "@shopify/polaris";
+import ProductPreview from "../../../lib/preview/modal";
 import { useCallback, useState } from "react";
 
 function BoldText({ text }) {
@@ -38,6 +38,12 @@ export default function CommonSideModal() {
                         />
                     </div>
                 </InlineGrid>
+                <Divider />
+                <BlockStack gap="200">
+                    <div style={{marginTop:'30px', marginLeft:'20px'}}>
+                        <ProductPreview />
+                    </div>
+                </BlockStack>
             </BlockStack>
         </Card>
     );

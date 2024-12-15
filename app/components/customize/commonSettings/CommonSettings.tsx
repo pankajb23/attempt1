@@ -35,14 +35,14 @@ export default function CommonSettingsModal({ navigateToPage }) {
           <div style={{ marginTop: "16px" }}>
             <BlockStack gap='200'>
               <Layout>
-                <Layout.Section>
+                <Layout.Section variant="oneThird">
                   <BlockStack gap='300' >
                     <GeneralSettings />
                     <CommonStylingModal />
                     <CustomCssModal />
                   </BlockStack>
                 </Layout.Section>
-                <Layout.Section variant="oneThird">
+                <Layout.Section >
                 <CommonSideModal />
                 </Layout.Section>
               </Layout>

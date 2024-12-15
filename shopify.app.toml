@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://tracy-collins-recording-serving.trycloudflare.com"
+application_url = "https://snap-basic-leisure-farming.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_users"
 
 [auth]
 redirect_urls = [
-  "https://tracy-collins-recording-serving.trycloudflare.com/auth/callback",
-  "https://tracy-collins-recording-serving.trycloudflare.com/auth/shopify/callback",
-  "https://tracy-collins-recording-serving.trycloudflare.com/api/auth/callback"
+  "https://snap-basic-leisure-farming.trycloudflare.com/auth/callback",
+  "https://snap-basic-leisure-farming.trycloudflare.com/auth/shopify/callback",
+  "https://snap-basic-leisure-farming.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

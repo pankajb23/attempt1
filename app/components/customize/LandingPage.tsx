@@ -79,11 +79,11 @@ const CardModals: CardModalProps[] = [
 export default function LandingPageModal({ navigateToPage }) {
     return (
         <Layout>
-            <Layout.Section>
+            <Layout.Section key={1}>
                 <Text variant="headingLg" fontWeight="bold" as="h5">Customize</Text>
             </Layout.Section>
             {CardModal(CardModals[0], navigateToPage)}
-            <Layout.Section>
+            <Layout.Section key={2}>
                 <Text variant="headingMd" fontWeight="bold" as="h6">Widgets</Text>
             </Layout.Section>
             {
