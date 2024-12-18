@@ -1,69 +1,64 @@
 /* Container */
 #sell-cross-container {
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     margin: 5px;
     border-radius: 4px;
     width: 100%;
     height: auto;
     padding: 10px;
     background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Heading */
 #sell-title {
     font-size: 18px;
     font-weight: bold;
-    padding: 4px;
-    color: green;
+    padding: 4px 4px 12px 0px;
+    color: var(--txt-color, rgb(1, 11, 1));
 }
 
 #sell-title-sub {
     font-size: 12px;
     font-weight: normal;
     padding: 4px;
-    border-bottom: 1px dotted #abd;
-    color: green;
+    border-bottom: 1px inset #abd;
+    color: rgb(200, 236, 200);
     margin-bottom: 10px;
 }
 
 /* Content */
 #content {
     display: flex;
+    position:relative;
     gap: 20px;
+    z-index: 10;
 }
 
 #products {
     display: flex;
     align-items: flex-start;
-    justify-content: center;
-    padding-left:20px;
-    padding-right:30px;
-    gap: 40px;
 }
 
 .product {
     position: relative; /* Allows child elements to be positioned relative to this */
     flex: 1 1 calc(20% - 20px);
-    max-width: 200px;
+    max-width: 100px;
     display: flex;
     flex-direction: column;
+    padding-left: 0px;
     align-items: center;
-    gap: 8px;
-    text-align: center;
-    box-sizing: border-box;
 }
+
 
 /* Checkbox Container */
 .checkbox-container {
     position: absolute;   /* Position relative to the .product container */
-    top: 1px;             /* Align at the top */
-    right: 25px;           /* Align at the right */
-    /* background-color: #fff; Background to ensure visibility */
+    top: 0px;             /* Align at the top */
+    right: 0px;           /* Align at the right */
     border-radius: 0%;   /* Circular background */
     padding: 0px;         /* Small padding around the checkbox */
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Light shadow */
-    z-index: 10;          /* Ensure it's above other elements */
+    z-index: 5;          /* Ensure it's above other elements */
 }
 
 /* Checkbox */
@@ -71,114 +66,106 @@
     width: 14px;          /* Small checkbox size */
     height: 14px;
     cursor: pointer;
-    /* margin: 0px; */
 }
 
 .product-image {
     width: 100%;                /* Responsive image */
     height: auto;
-    max-width: 150px;
+    max-width: 140px;
+    max-height: 140px;
     border-radius: 4px;
     border: 1px solid #ddd;
 }
 
+/* .product:hover .product-image {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow when hovering image */
+/* } */ 
+
 .product-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
-    color: #333;
+    color: var(--txt-color, rgb(1, 11, 1));
 }
 
 .product-price {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
-    color: #007600; /* Green price color */
-    text-align: center;
+    text-align: left;
 }
-
-
 
 
 /* Footer */
 #footer {
     flex-direction: column;
     padding-top: 4%;
+    padding-left: 35px;
+}
+
+#mobile-footer {
+    display:block;
+    width: 100%;
 }
 
 /* Total Price */
 .total-price {
-    font-size: 14px;                /* Larger font for visibility */
+    font-size: 12px;                /* Larger font for visibility */
     font-weight: bold;              
     color: #333;                    /* Darker text color */
-    padding-bottom: 10px;
+    text-align: left;
+    padding-bottom: 5px;
+    padding-left: 4px;
 }
+
+.total-price-cross{
+    text-decoration: line-through;  /* Add line-through effect */
+    color: #999;                    /* Lighter color for original price */
+    font-size: 11px;
+};
 
 .total-price span {
     color: #b12704;                 /* Red color for price value */
-    font-size: 15px;                /* Larger size for emphasis */
+    font-size: 13px;                /* Larger size for emphasis */
     font-weight: bold;
 }
 
 /* Add to Cart Button */
 .add-to-cart-btn {
-    background-color: #ffd814;      /* Yellow background */
-    border: none;
+    background-color: var(--btn-bg-color, #000000);      /* Yellow background */
+    border-width: var(--btn-wth, 1px);
     padding: 10px 20px;             /* Adjust padding for size */
-    font-size: 16px;                /* Larger text for button */
+    font-size: 12px;                /* Larger text for button */
     font-weight: bold;
-    color: #111;
-    border-radius: 4px;
+    color: var(--btn-text-color, #111);
+    width: var(--btn-width, 200px);
+    border-radius: var(--custom-radius, 10px);
+    border-color: var(--btn-brdr-color, #0f0c01);
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add slight shadow for depth */
 }
 
 .add-to-cart-btn:hover {
-    background-color: #f7ca00;      /* Darker yellow on hover */
+    background-color: #504d3e;      /* Darker yellow on hover */
 }
-
 
 /* Plus Symbol */
 .plus-symbol {
-    /* margin-top: 100px; */
-    padding-top: 10%;
+    padding-top: 15%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     font-weight: bold;
     color: #555;
-    margin: 0 10px; /* Adds spacing between products */
 }
 
-/* .add-to-cart-btn {
-    background-color: #ffd814;
-    border: none;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #111;
-    border-radius: 4px;
-    cursor: pointer;
+.product:hover .checkbox-container {
+    background-color: #e6f7ff; /* Light blue background on hover */
+    border: 1px solid #2196f3; /* Highlight border */
 }
 
-.add-to-cart-btn:hover {
-    background-color: #f7ca00;
+/* Selected State */
+.product.selected {
+    border: 2px solid #2196f3; /* Blue border to indicate selection */
+    border-radius: 8px;
 }
-
-
-.total-price {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.total-price span {
-    color: #b12704;
-}
-
-Footer
-#footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-} */

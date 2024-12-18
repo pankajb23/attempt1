@@ -3,6 +3,77 @@ import { prismaClient, authenticate } from "app/shopify.server";
 import { json } from "@remix-run/node";
 import { TagsData } from "../tags";
 
+async function getWidget(admin, type) {
+    const response = await admin.graphql(
+        `#graphql
+        query {
+        metaobjectByHandle(handle: {
+            type: "$app:sell_cross01",
+            handle: "${type}"
+        }) {
+            displayName
+            pageType: field(key: "pageType") { value }
+            content: field(key: "content") { value }
+        }
+        }`
+    );
+    console.log("Widget fetched ---> ", response);
+}
+
+
+async function setMetaObjects(admin, store) {
+    if (store.isMetaObjectsInitialized) {
+        console.log("Metaobjects already initialized for store ", store.id);
+        return;
+    } else {
+        try {
+            const shopifyResp = await admin.graphql(
+                `#graphql
+            mutation {
+            metaobjectDefinitionCreate(definition: {
+                type: "$app:sell_cross01",
+                access: {
+                  admin: MERCHANT_READ_WRITE,
+                    storefront: PUBLIC_READ
+                },
+                capabilities: {
+                    publishable: {
+                        enabled: true
+                    }
+                },
+                fieldDefinitions: [
+                { key: "pageType", name: "Page type", type: "single_line_text_field" },
+                { key: "content", name: "Page type", type: "single_line_text_field" }
+                ]
+            }) {
+                metaobjectDefinition {
+                id
+                type
+                fieldDefinitions {
+                    key
+                    name
+                    type {
+                         name
+                    }
+                }
+                }
+            }
+            }`
+            );
+            console.log("Shopify response ---> ", shopifyResp);
+            await prismaClient.store.update({
+                where: { id: store.id },
+                data: {
+                    isMetaObjectsInitialized: true
+                }
+            });
+        } catch (e) {
+            console.log("Error in setting metaobjects", e);
+        }
+    }
+
+}
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const { admin } = await authenticate.admin(request);
     const response = await admin.graphql(
@@ -32,17 +103,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 
     const data = await response.json();
+    const shopId = data.data.shop.id;
     const tagsData = await TagsData(admin);
     const store = await prismaClient.store.upsert({
-        where: { shopId: data.data.shop.id },
+        where: { shopId: shopId },
         update: {},
         create: {
-            shopId: data.data.shop.id,
+            shopId: shopId,
             contactEmail: data.data.shop.contactEmail,
             name: data.data.shop.name,
             createdAt: new Date(data.data.shop.createdAt)
         }
     });
+
+    await setMetaObjects(admin, store);
 
     const helpModals = await prismaClient.helpModals.upsert({
         where: { storeId: store.id },
@@ -69,5 +143,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }
     });
 
+    await getWidget(admin, "CommonSettings");
     return json({ success: true, data: { storeId: store.id, helpModal: helpModals, tagsData: [...tagsData], currencyformats: data.data.currencyCode, offers: allOffers, customPages: customPages } });
 };

@@ -1,7 +1,7 @@
-import { CardModalProps, CustomizePageType } from "../types/CustomizeTypes";
+import { type CardModalProps, CustomizePageType } from "../types/CustomizeTypes";
 import { Layout, Text, Card, InlineGrid, Button } from "@shopify/polaris";
 
-function CardModal(modal: CardModalProps, navigateToPage) {
+function CardModal({ modal, navigateToPage }) {
     return (
         <>
             <Layout.Section key={modal.modalType}>
@@ -9,9 +9,9 @@ function CardModal(modal: CardModalProps, navigateToPage) {
                     <InlineGrid columns="1fr auto">
                         <Text variant="headingSm" fontWeight="bold" as="h5">{modal.heading}</Text>
                         {/** @ts-ignore */}
-                        <Button variant="secondary" size="slim" onClick={() => { navigateToPage(modal.modalType)}}>
-                                <Text variant="bodySm" as="p" fontWeight="bold">{modal.buttonContent}
-                                </Text>
+                        <Button variant="secondary" size="slim" onClick={() => { navigateToPage(modal.modalType) }}>
+                            <Text variant="bodySm" as="p" fontWeight="bold">{modal.buttonContent}
+                            </Text>
                         </Button>
                     </InlineGrid>
                     <div style={{ marginTop: '8px' }}>
@@ -79,15 +79,17 @@ const CardModals: CardModalProps[] = [
 export default function LandingPageModal({ navigateToPage }) {
     return (
         <Layout>
-            <Layout.Section key={1}>
+            <Layout.Section key={'alpha'}>
                 <Text variant="headingLg" fontWeight="bold" as="h5">Customize</Text>
             </Layout.Section>
-            {CardModal(CardModals[0], navigateToPage)}
-            <Layout.Section key={2}>
+            {<CardModal key={CardModals[0].modalType} modal={CardModals[0]} navigateToPage={navigateToPage} />}
+            <Layout.Section key={'beta'}>
                 <Text variant="headingMd" fontWeight="bold" as="h6">Widgets</Text>
             </Layout.Section>
             {
-                CardModals.slice(1).map((modal) => CardModal(modal, navigateToPage))
+                CardModals.slice(1).map((modal) => {
+                    return <CardModal key={modal.modalType} modal={modal} navigateToPage={navigateToPage} />
+                })
             }
         </Layout>
     );

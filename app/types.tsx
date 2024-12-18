@@ -19,3 +19,22 @@ export interface Offer{
     priority: string
     content: string
 }
+
+export interface CommonStyling {
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    buttonBorderColor?: string;
+    buttonBorderWidth?: string;
+    textColor?: string;
+    priceColor?: string;
+    salePriceColor?: string;
+    compareAtPriceColor?: string;
+    timerTextColor?: string;
+    borderRadius?: string
+}
+
+export interface Product {
+    title?: string
+    img?: string
+    price?: string
+}

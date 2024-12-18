@@ -16,12 +16,12 @@ export default function TopHeadingBanner({ navigateTo, heading, saveOfferButton,
     const { t } = useTranslation();
     return (
         <>
-            <InlineStack gap="300">
+            <InlineStack gap="300" wrap={false}>
                 <div style={{ marginTop: "1px" }}>
                     <Button icon={ChevronLeftIcon} variant="tertiary" size="medium" onClick={() => navigateTo(mainPage)} />
                 </div>
                 {/* this width is to spread button to the right most.  */}
-                <div style={{ width: '93%', paddingBottom: '4px', marginBottom: '4px' }}>
+                <div style={{ width: '100%', paddingBottom: '4px', marginBottom: '4px' }}>
                     <InlineGrid columns="1fr auto">
                         <Text as="h5" variant="headingLg"> {heading}</Text>
                         {saveOfferButton ? <Button variant="primary" onClick={onSave}> {saveButtonContent || t("offer.save")}</Button> : null}

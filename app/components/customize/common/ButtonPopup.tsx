@@ -4,7 +4,7 @@ import chroma from "chroma-js";
 import { useFormContext } from "react-hook-form";
 
 export default function ButtonPopup({ popoverActive, setPopoverActive, togglePopoverActive, activator, property }) {
-    const {setValue} = useFormContext();
+    const { setValue } = useFormContext();
 
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
@@ -50,11 +50,14 @@ export default function ButtonPopup({ popoverActive, setPopoverActive, togglePop
                         setColor(hex);
                         setValue(property, hex);
                     }} color={hexToHslConverter(color)} allowAlpha />
-                    <Button size="slim" onClick={() => {
-                        console.log("Setting value", color);
-                        setValue(property, color);
-                        setPopoverActive(false);
-                    }}>Apply</Button>
+                    <div >
+                        <div>
+                            <Button size="slim" onClick={() => {
+                                setValue(property, color);
+                                setPopoverActive(false);
+                            }}>Apply</Button>
+                        </div>
+                    </div>
                 </BlockStack>
             </Card>
         </Popover>);

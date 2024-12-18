@@ -3,19 +3,23 @@ import { useState, useCallback } from "react";
 import ButtonPopup from "../common/ButtonPopup";
 import { Button, TextField, Text } from "@shopify/polaris";
 
-export default function ButtonWithColorAndPopup({ header, property }) {
+export default function ButtonWithColorAndPopup({ header, property, defaultValue }) {
     const { watch, control } = useFormContext();
     const [popoverActive, setPopoverActive] = useState(false);
     const togglePopoverActive = useCallback(
         () => setPopoverActive((popoverActive) => !popoverActive),
         [],
     );
-    const backgroundColor = watch(property) ?? undefined;
-    const autoDetectColor = backgroundColor ?? "#OOffOO";
+    const backgroundColor = watch(property) ?? defaultValue;
+    const autoDetectColor = backgroundColor 
     const activator = (
         <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.9)', // Add opacity
+            backgroundColor: backgroundColor, // Add opacity
+            opacity: 0.8,
             border: '1px solid #ddd',
+            fontWeight: 'bold',
+            width: '70px',
+            overflow: 'hidden',
         }}>
             <Button variant="tertiary" onClick={() => setPopoverActive(true)} fullWidth={true} >
                 {autoDetectColor}
@@ -32,6 +36,7 @@ export default function ButtonWithColorAndPopup({ header, property }) {
                 <TextField
                     label={<Text as="p" variant="bodySm" fontWeight="bold">{header}</Text>}
                     value={value}
+                    autoSize={false}
                     onChange={onChange}
                     autoComplete="off"
                     placeholder="Auto-detect"

@@ -4,7 +4,6 @@ import { CustomizePageType } from "../../types/CustomizeTypes";
 import GeneralSettings from "./GeneralSettings";
 import { FormProvider, useForm } from 'react-hook-form';
 import CommonStylingModal from "./CommonStyling";
-import CustomCssModal from "./CustomCssModal";
 import { useStoreContext } from "../../../lib/context/StoreContext";
 import CommonSideModal from "./CommonSideModal";
 
@@ -16,7 +15,21 @@ export default function CommonSettingsModal({ navigateToPage }) {
     defaultValues: modalsAndStoreId.customPages.find((page) => page.type === CustomizePageType.CommonSettings)
   });
 
-  console.log("custom pages", modalsAndStoreId.customPages);
+  const onSubmit = async (data) => {
+    fetch(`/api/widgets/save?storeId=${modalsAndStoreId.storeId}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'CommonSettings',
+        content: data
+      })
+    }).then((response) => {
+      console.log(response);
+      shopify.toast.show(`Successfully saved customization`, { duration: 500 });
+    }).catch((error) => {
+      console.error(error);
+      shopify.toast.show(`Failed to saved customization`, { duration: 500, isError: true });
+    });
+  };
 
   return (
     <>
@@ -28,22 +41,22 @@ export default function CommonSettingsModal({ navigateToPage }) {
               heading={"Common settings and customizations"}
               saveOfferButton={true}
               saveButtonContent="Save"
-              onSave={() => { console.log("Not implemented") }}
+              onSave={methods.handleSubmit(onSubmit)}
               mainPage={CustomizePageType.LandingPage}
             />
           </BlockStack>
           <div style={{ marginTop: "16px" }}>
             <BlockStack gap='200'>
               <Layout>
-                <Layout.Section variant="oneThird">
+                <Layout.Section variant="oneHalf">
                   <BlockStack gap='300' >
                     <GeneralSettings />
                     <CommonStylingModal />
-                    <CustomCssModal />
+                    {/* <CustomCssModal /> */}
                   </BlockStack>
                 </Layout.Section>
-                <Layout.Section >
-                <CommonSideModal />
+                <Layout.Section variant="oneHalf">
+                  <CommonSideModal />
                 </Layout.Section>
               </Layout>
             </BlockStack>
