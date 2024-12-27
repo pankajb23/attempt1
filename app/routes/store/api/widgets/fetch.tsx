@@ -18,6 +18,7 @@ async function getWidget(admin, type) {
     );
     console.log("Widget fetched ---> ", response);
 }
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const {admin} = await authenticate.admin(request);
 

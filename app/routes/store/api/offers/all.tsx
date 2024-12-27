@@ -3,23 +3,54 @@ import { prismaClient, authenticate } from "app/shopify.server";
 import { json } from "@remix-run/node";
 import { TagsData } from "../tags";
 
-async function getWidget(admin, type) {
+
+
+export async function updateMetaObject(admin, storeId, body) {
+    console.log("updateing body", JSON.stringify(body));
     const response = await admin.graphql(
         `#graphql
-        query {
-        metaobjectByHandle(handle: {
-            type: "$app:sell_cross01",
-            handle: "${type}"
-        }) {
-            displayName
-            pageType: field(key: "pageType") { value }
-            content: field(key: "content") { value }
-        }
-        }`
+        mutation UpsertMetaobject($handle: MetaobjectHandleInput!, $metaobject: MetaobjectUpsertInput!) {
+            metaobjectUpsert(handle: $handle, metaobject: $metaobject) {
+            metaobject {
+                handle
+                type: field(key: "pageType") {
+                    value
+                }
+            }
+            userErrors {
+                field
+                message
+                code
+            }
+            }
+        }`,
+        {
+            variables: {
+                "handle": {
+                    "type": "$app:sell_cross01",
+                    "handle": "offers"
+                },
+                "metaobject": {
+                    "fields": [
+                        {
+                            "key": "pageType",
+                            "value": "offers"
+                        },
+                        {
+                            "key": "content",
+                            "value": body
+                        }
+                    ]
+                }
+            },
+        },
     );
-    console.log("Widget fetched ---> ", response);
-}
 
+    const data = await response.json();
+    console.log("Metaobject updated ---> ", JSON.stringify(data));
+    // console.log("All error", response.data.metaobjectUpsert.userErrors);
+
+}
 
 async function setMetaObjects(admin, store) {
     if (store.isMetaObjectsInitialized) {
@@ -43,7 +74,7 @@ async function setMetaObjects(admin, store) {
                 },
                 fieldDefinitions: [
                 { key: "pageType", name: "Page type", type: "single_line_text_field" },
-                { key: "content", name: "Page type", type: "single_line_text_field" }
+                { key: "content", name: "Page type", type: "json" }
                 ]
             }) {
                 metaobjectDefinition {
@@ -143,6 +174,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }
     });
 
-    await getWidget(admin, "CommonSettings");
+    // await getWidget(admin, "CommonSettings");
     return json({ success: true, data: { storeId: store.id, helpModal: helpModals, tagsData: [...tagsData], currencyformats: data.data.currencyCode, offers: allOffers, customPages: customPages } });
 };

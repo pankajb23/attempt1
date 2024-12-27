@@ -1,9 +1,10 @@
 import { type ActionFunction, json } from "@remix-run/node";
-import { prismaClient } from "app/shopify.server";
+import { prismaClient, authenticate } from "app/shopify.server";
+import { updateMetaObject } from "./all";
 
 export const action: ActionFunction = async ({ params, request }) => {
     const body = await request.json(); // Parse the body from the incoming request
-
+    const {admin} = await authenticate.admin(request);
     const url = new URL(request.url);
     const queryParams = Object.fromEntries(url.searchParams);
     console.log("Query params:", queryParams);
@@ -42,7 +43,24 @@ export const action: ActionFunction = async ({ params, request }) => {
                 }
             });
         }
-       
+        
+        const allOffers = await prismaClient.offer.findMany({
+            where: {
+                storeId: storeId,
+            },
+            select: {
+                offerId: true,
+                offerContent: true
+            }
+        });
+        const offersWithNestedObject = allOffers.map(offer => ({
+            offerId: offer.offerId,
+            offerContent: JSON.parse(offer.offerContent),
+          }));
+        const offersAsJson = JSON.stringify(offersWithNestedObject, null , 0);
+        console.log("All offers on this store", offersAsJson);
+        await updateMetaObject(admin, storeId, offersAsJson);
+
         console.log("offer upsert id ->  ", response);
         return json({ status: 200, data: { message: "Offer saved successfully!", response: response } });
     } catch (error) {

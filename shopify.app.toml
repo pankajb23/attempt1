@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://com-subscription-ear-floor.trycloudflare.com"
+application_url = "https://march-activation-dm-voip.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_definitions ,write_metaobject_definitions, read_metaobjects, unauthenticated_read_metaobjects"
+scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_definitions ,write_metaobject_definitions, read_metaobjects, unauthenticated_read_metaobjects,  unauthenticated_read_product_listings"
 
 [auth]
 redirect_urls = [
-  "https://com-subscription-ear-floor.trycloudflare.com/auth/callback",
-  "https://com-subscription-ear-floor.trycloudflare.com/auth/shopify/callback",
-  "https://com-subscription-ear-floor.trycloudflare.com/api/auth/callback"
+  "https://march-activation-dm-voip.trycloudflare.com/auth/callback",
+  "https://march-activation-dm-voip.trycloudflare.com/auth/shopify/callback",
+  "https://march-activation-dm-voip.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

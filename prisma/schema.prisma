@@ -53,17 +53,18 @@ model HelpModals {
 }
 
 model Offer {
-  offerId      String   @id @default(uuid())
-  storeId      String
-  store        Store    @relation(fields: [storeId], references: [id]) //Foreign key
-  offerName    String
-  offerType    String
-  offerContent String?
-  status       String   @default("active")
-  createdAt    DateTime @default(now())
+  offerId             String                @id @default(uuid())
+  storeId             String
+  store               Store                 @relation(fields: [storeId], references: [id]) //Foreign key
+  offerName           String
+  offerType           String
+  offerContent        String?
+  status              String                @default("active")
+  createdAt           DateTime              @default(now())
 
   @@unique([storeId, offerName])
 }
+
 
 model Widget {
   id      Int     @id @default(autoincrement())

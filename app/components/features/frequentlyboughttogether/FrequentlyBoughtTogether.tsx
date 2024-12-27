@@ -22,7 +22,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
 
     const onSubmit = async (data) => {
         console.log("data and shipping", offer?.offerId);
-        const uri = offer?.offerId === undefined ? `api/offers/save?storeId=${storeId}` : `api/offers/update?storeId=${storeId}&offerId=${offer.offerId}`;
+        const uri = offer?.offerId === undefined ? `api/offers/save?storeId=${storeId}` : `api/offers/save?storeId=${storeId}&offerId=${offer.offerId}`;
         const response = await fetch(`${uri}`, {
             method: 'POST',
             headers: {

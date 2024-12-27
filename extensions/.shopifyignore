@@ -1,0 +1,9 @@
+node_modules/
+dev/
+src/
+*.config.js
+package.json
+package-lock.json
+README.md
+.git/
+*.html

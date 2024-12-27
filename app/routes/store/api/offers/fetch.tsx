@@ -4,7 +4,7 @@ import { json } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     await authenticate.admin(request);
-
+    console.log("Reached here");
     const url = new URL(request.url);
     const queryParams = Object.fromEntries(url.searchParams);
     console.log("Query params:", queryParams);
