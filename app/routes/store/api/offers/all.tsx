@@ -136,6 +136,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const data = await response.json();
     const shopId = data.data.shop.id;
     const tagsData = await TagsData(admin);
+    
     const store = await prismaClient.store.upsert({
         where: { shopId: shopId },
         update: {},
@@ -147,7 +148,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }
     });
 
-    await setMetaObjects(admin, store);
+    // await setMetaObjects(admin, store);
 
     const helpModals = await prismaClient.helpModals.upsert({
         where: { storeId: store.id },
