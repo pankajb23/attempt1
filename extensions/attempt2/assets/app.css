@@ -1,0 +1,191 @@
+/* Container */
+#sell-cross-container {
+    /* border: 1px solid #ddd; */
+    margin: 5px;
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* Heading */
+.cross-sell-title {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 4px 4px 12px 0px;
+    color: var(--txt-color, rgb(1, 11, 1));
+}
+
+#sell-title-sub {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px;
+    border-bottom: 1px inset #abd;
+    color: rgb(200, 236, 200);
+    margin-bottom: 10px;
+}
+
+/* Content */
+.cross-content {
+    display: flex;
+    position:relative;
+    gap: 20px;
+    z-index: 10;
+    /* width: ; */
+}
+
+
+.cross-products {
+    display: flex;
+    align-items: flex-start;
+    /* flex: 1; */
+}
+
+.cross-product {
+    position: relative; /* Allows child elements to be positioned relative to this */
+    flex: 1 1 calc(20% - 20px);
+    max-width: 100px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 0px;
+    align-items: center;
+}
+
+product-container {
+    display: inline-flex; /* or flex, depending on your need */
+    width: fit-content; /* prevents 100% width */
+}
+
+plus-sign {
+    display: inline-flex; /* or flex, depending on your need */
+    width: fit-content; /* prevents 100% width */
+    align-items: center;
+    margin: 0 1rem;
+    padding-top: 40px;
+    /* padding-bottom: 10%; */
+}
+
+/* Checkbox Container */
+.cross-checkbox-container {
+    position: absolute;   /* Position relative to the .product container */
+    top: 0px;             /* Align at the top */
+    right: 0px;           /* Align at the right */
+    border-radius: 0%;   /* Circular background */
+    padding: 0px;         /* Small padding around the checkbox */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Light shadow */
+    z-index: 5;          /* Ensure it's above other elements */
+}
+
+/* Checkbox */
+.cross-product-checkbox {
+    width: 14px;          /* Small checkbox size */
+    height: 14px;
+    cursor: pointer;
+}
+
+.cross-product-image {
+    width: 100%;                /* Responsive image */
+    height: auto;
+    max-width: 140px;
+    max-height: 140px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* .product:hover .product-image {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow when hovering image */
+/* } */ 
+
+.cross-product-title {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: var(--txt-color, rgb(1, 11, 1));
+}
+
+.cross-product-price {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+}
+
+
+/* Footer */
+#cross-footer {
+    flex-direction: column;
+    padding-top: 30px;
+    padding-left: 35px;
+}
+
+#cross-mobile-footer {
+    display:block;
+    width: 100%;
+}
+
+/* Total Price */
+.cross-total-price {
+    font-size: 12px;                /* Larger font for visibility */
+    font-weight: bold;              
+    color: #333;                    /* Darker text color */
+    text-align: left;
+    padding-bottom: 5px;
+    padding-left: 4px;
+}
+
+.cross-total-price{
+    text-decoration: line-through;  /* Add line-through effect */
+    color: #999;                    /* Lighter color for original price */
+    font-size: 11px;
+};
+
+.cross-total-price span {
+    color: #b12704;                 /* Red color for price value */
+    font-size: 13px;                /* Larger size for emphasis */
+    font-weight: bold;
+}
+
+/* Add to Cart Button */
+.cross-add-to-cart-btn {
+    background-color: var(--btn-bg-color, #000000);      /* Yellow background */
+    border-width: var(--btn-wth, 1px);
+    padding: 10px 20px;             /* Adjust padding for size */
+    font-size: 12px;                /* Larger text for button */
+    font-weight: bold;
+    color: var(--btn-text-color, #111);
+    width: var(--btn-width, 200px);
+    border-radius: var(--custom-radius, 10px);
+    border-color: var(--btn-brdr-color, #0f0c01);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add slight shadow for depth */
+}
+
+.cross-add-to-cart-btn:hover {
+    background-color: #504d3e;      /* Darker yellow on hover */
+}
+
+/* Plus Symbol */
+.cross-plus-symbol {
+    /* padding-top: 10%; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
+}
+
+.cross-product:hover .cross-checkbox-container {
+    background-color: #e6f7ff; /* Light blue background on hover */
+    border: 1px solid #2196f3; /* Highlight border */
+}
+
+/* Selected State */
+.cross-product.selected {
+    border: 2px solid #2196f3; /* Blue border to indicate selection */
+    border-radius: 8px;
+}
+
+.cross-final-price{
+    margin-left: 6px;
+}

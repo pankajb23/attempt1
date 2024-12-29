@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://vacuum-engagement-divided-maritime.trycloudflare.com"
+application_url = "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_de
 
 [auth]
 redirect_urls = [
-  "https://vacuum-engagement-divided-maritime.trycloudflare.com/auth/callback",
-  "https://vacuum-engagement-divided-maritime.trycloudflare.com/auth/shopify/callback",
-  "https://vacuum-engagement-divided-maritime.trycloudflare.com/api/auth/callback"
+  "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com/auth/callback",
+  "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com/auth/shopify/callback",
+  "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

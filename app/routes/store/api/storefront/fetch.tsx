@@ -12,7 +12,6 @@ const GetProductDetails = async (pids, shop) => {
 
     const productsResponse = await Promise.all(pids.map(async (pid) => {
         try {
-            console.log("pid", pid);
             const response = await storefront.graphql(
                 `#graphql
                 query {
@@ -39,6 +38,7 @@ const GetProductDetails = async (pids, shop) => {
             );
             const data = await response.json();
             if (response.ok) {
+                // console.log("data", JSON.stringify(data), data);
                 return data.data;
             } else {
                 console.error("GraphQL Error:", data.errors);
@@ -50,7 +50,7 @@ const GetProductDetails = async (pids, shop) => {
             console.log("error1 ---> ", error.body.errors.graphQLErrors);
         }
     }));
-    console.log("ProductsResponse", productsResponse);
+    console.log("ProductsResponse", JSON.stringify(productsResponse));
     return productsResponse;
 }
 

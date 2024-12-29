@@ -15,12 +15,10 @@
     const productId = "{{product.id}}";
     const shopDomain = "{{shop.domain}}";
   </script>
-  <script src="{{ 'sell-cross.js' | asset_url }}" async></script>
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="section-{{ section.id }}-padding">
     <div id="sell-cross-component">
-      <span>ABCD-EFGHI-JKLM-OPQRST</span>
     </div>
   </div>
 </div>
@@ -31,6 +29,7 @@
   "tag": "section",
   "target": "section",
   "stylesheet" :"app.css",
+  "javascript": "sell-cross.js",
   "class": "section",
   "enabled_on":{
     "templates":["product"]
