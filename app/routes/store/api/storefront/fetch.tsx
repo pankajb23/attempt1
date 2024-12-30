@@ -1,11 +1,12 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { prismaClient, authenticate, unauthenticated } from "app/shopify.server";
+import { prismaClient, authenticate, unauthenticated, shopify } from "app/shopify.server";
 import { json } from "@remix-run/node";
 
 /**
  * storefront request where we get the products related information
  */
 const GetProductDetails = async (pids, shop) => {
+    shopify.unauthenticated.admin(shop);
     const { storefront } = await unauthenticated.storefront(
         shop
     );

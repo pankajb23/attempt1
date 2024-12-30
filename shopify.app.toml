@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com"
+application_url = "https://answered-ukraine-foo-fluid.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_definitions ,write_metaobject_definitions, read_metaobjects, unauthenticated_read_metaobjects,  unauthenticated_read_product_listings"
+scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_definitions ,write_metaobject_definitions, read_metaobjects, unauthenticated_read_metaobjects,  unauthenticated_read_product_listings, write_discounts"
 
 [auth]
 redirect_urls = [
-  "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com/auth/callback",
-  "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com/auth/shopify/callback",
-  "https://johnson-rarely-hydrocodone-specifies.trycloudflare.com/api/auth/callback"
+  "https://answered-ukraine-foo-fluid.trycloudflare.com/auth/callback",
+  "https://answered-ukraine-foo-fluid.trycloudflare.com/auth/shopify/callback",
+  "https://answered-ukraine-foo-fluid.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

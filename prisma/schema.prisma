@@ -42,6 +42,7 @@ model Store {
   widgets                  Widget[]
   isMetaObjectsInitialized Boolean     @default(false)
   isUninstalled            Boolean     @default(false)
+  shopAccessToken          String? 
 }
 
 model HelpModals {

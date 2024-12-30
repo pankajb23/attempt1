@@ -47,7 +47,7 @@ class ProductContainer extends HTMLElement {
         const checkbox = this.querySelector(".cross-product-checkbox");
         const price = parseFloat(productWithVariants?.price || 0);
         const productId = productWithVariants?.product?.id;
-        
+
         checkbox.addEventListener('change', (e) => {
             const footer = document.querySelector('cross-footer');
             footer.updatePrice(productId, price, e.target.checked);
@@ -154,7 +154,7 @@ customElements.define('product-container', ProductContainer);
 customElements.define('section-heading', SectionHeading);
 customElements.define('cross-footer', Footer);
 
-
+console.log("cart tokens",localStorage.getItem('cartToken'));
 const renderSellCross = async () => {
     const sellCrossComponent = document.getElementById("sell-cross-component");
     console.log(sellCrossComponent);
