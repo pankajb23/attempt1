@@ -29,7 +29,7 @@
 /* Content */
 .cross-content {
     display: flex;
-    position:relative;
+    position: relative;
     gap: 20px;
     z-index: 10;
     /* width: ; */
@@ -43,51 +43,65 @@
 }
 
 .cross-product {
-    position: relative; /* Allows child elements to be positioned relative to this */
+    position: relative;
+    /* Allows child elements to be positioned relative to this */
     flex: 1 1 calc(20% - 20px);
-    max-width: 100px;
+    max-width: 150px;
     display: flex;
     flex-direction: column;
     padding-left: 0px;
     align-items: center;
 }
 
+
 product-container {
-    display: inline-flex; /* or flex, depending on your need */
-    width: fit-content; /* prevents 100% width */
+    display: inline-flex;
+    /* or flex, depending on your need */
+    width: fit-content;
+    /* prevents 100% width */
 }
 
 plus-sign {
-    display: inline-flex; /* or flex, depending on your need */
-    width: fit-content; /* prevents 100% width */
+    display: inline-flex;
+    /* or flex, depending on your need */
+    width: fit-content;
+    /* prevents 100% width */
     align-items: center;
     margin: 0 1rem;
-    padding-top: 40px;
-    /* padding-bottom: 10%; */
+    padding-top: 45px;
 }
 
 /* Checkbox Container */
 .cross-checkbox-container {
-    position: absolute;   /* Position relative to the .product container */
-    top: 0px;             /* Align at the top */
-    right: 0px;           /* Align at the right */
-    border-radius: 0%;   /* Circular background */
-    padding: 0px;         /* Small padding around the checkbox */
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Light shadow */
-    z-index: 5;          /* Ensure it's above other elements */
+    position: absolute;
+    /* Position relative to the .product container */
+    top: 0px;
+    /* Align at the top */
+    right: 0px;
+    /* Align at the right */
+    border-radius: 0%;
+    /* Circular background */
+    padding: 0px;
+    /* Small padding around the checkbox */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    /* Light shadow */
+    z-index: 5;
+    /* Ensure it's above other elements */
 }
 
 /* Checkbox */
 .cross-product-checkbox {
-    width: 14px;          /* Small checkbox size */
+    width: 14px;
+    /* Small checkbox size */
     height: 14px;
     cursor: pointer;
 }
 
 .cross-product-image {
-    width: 100%;                /* Responsive image */
+    width: 100%;
+    /* Responsive image */
     height: auto;
-    max-width: 140px;
+    max-width: 100%;
     max-height: 140px;
     border-radius: 4px;
     border: 1px solid #ddd;
@@ -95,7 +109,7 @@ plus-sign {
 
 /* .product:hover .product-image {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow when hovering image */
-/* } */ 
+/* } */
 
 .cross-product-title {
     font-size: 12px;
@@ -119,50 +133,120 @@ plus-sign {
 }
 
 #cross-mobile-footer {
-    display:block;
+    display: block;
     width: 100%;
 }
 
 /* Total Price */
-.cross-total-price {
-    font-size: 12px;                /* Larger font for visibility */
-    font-weight: bold;              
-    color: #333;                    /* Darker text color */
-    text-align: left;
-    padding-bottom: 5px;
-    padding-left: 4px;
+.cross-product-title {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: var(--txt-color, rgb(1, 11, 1));
+    max-width: 150px;
+    margin: 0 auto;
+    position: relative;
 }
 
-.cross-total-price{
-    text-decoration: line-through;  /* Add line-through effect */
-    color: #999;                    /* Lighter color for original price */
-    font-size: 11px;
-};
+.p-title-span{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    max-width: inherit;
+}
 
+
+.cross-total-price {
+    text-decoration: line-through;
+    /* Add line-through effect */
+    color: #999;
+    /* Lighter color for original price */
+    font-size: 11px;
+}
+
+.price-variant-display {
+    display: flex;
+    justify-content: space-between; /* Ensures dropdown is on the left and price is on the right */
+    align-items: center; /* Vertically align dropdown and price */
+    gap: 10px; /* Add space between dropdown and price */
+    width: 100%; /* Ensure it takes up the full width */
+}
+
+.variants {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px; /* Space between dropdown and price */
+}
+
+.variant-select {
+    -webkit-appearance: none; /* Remove default browser style (Safari, Chrome) */
+    -moz-appearance: none; /* Remove default style (Firefox) */
+    appearance: none; /* General style reset */
+    background-color: #f9f9f9; /* Custom background color */
+    border: 1px solid #ccc; /* Border styling */
+    border-radius: 4px; /* Rounded corners */
+    padding: 4px 8px; /* Padding inside the dropdown */
+    font-size: 14px; /* Adjust font size */
+    color: #333; /* Text color */
+    cursor: pointer; /* Pointer cursor for dropdown */
+}
+
+.variant-select:focus {
+    border-color: #007bff; /* Highlight border color on focus */
+    outline: none; /* Remove focus outline */
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5); /* Optional focus effect */
+}
+
+.variant-select::after {
+    content: "▼"; /* Custom dropdown arrow */
+    position: absolute;
+    right: 10px;
+    pointer-events: none; /* Prevent interaction with the arrow */
+}
+
+.cross-product-price {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.cross-product select.variant-select {
+    padding: 4px; /* Optional for better spacing */
+    font-size: 12px; /* Optional for consistent font size */
+    font-weight: bold; /* Optional for emphasis */
+    max-width: 100px;
+}
+
+.cross-product-price span.cross-price-span {
+    font-weight: bold;
+    font-size: 12px; /* Match dropdown font size */
+}
 .cross-total-price span {
-    color: #b12704;                 /* Red color for price value */
-    font-size: 13px;                /* Larger size for emphasis */
+    color: #b12704;
+    /* Red color for price value */
+    font-size: 13px;
+    /* Larger size for emphasis */
     font-weight: bold;
 }
 
 /* Add to Cart Button */
 .cross-add-to-cart-btn {
-    background-color: var(--btn-bg-color, #000000);      /* Yellow background */
+    background-color: var(--btn-bg-color, #000000);
+    /* Yellow background */
     border-width: var(--btn-wth, 1px);
-    padding: 10px 20px;             /* Adjust padding for size */
-    font-size: 12px;                /* Larger text for button */
+    padding: 10px 20px;
+    /* Adjust padding for size */
+    font-size: 12px;
+    /* Larger text for button */
     font-weight: bold;
     color: var(--btn-text-color, #111);
     width: var(--btn-width, 200px);
     border-radius: var(--custom-radius, 10px);
     border-color: var(--btn-brdr-color, #0f0c01);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add slight shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Add slight shadow for depth */
 }
 
-.cross-add-to-cart-btn:hover {
-    background-color: #504d3e;      /* Darker yellow on hover */
-}
 
 /* Plus Symbol */
 .cross-plus-symbol {
@@ -176,16 +260,19 @@ plus-sign {
 }
 
 .cross-product:hover .cross-checkbox-container {
-    background-color: #e6f7ff; /* Light blue background on hover */
-    border: 1px solid #2196f3; /* Highlight border */
+    background-color: #e6f7ff;
+    /* Light blue background on hover */
+    border: 1px solid #2196f3;
+    /* Highlight border */
 }
 
 /* Selected State */
 .cross-product.selected {
-    border: 2px solid #2196f3; /* Blue border to indicate selection */
+    border: 2px solid #2196f3;
+    /* Blue border to indicate selection */
     border-radius: 8px;
 }
 
-.cross-final-price{
+.cross-final-price {
     margin-left: 6px;
 }

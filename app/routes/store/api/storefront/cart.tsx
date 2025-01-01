@@ -5,8 +5,8 @@ import shopify from "../../shopify.server";
      
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    *   const shop = await authenticateExternal(request)
-    *   const {admin} = await shopify.unauthenticated.admin(shop);
-    *   const response = await admin.graphql("{ shop { name} }")
+    
+
+    // const {admin} = await shopify.unauthenticated.admin(shop);
     
 }

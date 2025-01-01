@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://answered-ukraine-foo-fluid.trycloudflare.com"
+application_url = "https://latex-sunset-obligation-estimate.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_de
 
 [auth]
 redirect_urls = [
-  "https://answered-ukraine-foo-fluid.trycloudflare.com/auth/callback",
-  "https://answered-ukraine-foo-fluid.trycloudflare.com/auth/shopify/callback",
-  "https://answered-ukraine-foo-fluid.trycloudflare.com/api/auth/callback"
+  "https://latex-sunset-obligation-estimate.trycloudflare.com/auth/callback",
+  "https://latex-sunset-obligation-estimate.trycloudflare.com/auth/shopify/callback",
+  "https://latex-sunset-obligation-estimate.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

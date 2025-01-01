@@ -1,12 +1,11 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { prismaClient, authenticate, unauthenticated, shopify } from "app/shopify.server";
+import { prismaClient, unauthenticated } from "app/shopify.server";
 import { json } from "@remix-run/node";
 
 /**
  * storefront request where we get the products related information
  */
 const GetProductDetails = async (pids, shop) => {
-    shopify.unauthenticated.admin(shop);
     const { storefront } = await unauthenticated.storefront(
         shop
     );
@@ -59,6 +58,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // console.log("Adming", admin);
 
     console.log("Request", JSON.stringify(request));
+    console.log("Headers  --> ", JSON.stringify(request.headers));
     const url = new URL(request.url);
     const queryParams = Object.fromEntries(url.searchParams);
     console.log("Query params:", queryParams);
