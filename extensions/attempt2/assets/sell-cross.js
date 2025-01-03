@@ -27,6 +27,7 @@ class ProductContainer extends HTMLElement {
                 </div>
             </div>`;
         this.innerHTML = template.innerHTML;
+        this.pid = null;
     }
 
     // Get the variant ID of the selected option
@@ -37,8 +38,7 @@ class ProductContainer extends HTMLElement {
 
     // Get the product ID
     getProductId() {
-        const checkbox = this.querySelector(".cross-product-checkbox");
-        return checkbox?.getAttribute("data-product-id") || null;
+        return this.pid;
     }
 
     // Check if the checkbox is selected
@@ -51,7 +51,7 @@ class ProductContainer extends HTMLElement {
         // Use this instead of shadowRoot
         console.log("productWithVariants", productWithVariants);
         const product = productWithVariants?.product;
-
+        this.pid = product?.id;
         const img = this.querySelector(".cross-product-image");
         const titleSpan = this.querySelector(".p-title-span");
         const priceSpan = this.querySelector(".cross-price-span");
@@ -143,6 +143,22 @@ class SectionHeading extends HTMLElement {
 
 }
 
+function getCookie(name) {
+    // Get all cookies in one string: "key1=value1; key2=value2; ..."
+    const cookieString = `; ${document.cookie}`;
+    
+    // Split on "; name=" to isolate the target cookie
+    const parts = cookieString.split(`; ${name}=`);
+  
+    // If found, split on ";" to get just the value
+    if (parts.length === 2) {
+      return parts.pop().split(';').shift();
+    }
+  
+    // If not found, return null or undefined
+    return null;
+  }
+
 class Footer extends HTMLElement {
     constructor() {
         super();
@@ -188,7 +204,7 @@ class Footer extends HTMLElement {
         container.appendChild(this);
     }
 
-    async handhandleClick() {
+    handleClick = async () => {
         const productContainers = document.querySelectorAll("product-container");
         const selectedProducts = Array.from(productContainers).map((container) => {
             return {
@@ -200,19 +216,38 @@ class Footer extends HTMLElement {
 
         console.log("Selected Items:", selectedProducts);
 
-        try{
-            const uri = `${location.origin}/apps/store/api/storefront/order-create` 
-            fetch(uri, {
-                method: "POST",
-                headers:{
-                    "Content-Type": "application/json",
-                },
-                body:JSON.stringify({
-                    cartToken: localStorage.getItem('cartToken'),
-                    products: selectedProducts,
-                })
-            })
-        }
+        const uri = `${location.origin}/apps/store/api/storefront/order-create?shop=${shopDomain}`;
+        
+        const cartJsCall = await fetch(`${location.origin}/cart.js`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        const response = await cartJsCall.json();
+        console.log("response", response);
+        const cartToken = response.token;
+        console.log("cartToken", cartToken);
+        const body = JSON.stringify({
+            cartToken: cartToken,
+            products: selectedProducts,
+        });
+        console.log("body - json ", body);
+        fetch(uri, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: body
+        }).then((response) => {
+            if (response.ok) {
+                console.log("response", response);
+            } else {
+                console.log("response", response);
+            }
+        }).catch((error) => {
+            console.error("Error:", error);
+        })
     }
 
     updatePrice(productId, price, isChecked) {
@@ -237,6 +272,7 @@ customElements.define('cross-footer', Footer);
 console.log("cart tokens", localStorage.getItem('cartToken'));
 const renderSellCross = async () => {
     const sellCrossComponent = document.getElementById("sell-cross-component");
+
     console.log(sellCrossComponent);
     if (!sellCrossComponent) {
         console.error("Error: sell-cross-component not found in the DOM.");
@@ -305,34 +341,6 @@ const renderSellCross = async () => {
 
 
         contentContainer.appendChild(footer.container || footer.element || footer);
-    };
-
-    // Update total price
-    const updateTotalPrice = () => {
-        const total = selectedItems.reduce((sum, item) => sum + parseFloat(item.dataset.price), 0);
-        const originalTotal = selectedItems.length * 20; // Example original price logic
-        document.getElementById("total-price").textContent = total.toFixed(2);
-        document.getElementById("original-price").textContent = `₹${originalTotal.toFixed(2)}`;
-    };
-
-    const attachEventListeners = () => {
-        const items = document.querySelectorAll(".alphabet-item");
-        const checkboxes = document.querySelectorAll(".select-item");
-
-        checkboxes.forEach((checkbox, index) => {
-            checkbox.addEventListener("change", () => {
-                const item = items[index];
-                if (checkbox.checked) {
-                    item.classList.add("selected");
-                    selectedItems.push(item);
-                } else {
-                    item.classList.remove("selected");
-                    selectedItems = selectedItems.filter((selected) => selected !== item);
-                }
-                updateTotalPrice();
-            });
-        });
-
     };
 
     const uiConfig = await fetchUIConfig();
