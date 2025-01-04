@@ -42,7 +42,7 @@ model Store {
   widgets                  Widget[]
   isMetaObjectsInitialized Boolean     @default(false)
   isUninstalled            Boolean     @default(false)
-  // shopAccessToken          String? 
+  // shopAccessToken          String? // TODO
 }
 
 model HelpModals {
@@ -54,18 +54,28 @@ model HelpModals {
 }
 
 model Offer {
-  offerId             String                @id @default(uuid())
-  storeId             String
-  store               Store                 @relation(fields: [storeId], references: [id]) //Foreign key
-  offerName           String
-  offerType           String
-  offerContent        String?
-  status              String                @default("active")
-  createdAt           DateTime              @default(now())
+  offerId      String      @id @default(uuid())
+  storeId      String
+  store        Store       @relation(fields: [storeId], references: [id]) //Foreign key
+  offerName    String
+  offerType    String
+  offerContent String?
+  status       String      @default("active")
+  createdAt    DateTime    @default(now())
+  Discounts    Discounts[]
 
   @@unique([storeId, offerName])
 }
 
+model Discounts {
+  id           String   @id @default(uuid())
+  offerId      String
+  offer        Offer    @relation(fields: [offerId], references: [offerId])
+  discountCode String
+  discountId   String
+  startDate    DateTime?
+  endDate      DateTime?
+}
 
 model Widget {
   id      Int     @id @default(autoincrement())

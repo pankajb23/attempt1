@@ -130,7 +130,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         status: 200, data: {
             message: "Offers fetched successfully!",
             layout: JSON.parse(layout.content),
-            variants: variantsList
+            variants: variantsList,
+            offerId: highestValueOffer?.offerId
         }
     });
 }
