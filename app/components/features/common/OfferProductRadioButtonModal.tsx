@@ -22,7 +22,7 @@ const OfferAssetsVariants = "offerProducts.assets.variants";
 const OfferAssetsType = "offerProducts.assets.type";
 
 
-export default function OfferProductRadioButtonModal({ toolTipContent = "Frequently bought together is an unobtrusive widget and automatic recommendations are available." }) {
+export default function OfferProductRadioButtonModal({ toolTipContent = "Frequently bought together is a non-conspicous widget, automatic recommendations are available." }) {
     const { control, setValue, watch } = useFormContext();
     const shopify = useAppBridge();
 
@@ -84,15 +84,14 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
     return (
         <>
             <Card>
-                <Text as="h5" variant="headingSm">Offer products</Text>
-                <div style={{ marginTop: '10px' }}>
+                <div >
                     <Controller
                         name="offerProducts.type"
                         control={control}
                         defaultValue={offerType}
                         render={({ field: { onChange, value } }) => (
                             < ChoiceList
-                                title={<Text as="p" variant="headingSm" fontWeight="bold">Select offer products</Text>}
+                                title={<Text as="p" variant="headingSm" fontWeight="bold">Choose products for the offer</Text>}
                                 choices={[
                                     { label: 'Manual', value: 'manual' },
                                     { label: automaticOption, value: 'automatic' },
@@ -147,7 +146,6 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                                     })
                                                 }
                                             });
-                                            console.log("unique variants", pidVariantsArray);
                                             setValue(OfferAssetsVariants, pidVariantsArray);
                                             setValue(OfferAssetsProducts, null);
                                         }
@@ -167,7 +165,6 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                             }
                                         });
                                         if (selectedIds !== undefined) {
-                                            console.log("selectedIds products", selectedIds);
                                             const pids = selectedIds.map((p) => {
                                                 return {
                                                     pid: p.id,
@@ -175,13 +172,13 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                                     img: p.images[0]?.originalSrc ?? null,
                                                 }
                                             });
-                                            console.log("setting pids", pids)
                                             setValue(OfferAssetsProducts, pids);
                                             setValue(OfferAssetsVariants, null);
                                         }
                                     }
                                 }}>
-                                    <Text as="p" variant="bodyMd" fontWeight="bold"> Select products</Text>
+
+                                    <Text as="p" variant="bodySm" fontWeight="bold"> {manualOfferType === "variants" ? "Select products/variants": "Select products"}</Text>
                                 </Button>
                                 <Controller
                                     name={OfferAssetsType}
@@ -210,7 +207,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                 }
 
                 <div style={{ marginTop: '14px' }}>
-                    <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
+                    <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on product pages.</Text>
                 </div>
             </Card >
         </>

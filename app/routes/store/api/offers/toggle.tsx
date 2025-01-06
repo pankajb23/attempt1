@@ -9,7 +9,7 @@ export const action: ActionFunction = async ({ params, request }) => {
     console.log("Query params:", queryParams);
 
     const status = url.searchParams.get('status');    
-
+    
     await prismaClient.offer.updateMany({
         where: {
             offerId : {

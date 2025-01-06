@@ -40,6 +40,7 @@ export default function Index() {
 
   const navigateToCallback = useCallback((navigateToPage: NavigationPage) => {
     setNavigateTo(navigateToPage);
+    setOffer(null);
   }, []);
 
   const openPage = useCallback((navigateTo:NavigationPage, offer: Offer) => {
@@ -94,7 +95,8 @@ export default function Index() {
           );
 
         case NavigationPage.OFFER_PAGE_DASHBOARD:
-          return wrapBottom(<OfferOnPageDashboard navigateTo={navigateToCallback}/>);
+          return wrapBottom(<FrequentlyBoughtTogether navigateTo={navigateToCallback} offer={offer}/>);
+          // return wrapBottom(<OfferOnPageDashboard navigateTo={navigateToCallback}/>);
 
         case NavigationPage.FREQUENTLY_BOUGHT_TOGETHER:
           return wrapBottom(<FrequentlyBoughtTogether navigateTo={navigateToCallback} offer={offer}/>);

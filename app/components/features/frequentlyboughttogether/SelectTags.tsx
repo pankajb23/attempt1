@@ -65,7 +65,7 @@ export default function SelectTags({ tags }) {
     }, []);
 
 
-    return (<>
+    return (<div style={{ marginTop: '6px' }}>
         {/* @ts-ignore */}
         <Button variant="secondary" onClick={async () => {
             const picker = await shopify.picker({
@@ -83,12 +83,13 @@ export default function SelectTags({ tags }) {
             handleTagsChange(selected);
             console.log("Selected tags", selected , "tags ", findTagsForIds(selected));
         }}>
-            <Text as="p" fontWeight="bold" variant="bodySm">Select Tags</Text>
+            <Text as="h6" fontWeight="bold" variant="bodySm">Select tags</Text>
         </Button>
         <br />
         {TagsUI(selectedTagIds, allTags, handleTagsChange)}
         <div style={{ marginTop: '10px' }} >
             <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
         </div>
-    </>);
+        </div>
+    );
 }

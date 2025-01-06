@@ -8,7 +8,6 @@ function SelectedProducts(pids, handleProductChange) {
     if (pids === undefined || pids.size === 0) {
         return null;
     }
-    console.log("pids", pids);
     return (
         <div style={{ marginTop: '10px' }}>
             <LegacyCard>
@@ -43,7 +42,6 @@ function SelectedProducts(pids, handleProductChange) {
                                         <div>
                                             {/* @ts-ignore */}
                                             <Button variant="plain" icon={XSmallIcon} onClick={() => {
-                                                console.log("Removing product " + item);
                                                 handleProductChange(item)
                                             }} />
                                         </div>
@@ -77,7 +75,6 @@ export default function SpecificProducts({ selectedProducts, property, showButto
                 setValue(property, products);
                 return new Set(products);
             } else {
-                console.log("products", products,"newPids", newPids);
                 if (newPids.has(products)) {
                     newPids.delete(products);
                 } else {
@@ -102,9 +99,7 @@ export default function SpecificProducts({ selectedProducts, property, showButto
                         variants: false
                     }
                 }).then((selected) => {
-                    // Do something with the selected products
                     const productTypList = selected.map((p) => {
-                        console.log("id -> ", p.id, p);
                         const selectedProductType: SelectedProductType = {
                             pid: p.id,
                             title: p.title,
@@ -113,11 +108,10 @@ export default function SpecificProducts({ selectedProducts, property, showButto
                         return selectedProductType;
 
                     })
-                    console.log("selectedProductType -> ", productTypList);
                     handleProductChange(productTypList);
                 });
             }}>
-                <Text as="h6" fontWeight="bold" variant="headingSm">Select products</Text>
+                <Text as="h6" fontWeight="bold" variant="bodySm">Select products</Text>
             </Button>
         }
         {SelectedProducts(selectedIds, handleProductChange)}

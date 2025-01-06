@@ -1,6 +1,7 @@
 import { BlockStack, Text, Checkbox, ChoiceList, TextField, Select, Card } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";
 import { Controller, useFormContext } from "react-hook-form";
+import { useStoreContext } from "app/lib/context/StoreContext";
 
 const AllCheckbox = ({ mapp = new Map(), skip = new Set }) => {
     const { t } = useTranslation();
@@ -73,6 +74,9 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
     const { t } = useTranslation();
     const { control, watch } = useFormContext();
 
+    const { modalsAndStoreId } = useStoreContext();
+    const discountOptions = ["%", modalsAndStoreId.currencySymbol];
+
     const discountedText = (
         <Text as="p" variant="bodySm" fontWeight="bold">
             {t("pages.discount.enable.discount.text")}
@@ -84,19 +88,16 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
             case 'percentOrFixed':
                 return {
                     isEnabled: true,
-                    // selectedType: 'percentOrFixed',
                     name: 'discountState.discountText',
                 }
             case 'cheapestItemFree':
                 return {
                     isEnabled: false,
-                    // selectedType: 'cheapestItemFree',
                     name: 'discountState.discountText',
                 }
             case 'freeShipping':
                 return {
                     isEnabled: false,
-                    // selectedType: 'freeShipping',
                     name: 'discountState.discountText',
                 }
             default:
@@ -104,8 +105,10 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
         }
     }
     )();
+    
     const discountedTextvalue = watch(name);
     const discountedUnit = watch("discountState.discountUnit") ?? "%";
+
     return (
         <>
             <BlockStack gap="600">
@@ -133,7 +136,7 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
                                             label="Weight unit"
                                             onChange={onChange}
                                             labelHidden
-                                            options={["%", "Inr"]}
+                                            options={discountOptions}
                                         />
                                     }
                                 />
@@ -170,11 +173,7 @@ const DiscountDetails = ({ discountedChoice, discountTextPlaceHolder, shouldHave
                             label={discountedText}
                             value={value || ''}
                             placeholder={discountTextPlaceHolder}
-                            onChange={(newValue) => {
-                                // Sanitize the input value
-                                const sanitizedValue = String(newValue).trim();
-                                onChange(sanitizedValue);
-                            }}
+                            onChange={onChange}
                             autoComplete="off"
                         />
                     )}
@@ -197,9 +196,6 @@ export default function DiscountModal({ checkboxHelpText, choices, discountTextP
         <div>
             <Card>
                 <BlockStack gap='400'>
-                    <Text as='p' variant="bodySm" fontWeight="bold">
-                        {t("pages.frequently_bought_together.discount.label")}
-                    </Text>
                     <Controller
                         name="discountState.isEnabled"
                         control={control}
@@ -236,4 +232,4 @@ export default function DiscountModal({ checkboxHelpText, choices, discountTextP
             </Card>
         </div>
     );
-}
+}     

@@ -177,7 +177,6 @@ export default function OfferTabModal({ onShowOfferPage, openPage }) {
     const [selected, setSelected] = useState(0);
     const { mode, setMode } = useSetIndexFiltersMode();
     const onHandleCancel = () => { };
-    console.log("Moda", mode, selected);
 
     const [queryValue, setQueryValue] = useState('');
 

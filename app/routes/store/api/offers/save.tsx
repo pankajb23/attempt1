@@ -1,10 +1,9 @@
 import { type ActionFunction, json } from "@remix-run/node";
-import { prismaClient, authenticate } from "app/shopify.server";
-import { updateMetaObject } from "./all";
+import { prismaClient } from "app/shopify.server";
+// import { updateMetaObject } from "./all";
 
 export const action: ActionFunction = async ({ params, request }) => {
     const body = await request.json(); // Parse the body from the incoming request
-    const {admin} = await authenticate.admin(request);
     const url = new URL(request.url);
     const queryParams = Object.fromEntries(url.searchParams);
     console.log("Query params:", queryParams);
@@ -27,10 +26,8 @@ export const action: ActionFunction = async ({ params, request }) => {
                 },
                 data: {
                     offerName: body.offerName,
-                    offerContent: JSON.stringify(body)
-                },
-                select: {
-                    offerId: true
+                    offerContent: JSON.stringify(body),
+                    status: body.status
                 }
             });
         } else {
@@ -39,7 +36,8 @@ export const action: ActionFunction = async ({ params, request }) => {
                     offerName: body.offerName,
                     offerType: body.offer.type,
                     storeId: storeId,
-                    offerContent: JSON.stringify(body)
+                    offerContent: JSON.stringify(body),
+                    status: body.status
                 }
             });
         }
@@ -59,7 +57,6 @@ export const action: ActionFunction = async ({ params, request }) => {
           }));
         const offersAsJson = JSON.stringify(offersWithNestedObject, null , 0);
         console.log("All offers on this store", offersAsJson);
-        await updateMetaObject(admin, storeId, offersAsJson);
 
         console.log("offer upsert id ->  ", response);
         return json({ status: 200, data: { message: "Offer saved successfully!", response: response } });

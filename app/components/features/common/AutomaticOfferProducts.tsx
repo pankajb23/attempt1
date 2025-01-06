@@ -5,11 +5,11 @@ const OfferProductLiteral = "offerProducts.maxProducts"
 export default function AutomaticOfferProducts() {
     const { watch, control } = useFormContext();
 
-    const offerDefaultValue = watch(OfferProductLiteral) ?? 2;
+    const offerDefaultValue = watch(OfferProductLiteral) ?? 1;
 
     const label =
         <Text as="p" fontWeight="bold" variant="bodySm">
-            Maximum number of offer products shown
+            Maximum number of offer products
         </Text>
     return (
         <>
@@ -20,32 +20,19 @@ export default function AutomaticOfferProducts() {
                         defaultValue={offerDefaultValue}
                         name={OfferProductLiteral}
                         rules={{
-                            required: "Please enter the maximum number of offer products",
-                            max: {
-                                value: 5,
-                                message: "You can show a maximum of 5 offer products."
-                            },
-                            min: {
-                                value: 2,
-                                message: "You must show at least 2 offer product."
-                            },
-                            validate: {
-                                isNumber: (value) =>
-                                    !isNaN(Number(value)) || 'Must be a valid number',
-                                isInteger: (value) =>
-                                    Number.isInteger(Number(value)) || 'Must be a whole number'
-                            }
+                            required: "Please enter the maximum number of offer products" 
                         }}
                         render={({ field: { value, onChange } }) => (
                             <TextField
                                 label={label}
                                 type="number"
                                 value={value}
-                                min={2}
+                                onChange={onChange}
+                                min={1}
                                 step={1}
-                                max={5}
+                                max={4}
                                 autoComplete="off"
-                                helpText="You can show a maximum of 5 offer products."
+                                helpText="You can show a maximum of 4 offer products."
                             />
                         )} />
                     <Text as="p" fontWeight="semibold" variant="bodySm">

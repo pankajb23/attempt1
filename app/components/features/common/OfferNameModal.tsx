@@ -3,11 +3,10 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from "react-i18next";
 
 export default function OfferNameModal({ placeholder }) {
-    const { control, watch,getValues, formState: { errors } } = useFormContext();
+    const { control, watch, formState: { errors } } = useFormContext();
     const { t } = useTranslation();
     const property = "offerName";
     const propertyValue = watch(property);
-    console.log("propertyValue", propertyValue, "p ", getValues());
 
     return (
         <Card>
@@ -15,7 +14,7 @@ export default function OfferNameModal({ placeholder }) {
                 {t("pages.frequently_bought_together.offer_name.heading")}
             </Text>
             <Controller
-                name="offerName"
+                name={property}
                 control={control}
                 defaultValue={propertyValue}
                 rules={{ required: "Store name is required" }}
@@ -24,7 +23,7 @@ export default function OfferNameModal({ placeholder }) {
                         <TextField
                             label=""
                             value={value}
-                            id="offerName"
+                            id={property}
                             onChange={onChange}
                             placeholder={placeholder}
                             error={Boolean(errors.offerName)}

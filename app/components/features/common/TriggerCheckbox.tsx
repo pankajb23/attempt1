@@ -8,7 +8,7 @@ export default function TriggerCheckbox({offerType}) {
     const { control, setValue, watch, formState: { isSubmitted } } = useFormContext();
 
     setValue('offer.type', offerType);
-    const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Offer is triggered for </Text>
+    const title = <Text as="h6" variant="headingSm" fontWeight="semibold"> Trigger offers for products/tags </Text>
 
     const triggerType = watch('trigger.type') ?? "all_products";
     const selectedProducts = watch('trigger.products') || [];
@@ -47,7 +47,7 @@ export default function TriggerCheckbox({offerType}) {
             case "all_products":
                 return (<>
                     {/* @ts-ignore */}
-                    <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on trigger product pages.</Text>
+                    <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on product pages.</Text>
                 </>);
         }
     }
@@ -55,8 +55,7 @@ export default function TriggerCheckbox({offerType}) {
     return (
         <>
             <Card>
-                <Text as="h5" variant="headingSm">Trigger</Text>
-                <div style={{ marginTop: '10px', paddingBottom: '2px' }}>
+                <div style={{ paddingBottom: '2px' }}>
                     <Controller
                         name="trigger.type"
                         control={control}
@@ -75,7 +74,7 @@ export default function TriggerCheckbox({offerType}) {
                                 }}
                                 choices={[
                                     {
-                                        label: "Specific products",
+                                        label: "Products",
                                         value: "specific_products",
                                     },
                                     {

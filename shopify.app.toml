@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://crest-dairy-md-winds.trycloudflare.com"
+application_url = "https://tx-scotland-varieties-ampland.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_de
 
 [auth]
 redirect_urls = [
-  "https://crest-dairy-md-winds.trycloudflare.com/auth/callback",
-  "https://crest-dairy-md-winds.trycloudflare.com/auth/shopify/callback",
-  "https://crest-dairy-md-winds.trycloudflare.com/api/auth/callback"
+  "https://tx-scotland-varieties-ampland.trycloudflare.com/auth/callback",
+  "https://tx-scotland-varieties-ampland.trycloudflare.com/auth/shopify/callback",
+  "https://tx-scotland-varieties-ampland.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

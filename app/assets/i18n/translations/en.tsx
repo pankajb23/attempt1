@@ -6,8 +6,8 @@ export const en = {
         frequently_bought_together:{
             heading:"Frequently Bought Together",
             offer_name:{
-                heading:"Offer name - for internal reference",
-                placeholder:"Eg: Upsell for mobile phones"
+                heading:"Internal offer label",
+                placeholder:"Eg: Frequently buying together with shoe"
             },
             checkbox:{
                 percentOrFixed:{
@@ -33,7 +33,7 @@ export const en = {
         discount:{
             enable:{
                 heading:"Enable discount",
-                bundle:"Bundle discount for product page upsell.",
+                bundle:"Bundle discount for product page upsell",
                 discount:{
                     heading:"Discount type",
                     text:"Discount text"

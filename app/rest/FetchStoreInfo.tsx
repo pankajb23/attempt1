@@ -19,6 +19,7 @@ export function fetchStoreInfo(updateStoreDetails) {
                     tags: resp.data.tagsData,
                     offers: resp.data.offers,
                     customPages: resp.data.customPages,
+                    currencySymbol: resp.data.currencySymbol,
                 });
 
             } else {
