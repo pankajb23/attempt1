@@ -179,22 +179,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     console.log("ShopId - currencyCode", shopId, currencyCode);
 
 
-    let currencyFormatId = await prismaClient.currencyFormat.findUnique({
+    const currencyFormatsResponse = await prismaClient.currencyFormat.findUnique({
         where: {
             currencyCode: currencyCode
         },
         select: {
-            id: true
+            id: true,
+            currencyFormat: true
         }
     });
 
+    let currencyFormatId = currencyFormatsResponse.id;
+    const currencyFormat = currencyFormatsResponse.currencyFormat;
+    
     if (GlobalShopToCurrencyCodes[shopId] !== currencyCode) {
         GlobalShopToCurrencyCodes[shopId] = currencyCode;
         GlobalCurrencyCodes[currencyCode] = getSymbolFromCurrency(currencyCode)
 
         if (currencyFormatId === null || currencyFormatId === undefined) {
             // only upsert if it's not present.            
-            currencyFormatId = await prismaClient.currencyFormat.create({
+            const k = await prismaClient.currencyFormat.create({
                 data: {
                     currencyCode: currencyCode,
                     currencySymbol: GlobalCurrencyCodes[currencyCode],
@@ -204,6 +208,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
                     id: true
                 }
             });
+            currencyFormatId = k.id;
         }
     }
 
@@ -261,6 +266,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             offers: allOffers,
             customPages: customPages,
             currencySymbol: currencyCode,
+            currencyFormat: currencyFormat,
             sampleData: storeData
         }
     });

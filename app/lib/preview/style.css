@@ -15,7 +15,7 @@
     font-size: 18px;
     font-weight: bold;
     padding: 4px 4px 12px 0px;
-    color: var(--txt-color, rgb(1, 11, 1));
+    color: var(--canvas-text-color, rgb(1, 11, 1));
 }
 
 #sell-title-sub {
@@ -49,6 +49,7 @@
     /* height: 150px; */
     /* width: 100px; */
     width:min-content;
+    min-width: 80px;
     display: flex;
     flex-direction: column;
     padding-left: 0px;
@@ -85,7 +86,8 @@
     /* width: 100%; */
     position: relative;
     /* Responsive image */
-    width: 100px;
+    width: 100%;
+    max-width: 100px;
     height: 100px;
     border-radius: 4px;
     border: 1px solid #ddd;
@@ -98,9 +100,9 @@
 }
 
 .checkbox-container input:not(:checked)~.product-image {
-    opacity: 0.5;
+    opacity: 0.1;
     /* Adjust the opacity for unchecked state */
-    transition: opacity 0.3s ease;
+    transition: opacity 0.1ms ease;
     /* Smooth transition */
 }
 
@@ -143,8 +145,11 @@
 } */
 
 .variant-and-price {
-    width: 100%;
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; 
+    gap: 0.5rem; 
 }
 
 .product-title span:hover::after {
@@ -196,11 +201,8 @@
 }
 
 .product-price {
-    font-size: 12px;
-    font-weight: bold;
-    text-align: right;
-    float: right;
-    width: 30%
+    font-size: 9px;
+    font-weight: 600;
 }
 
 
@@ -249,28 +251,28 @@
 
 /* Add to Cart Button */
 .add-to-cart-btn {
-    background-color: var(--btn-bg-color, #000000);
+    background-color: var(--button-background-color, #000000);
     /* Yellow background */
-    border-width: var(--btn-wth, 1px);
+    border-width: var(--button-border-width, 1px);
     padding: 10px 20px;
     /* Adjust padding for size */
     font-size: 12px;
     /* Larger text for button */
     font-weight: bold;
-    color: var(--btn-text-color, #111);
+    color: var(--button-text-color, #111);
     height: auto;
-    width: var(--btn-width, 300px);
-    border-radius: var(--custom-radius, 10px);
-    border-color: var(--btn-brdr-color, #0f0c01);
+    width: 100%;
+    font-family: var(--button-text-family, Arial, sans-serif);
+    border-radius: var(--button-border-radius, 10px);
+    border-color: var(--button-border-color, #0f0c01);
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     /* Add slight shadow for depth */
 }
 
-.add-to-cart-btn:hover {
+/* .add-to-cart-btn:hover {
     background-color: #504d3e;
-    /* Darker yellow on hover */
-}
+} */
 
 /* Plus Symbol */
 .plus-symbol {

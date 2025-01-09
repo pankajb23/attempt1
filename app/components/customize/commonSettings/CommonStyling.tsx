@@ -1,8 +1,11 @@
-import { Card, Text, BlockStack, Divider, InlineGrid, Button, Collapsible } from "@shopify/polaris";
+import { Card, Text, BlockStack, InlineGrid, Divider, Button, Collapsible, Tooltip } from "@shopify/polaris";
 import ButtonWithColorAndPopup from "../common/ButtonWithColorAndPopup";
 import NumberTextField from "../common/NumberTextFieldModal";
 import { useState, useCallback } from "react";
-
+import * as CommonConfigsName from "./CommonConfigsName";
+import FontFamilySelect from "./FontFamilySelect";
+import { Divider as DividerMui, Chip } from '@mui/material';
+// import Divider  from "@mui/material/Divider";
 function ButtonStyling({ open, handleOpen }) {
     return (
         <Card roundedAbove="sm">
@@ -10,16 +13,13 @@ function ButtonStyling({ open, handleOpen }) {
                 <Button
                     fullWidth
                     disabled={open === "button"}
-                    onClick={() =>
-                        handleOpen("button")
-                    }
+                    onClick={() => handleOpen("button")}
                     ariaExpanded={open}
                     ariaControls="basic-collapsible">
-                        Button styling
-                        </Button>
+                    Button styling
+                </Button>
                 <Collapsible
-                    // open={open === "button"}
-                    open={true}
+                    open={open === "button"}
                     id="basic-collapsible"
                     transition={{ duration: "500ms", timingFunction: "ease-in-out" }}
                     expandOnPrint
@@ -27,19 +27,20 @@ function ButtonStyling({ open, handleOpen }) {
                     <BlockStack gap="300">
                         <Divider />
                         <InlineGrid columns="2" gap="200">
-                            <ButtonWithColorAndPopup header="Text ('Add to Cart')" property="component.button.text.color" defaultValue="#000000" />
-                            <ButtonWithColorAndPopup header="Background color" property="component.button.background.color" defaultValue="#000000" />
+                            <ButtonWithColorAndPopup header="Text ('Add to Cart')" property={CommonConfigsName.ButtonTextColor} defaultValue="#ffffff" />
+                            <FontFamilySelect heading="Text family" property={CommonConfigsName.ButtonTextFamily} />
                         </InlineGrid>
+
+                        <Divider />
                         <InlineGrid columns="2" gap="200">
-                            <NumberTextField heading="Length" property="component.button.size.length" placeholder={"Auto-detect"} />
-                            <NumberTextField heading="Width" property="component.button.size.width" placeholder={"Auto-detect"} />
+                            <NumberTextField placeholder={"Auto-detect"} heading={"Border radius"} property={CommonConfigsName.ButtonBorderRadius} defaultValue={10} />
+                            <NumberTextField placeholder={"Auto-detect"} heading={"Border width"} property={CommonConfigsName.ButtonBorderWidth} defaultValue={4} />
                         </InlineGrid>
+
+                        <Divider />
                         <InlineGrid columns="2" gap="200">
-                            <NumberTextField placeholder={"Auto-detect"} heading={"Border radius"} property="component.button.border.radius" />
-                            <NumberTextField placeholder={"Auto-detect"} heading={"Border width"} property={"component.button.border.wdth"} />
-                        </InlineGrid>
-                        <InlineGrid columns="2" gap="200">
-                            <ButtonWithColorAndPopup header="Border color" property="component.button.border.color" defaultValue="#000000" />
+                            <ButtonWithColorAndPopup header="Border color" property={CommonConfigsName.ButtonBorderColor} defaultValue="#d37594ff" />
+                            <ButtonWithColorAndPopup header="Background color" property={CommonConfigsName.ButtonBackgroundColor} defaultValue="#0b8498ff" />
                         </InlineGrid>
                     </BlockStack>
                 </Collapsible>
@@ -48,33 +49,44 @@ function ButtonStyling({ open, handleOpen }) {
     );
 }
 
-function TextStyling({ open, handleOpen }) {
-    console.log("open", open);
+function CanvasStyling({ open, handleOpen }) {
+    const componentName = "canvas";
     return (
         <Card roundedAbove="sm">
             <BlockStack gap="400">
                 <Button
                     fullWidth
-                    disabled={open === "text"}
-                    onClick={() => handleOpen("text")}
+                    disabled={open === componentName}
+                    onClick={() => handleOpen(componentName)}
                     ariaExpanded={open}
-                    ariaControls="basic-collapsible">Text styling</Button>
+                    ariaControls="basic-collapsible">Canvas styling</Button>
                 <Collapsible
-                    //open={open === "text"}
-                    open={true}
+                    open={open === componentName}
                     id="basic-collapsible"
                     transition={{ duration: "500ms", timingFunction: "ease-in-out" }}
                     expandOnPrint
                 >
                     <BlockStack gap="300">
-                        <Divider borderWidth="100" />
-                        <InlineGrid columns="2" gap="200">
-                            <ButtonWithColorAndPopup header="Text color" property="component.text.color" defaultValue="#333" />
-                            <ButtonWithColorAndPopup header="Price color" property="price.color" defaultValue="#444" />
+                        <Divider />
+                        <InlineGrid columns="4" gap="200">
+                            <NumberTextField placeholder={"Auto"} heading={"Left padding"} property={CommonConfigsName.CanvasLeftPadding} defaultValue={10} />
+                            <NumberTextField placeholder={"Auto"} heading={"Right padding"} property={CommonConfigsName.CanvasRightPadding} />
+                            <NumberTextField placeholder={"Auto"} heading={"Top padding"} property={CommonConfigsName.CanvasTopPadding} defaultValue={10} />
+                            <NumberTextField placeholder={"Auto"} heading={"Bottom padding"} property={CommonConfigsName.CanvasBottomPadding} defaultValue={10} />
                         </InlineGrid>
-                        <InlineGrid columns="2" gap="200">
-                            <ButtonWithColorAndPopup header="Sale price color" property="price.sale.color" defaultValue="#720707ff" />
-                            <ButtonWithColorAndPopup header="Compare-at price color" property="price.compare.color" defaultValue="#777" />
+                        <Divider />
+                        <InlineGrid columns="4" gap="200">
+                            <ButtonWithColorAndPopup header="Background color" property={CommonConfigsName.CanvasBackgroundColor} defaultValue="#ffffff" />
+                            <ButtonWithColorAndPopup header="Border color" property={CommonConfigsName.CanvasBorderColor} defaultValue="#333333" />
+                            <NumberTextField placeholder={"Auto"} heading={"Border radius"} property={CommonConfigsName.CanvasBorderRadius} defaultValue={10} />
+                            <NumberTextField placeholder={"Auto"} heading={"Border width"} property={CommonConfigsName.CanvasBorderWidth} defaultValue={4} />
+                        </InlineGrid>
+                        <Divider />
+                        <InlineGrid columns="4" gap="200">
+                            <NumberTextField placeholder={"Auto"} heading={"Text size"} property={CommonConfigsName.CanvasTextSize} defaultValue={18} />
+                            <ButtonWithColorAndPopup header="Text color" property={CommonConfigsName.CanvasTextColor} defaultValue="#000000" />
+                            {/* <ButtonWithColorAndPopup header="Text weight" property={CommonConfigsName.CanvasTextWeight} defaultValue="#333" /> */}
+                            <FontFamilySelect heading="Text family" property={CommonConfigsName.CanvasTextFamily} />
                         </InlineGrid>
                     </BlockStack>
                 </Collapsible>
@@ -82,8 +94,39 @@ function TextStyling({ open, handleOpen }) {
         </Card>
     );
 }
+
+function TotalPriceStyling({ open, handleOpen }) {
+    const componentName = "totalPrice";
+    return (
+        <Card roundedAbove="sm">
+            <BlockStack gap="400">
+                <Button
+                    fullWidth
+                    disabled={open === componentName}
+                    onClick={() => handleOpen(componentName)}
+                    ariaExpanded={open}
+                    ariaControls="basic-collapsible">Price - styling</Button>
+                <Collapsible
+                    open={open === componentName}
+                    id="basic-collapsible"
+                    transition={{ duration: "500ms", timingFunction: "ease-in-out" }}
+                    expandOnPrint
+                >
+                    <BlockStack gap="200">
+                        <InlineGrid columns="3" gap="200" >
+                            <ButtonWithColorAndPopup header="Total price text color" property={CommonConfigsName.TotalPriceTextColor} defaultValue="#fb0101ff" />
+                            <ButtonWithColorAndPopup header="Crossed out price text color" property={CommonConfigsName.TotalPriceCrossedOutTextColor} defaultValue="#333" />
+                            <ButtonWithColorAndPopup header="Component price text color" property={CommonConfigsName.TotalPriceComponentTextColor} defaultValue="#333" />
+                        </InlineGrid>
+                    </BlockStack>
+                </Collapsible>
+            </BlockStack>
+        </Card>
+    );
+}
+
 export default function CommonStylingModal() {
-    const [open, setOpen] = useState("button");
+    const [open, setOpen] = useState("canvas");
 
     const handleToggle = useCallback((component: string) => {
         console.log("component", component);
@@ -92,8 +135,9 @@ export default function CommonStylingModal() {
 
     return (
         <BlockStack gap="400">
+            <CanvasStyling open={open} handleOpen={handleToggle} />
             <ButtonStyling open={open} handleOpen={handleToggle} />
-            <TextStyling open={open} handleOpen={handleToggle} />
+            <TotalPriceStyling open={open} handleOpen={handleToggle} />
         </BlockStack>
     );
 

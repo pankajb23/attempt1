@@ -20,7 +20,8 @@ export function fetchStoreInfo(updateStoreDetails) {
                     offers: resp.data.offers,
                     customPages: resp.data.customPages,
                     currencySymbol: resp.data.currencySymbol,
-                    storeData: resp.data.sampleData.nodes
+                    storeData: resp.data.sampleData.nodes,
+                    currencyFormat: resp.data.currencyFormat
                 });
 
             } else {

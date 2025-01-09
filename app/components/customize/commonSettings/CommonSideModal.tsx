@@ -1,9 +1,9 @@
 import { BlockStack, Card, Text, Select, InlineGrid, Divider } from "@shopify/polaris";
 import ProductPreview from "../../../lib/preview/modal";
 import { useCallback, useState } from "react";
-import { type CommonStyling } from "app/types";
 import { useFormContext } from "react-hook-form";
 import { useStoreContext } from "app/lib/context/StoreContext";
+import * as CommonConfigsName from "./CommonConfigsName";
 
 function BoldText({ text }) {
     return <Text as="p" variant="headingSm" fontWeight="bold"> {text}</Text>
@@ -37,12 +37,14 @@ export default function CommonSideModal() {
     ]
 
 
-    const {modalsAndStoreId} = useStoreContext();
-    const products = modalsAndStoreId.storeData.map((node, index) =>{
+    const { modalsAndStoreId } = useStoreContext();
+    const currencyFormat = modalsAndStoreId.currencyFormat;
+    const regex = /{{(.*?)}}/g;
+    const products = modalsAndStoreId.storeData.map((node, index) => {
         const variants = node.variants?.nodes.map((variant, index) => {
             return {
                 id: variant.id,
-                price: variant.price,
+                price: currencyFormat.replace(regex, variant?.price),
                 title: variant.displayName
             }
         })
@@ -58,18 +60,45 @@ export default function CommonSideModal() {
         }
     });
 
-    const commonStyling: CommonStyling = {
-        'buttonBgColor': watch('btn.bg.color') ?? '#000000',
-        'buttonTextColor': watch('btn.txt.color') ?? '#ffffff',
-        'buttonBorderColor': watch('btn.brdr.color') ?? '#000000',
-        'buttonBorderWidth': watch('btn.brdr.wdth') ?? '0',
-        'textColor': watch('text.color') ?? '#333',
-        'priceColor': watch('price.color') ?? '#444',
-        'salePriceColor': watch('price.sale.color') ?? '#720707ff',
-        'compareAtPriceColor': watch('price.compare.color') ?? '#777',
-        'timerTextColor': watch('text.timer.color') ?? '#888',
-        'borderRadius': watch('btn.radius') ?? "0"
+    const commonStyling = {
+        [CommonConfigsName.ButtonBackgroundColor]: watch(CommonConfigsName.ButtonBackgroundColor) ?? '#0b8498ff',
+        [CommonConfigsName.ButtonTextColor]: watch(CommonConfigsName.ButtonTextColor) ?? '#ffffff',
+        [CommonConfigsName.ButtonTextFamily]: watch(CommonConfigsName.ButtonTextFamily) ?? 'Arial, sans-serif',
+        [CommonConfigsName.ButtonBorderRadius]: watch(CommonConfigsName.ButtonBorderRadius) ?? '10',
+        [CommonConfigsName.ButtonBorderColor]: watch(CommonConfigsName.ButtonBorderColor) ?? '#d37594ff',
+        [CommonConfigsName.ButtonBorderWidth]: watch(CommonConfigsName.ButtonBorderWidth) ?? '4',
+
+        [CommonConfigsName.CanvasBackgroundColor]: watch(CommonConfigsName.CanvasBackgroundColor) ?? '#ffffff',
+        [CommonConfigsName.CanvasLeftPadding]: watch(CommonConfigsName.CanvasLeftPadding) ?? '10',
+        [CommonConfigsName.CanvasRightPadding]: watch(CommonConfigsName.CanvasRightPadding),
+        [CommonConfigsName.CanvasTopPadding]: watch(CommonConfigsName.CanvasTopPadding) ?? '10',
+        [CommonConfigsName.CanvasBottomPadding]: watch(CommonConfigsName.CanvasBottomPadding) ?? '10',
+        [CommonConfigsName.CanvasBorderRadius]: watch(CommonConfigsName.CanvasBorderRadius) ?? '10',
+        [CommonConfigsName.CanvasBorderWidth]: watch(CommonConfigsName.CanvasBorderWidth) ?? '4',
+        [CommonConfigsName.CanvasBorderColor]: watch(CommonConfigsName.CanvasBorderColor) ?? '#333333',
+
+        [CommonConfigsName.CanvasTextColor]: watch(CommonConfigsName.CanvasTextColor) ?? '#000000',
+        [CommonConfigsName.CanvasTextSize]: watch(CommonConfigsName.CanvasTextSize) ?? "18",
+        [CommonConfigsName.CanvasTextFamily]: watch(CommonConfigsName.CanvasTextFamily) ?? 'Arial, sans-serif',
+
+        [CommonConfigsName.TotalPriceTextColor]: watch(CommonConfigsName.TotalPriceTextColor) ?? '#fb0101ff',
+        [CommonConfigsName.TotalPriceComponentTextColor]: watch(CommonConfigsName.TotalPriceComponentTextColor) ?? '#444',
+        [CommonConfigsName.TotalPriceCrossedOutTextColor]: watch(CommonConfigsName.TotalPriceCrossedOutTextColor) ?? '#444'
+        // [CommonConfigsName.TotalPriceTextSize]: watch(CommonConfigsName.TotalPriceTextSize) ?? '10',
+        // [CommonConfigsName.TotalPriceTextWeight]: watch(CommonConfigsName.TotalPriceTextWeight) ?? 'normal',
+        // [CommonConfigsName.TotalPriceTextFamily]: watch(CommonConfigsName.TotalPriceTextFamily) ?? 'Arial, sans-serif',
+
+        // [CommonConfigsName.TotalPriceComponentTextColor]: watch(CommonConfigsName.TotalPriceComponentTextColor),
+        // [CommonConfigsName.TotalPriceComponentTextSize]: watch(CommonConfigsName.TotalPriceComponentTextSize),
+        // [CommonConfigsName.TotalPriceComponentTextWeight]: watch(CommonConfigsName.TotalPriceComponentTextWeight),
+        // [CommonConfigsName.TotalPriceComponentTextFamily]: watch(CommonConfigsName.TotalPriceComponentTextFamily),
+
+        // [CommonConfigsName.TotalPriceCrossedOutTextColor]: watch(CommonConfigsName.TotalPriceCrossedOutTextColor),
+        // [CommonConfigsName.TotalPriceCrossedOutTextSize]: watch(CommonConfigsName.TotalPriceCrossedOutTextSize),
+        // [CommonConfigsName.TotalPriceCrossedOutTextWeight]: watch(CommonConfigsName.TotalPriceCrossedOutTextWeight),
+        // [CommonConfigsName.TotalPriceCrossedOutTextFamily]: watch(CommonConfigsName.TotalPriceCrossedOutTextFamily) ,
     }
+    console.log("commonStyling", commonStyling);
     const isWeb = web === 'web';
     const width = isWeb ? '100%' : '50%';
 
@@ -100,6 +129,7 @@ export default function CommonSideModal() {
                         </InlineGrid>
                     </BlockStack>
                 </Card>
+
                 <Card padding={{ xs: "0", sm: "0" }} roundedAbove="sm">
                     <ProductPreview products={products} commonStyling={commonStyling} isWeb={isWeb} productCounts={previewCount} />
                 </Card>
