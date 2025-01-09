@@ -32,19 +32,19 @@ model Session {
 }
 
 model Store {
-  id                       String          @id @default(uuid()) // id for local storage.
-  shopId                   String          @unique // a unique shopify id. 
+  id                       String           @id @default(uuid()) // id for local storage.
+  shopId                   String           @unique // a unique shopify id. 
   name                     String
   contactEmail             String
   createdAt                DateTime
   offers                   Offer[]
   helpModals               HelpModals?
   widgets                  Widget[]
-  isMetaObjectsInitialized Boolean         @default(false)
-  isUninstalled            Boolean         @default(false)
+  isMetaObjectsInitialized Boolean          @default(false)
+  isUninstalled            Boolean          @default(false)
   currencyFormatId         Int // Foreign key to CurrencyFormat
-  currencyCode             CurrencyFormat? @relation(fields: [currencyFormatId], references: [id])
-
+  currencyCode             CurrencyFormat?  @relation(fields: [currencyFormatId], references: [id])
+  sample                   String @default("")
   // shopAccessToken          String? // TODO
 }
 
@@ -98,3 +98,5 @@ model CurrencyFormat {
   currencyFormat String
   stores         Store[]
 }
+
+

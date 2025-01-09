@@ -50,7 +50,7 @@ export default function CommonSettingsModal({ navigateToPage }) {
               <Layout>
                 <Layout.Section variant="oneHalf">
                   <BlockStack gap='300' >
-                    <GeneralSettings />
+                    {/* <GeneralSettings /> */}
                     <CommonStylingModal />
                     {/* <CustomCssModal /> */}
                   </BlockStack>

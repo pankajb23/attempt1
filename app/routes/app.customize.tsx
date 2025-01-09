@@ -36,8 +36,9 @@ export default function CustomizeMainPage() {
     const showPage = (page: CustomizePageType) => {
       switch (page) {
         case CustomizePageType.LandingPage:
-          return customPage(<LandingPageModal key={'landing-page'} navigateToPage={navigateToCallback} />, true);
-
+          // return customPage(<LandingPageModal key={'landing-page'} navigateToPage={navigateToCallback} />, true);
+          return customPage(<CommonSettingsModal key={'common-setting'} navigateToPage={navigateToCallback} />, false, true);
+          
         case CustomizePageType.CommonSettings:
           return customPage(<CommonSettingsModal key={'common-setting'} navigateToPage={navigateToCallback} />, false, true);
 

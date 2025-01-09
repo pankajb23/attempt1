@@ -1,28 +1,75 @@
 import './style.css';
 import type { CommonStyling, Product } from "app/types";
-
+import { useState } from 'react';
 function Component({ product, shouldAddSignSymbol, commonStyling }: { product: Product, shouldAddSignSymbol: boolean, commonStyling: CommonStyling }) {
+    const [selectVariant, setSelectVariant] = useState(product.variants[0].id);
+
+    console.log("variants", product.variants);
+    const handleVariantChange = (e) => {
+        const selectedId = e.target.value;
+        const variant = product.variants.find((v) => v.id === selectedId);
+        console.log("selectId", selectedId, variant.id);
+
+
+        setSelectVariant(variant.id); // Update the selected variant
+    };
+
+    const selectV = product.variants.find(variant => variant.id === selectVariant);
+    console.log("selectV", selectV);
     return (
         <>
             <div className="product">
-                <div className="checkbox-container">
-                    <input type="checkbox" className="product-checkbox" defaultChecked />
+
+                <div className="product-image-container">
+                    <div className="checkbox-container">
+                        <input type="checkbox" className="product-checkbox" defaultChecked />
+                    </div>
+                    <img
+                        src={product.img}
+                        alt="Product 2"
+                        className="product-image"
+                    />
                 </div>
-                <img
-                    src={product.img}
-                    alt="Product 2"
-                    className="product-image"
-                />
                 <div className="product-title">
                     <span style={{ color: commonStyling?.textColor }} >
-                        {product.title}
+                        <a
+                            href={product.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {product.title}
+                        </a>
                     </span>
                 </div>
-                <div className="product-price">
-                    <span style={{ color: commonStyling?.salePriceColor || "#FF0000" }}>{product.price}</span>
+                <div className="variant-and-price" >
+                    <div className="variant">
+
+                        {
+                            // product.variants.length === 1
+                            // ? (
+                            //     // If there's only one variant, just show its title
+                            //     product.variants[0].title
+                            // )
+                            (
+                                // Otherwise, render a dropdown of all variants
+                                <select onChange={handleVariantChange}>
+                                    {product.variants.map((variant, index) => (
+                                        <option key={index} value={variant.id}>
+                                            {variant.title}
+                                        </option>
+                                    ))}
+                                </select>
+                            )
+                        }
+                    </div>
+                    <div className="product-price">
+                        <span style={{ color: commonStyling?.salePriceColor || "#FF0000" }}>{selectV.price}</span>
+                    </div>
                 </div>
-            </div>
-            {shouldAddSignSymbol && <div className="plus-symbol">+</div>}
+
+            </div >
+            {shouldAddSignSymbol && <div className="plus-symbol">+</div>
+            }
         </>
     );
 }
@@ -33,7 +80,8 @@ function Component({ product, shouldAddSignSymbol, commonStyling }: { product: P
  */
 
 
-function Web({ products, commonStyling }: { products: Product[], commonStyling: CommonStyling }) {
+function Web({ products, commonStyling, productsCount }: { products: Product[], commonStyling: CommonStyling, productsCount: number }) {
+    const slicedArray = products.slice(0, productsCount);
     return (
         <div id="sell-cross-container">
             {/* Heading Section */}
@@ -49,11 +97,11 @@ function Web({ products, commonStyling }: { products: Product[], commonStyling: 
             <div id="content">
                 <div id="products">
                     {
-                        products.map((product, index) => {
+                        slicedArray.map((product, index) => {
                             return <Component
                                 key={index}
                                 product={product}
-                                shouldAddSignSymbol={index !== products.length - 1}
+                                shouldAddSignSymbol={index !== slicedArray.length - 1}
                                 commonStyling={commonStyling}
                             />
                         })
@@ -87,7 +135,8 @@ function Web({ products, commonStyling }: { products: Product[], commonStyling: 
 }
 
 
-function Mobile({ products, commonStyling }: { products: Product[], commonStyling: CommonStyling }) {
+function Mobile({ products, commonStyling, productsCount }: { products: Product[], commonStyling: CommonStyling, productsCount: number }) {
+    const slicedArray = products.slice(0, productsCount);
     return (
         <div id="sell-cross-container">
             {/* Heading Section */}
@@ -103,11 +152,11 @@ function Mobile({ products, commonStyling }: { products: Product[], commonStylin
             <div id="content">
                 <div id="products">
                     {
-                        products.map((product, index) => {
+                        slicedArray.map((product, index) => {
                             return <Component
                                 key={index}
                                 product={product}
-                                shouldAddSignSymbol={index !== products.length - 1}
+                                shouldAddSignSymbol={index !== slicedArray.length - 1}
                                 commonStyling={commonStyling}
                             />
                         })
@@ -117,7 +166,7 @@ function Mobile({ products, commonStyling }: { products: Product[], commonStylin
             {/* Footer Section */}
             <div id="mobile-footer">
                 <div className="total-price">
-                    <span style={{ color: commonStyling?.textColor || "#FFFFFF"}} >
+                    <span style={{ color: commonStyling?.textColor || "#FFFFFF" }} >
                         Total price:
                     </span>
                     <span style={{ color: commonStyling?.salePriceColor || "#FF0000" }}>
@@ -140,11 +189,12 @@ function Mobile({ products, commonStyling }: { products: Product[], commonStylin
     );
 }
 
-export default function ProductPreview({ products, commonStyling, isWeb }: { products: Product[], commonStyling: CommonStyling, isWeb: Boolean }) {
+export default function ProductPreview({ products, commonStyling, isWeb, productCounts }: { products: Product[], commonStyling: CommonStyling, isWeb: Boolean, productCounts: number }) {
+
     return (
 
-        <>
-            {isWeb ? <Web products={products} commonStyling={commonStyling} /> : <Mobile products={products} commonStyling={commonStyling} />}
-        </>
+        <div>
+            {isWeb ? <Web products={products} commonStyling={commonStyling} productsCount={productCounts} /> : <Mobile products={products} commonStyling={commonStyling} productsCount={productCounts} />}
+        </div>
     )
 }

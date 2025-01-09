@@ -3,6 +3,7 @@ import ProductPreview from "../../../lib/preview/modal";
 import { useCallback, useState } from "react";
 import { type CommonStyling } from "app/types";
 import { useFormContext } from "react-hook-form";
+import { useStoreContext } from "app/lib/context/StoreContext";
 
 function BoldText({ text }) {
     return <Text as="p" variant="headingSm" fontWeight="bold"> {text}</Text>
@@ -21,26 +22,41 @@ export default function CommonSideModal() {
     const options = [
         { label: 'web', value: 'web' },
         { label: 'mobile', value: 'mobile' }
-
     ];
 
-    const products = [
-        {
-            title: "Toddler Monkey Caps Winter Woolen Knit Hat",
-            price: "$15",
-            img: "https://via.placeholder.com/150"
-        },
-        {
-            title: "Pampers All Round Protection Baby Diapers",
-            price: "$15",
-            img: "https://via.placeholder.com/150"
-        },
-        {
-            title: "Pampers All Round Protection Baby Diapers",
-            price: "$15",
-            img: "https://via.placeholder.com/150"
+    const [previewCount, setPreviewCount] = useState(2);
+
+    const handlePreviewCountChange = useCallback(
+        (value: string) => setPreviewCount(parseInt(value)),
+        [],
+    );
+    const optionsPreview = [
+        { label: '2 Products', value: '2' },
+        { label: '3 Products', value: '3' },
+        { label: '4 Products', value: '4' }
+    ]
+
+
+    const {modalsAndStoreId} = useStoreContext();
+    const products = modalsAndStoreId.storeData.map((node, index) =>{
+        const variants = node.variants?.nodes.map((variant, index) => {
+            return {
+                id: variant.id,
+                price: variant.price,
+                title: variant.displayName
+            }
+        })
+        const image = node.featuredMedia?.preview?.image
+        return {
+            id: node.id,
+            title: node.title,
+            url: node.onlineStoreUrl || node.onlineStorePreviewUrl,
+            img: image?.url,
+            height: image?.height,
+            width: image?.width,
+            variants: variants
         }
-    ];
+    });
 
     const commonStyling: CommonStyling = {
         'buttonBgColor': watch('btn.bg.color') ?? '#000000',
@@ -57,31 +73,37 @@ export default function CommonSideModal() {
     const isWeb = web === 'web';
     const width = isWeb ? '100%' : '50%';
 
+    const divSize = isWeb ? '50%' : '96%';
+
     return (
         <div style={{ width: width }}>
-            <Card roundedAbove="sm">
-                <BlockStack gap="300">
-                    <InlineGrid gap="200" columns={2}>
-                        <BoldText text="Preview" />
-                        <div >
-                            <Select
-                                label=''
-                                options={options}
-                                onChange={handleSelectChange}
-                                value={web}
-                            />
-                        </div>
-                    </InlineGrid>
-                    <Divider />
-                    <BlockStack gap="200">
-                        {
-                            <div style={{ marginTop: '30px' }}>
-                                <ProductPreview products={products} commonStyling={commonStyling} isWeb={isWeb} />
+            <BlockStack gap="600">
+                <Card roundedAbove="sm">
+                    <BlockStack gap="300">
+                        <InlineGrid gap="200" columns={2}>
+                            <div style={{ width: `${divSize}` }}>
+                                <Select
+                                    label={<Text as="p" fontWeight="bold">Preview with </Text>}
+                                    options={optionsPreview}
+                                    onChange={handlePreviewCountChange}
+                                    value={previewCount.toString()}
+                                />
                             </div>
-                        }
+                            <div style={{ width: `${divSize}`, marginLeft: 'auto' }}>
+                                <Select
+                                    label={<Text as="p" fontWeight="bold">Preview on </Text>}
+                                    options={options}
+                                    onChange={handleSelectChange}
+                                    value={web}
+                                />
+                            </div>
+                        </InlineGrid>
                     </BlockStack>
-                </BlockStack>
-            </Card>
+                </Card>
+                <Card padding={{ xs: "0", sm: "0" }} roundedAbove="sm">
+                    <ProductPreview products={products} commonStyling={commonStyling} isWeb={isWeb} productCounts={previewCount} />
+                </Card>
+            </BlockStack>
         </div>
     );
 }

@@ -14,6 +14,7 @@ export default function NumberTextField({property, placeholder, heading}) {
                     type="number"
                     value={value}
                     onChange={onChange}
+                    placeholder={placeholder}
                     label={<Text as="p" variant="bodySm" fontWeight="bold"> {heading}</Text>}
                     autoComplete="off"
                 />

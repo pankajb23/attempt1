@@ -27,6 +27,8 @@ export default function ButtonWithColorAndPopup({ header, property, defaultValue
         </div>
     )
 
+    const textHeader = <Text as="p" variant="bodySm" fontWeight="bold">{header}</Text>
+
     return (
         <Controller
             control={control}
@@ -34,7 +36,7 @@ export default function ButtonWithColorAndPopup({ header, property, defaultValue
             defaultValue={backgroundColor}
             render={({ field: { value, onChange } }) => (
                 <TextField
-                    label={<Text as="p" variant="bodySm" fontWeight="bold">{header}</Text>}
+                    label={textHeader}
                     value={value}
                     autoSize={false}
                     onChange={onChange}

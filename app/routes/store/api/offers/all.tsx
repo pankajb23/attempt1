@@ -107,6 +107,47 @@ async function setMetaObjects(admin, store) {
 
 }
 
+async function FetchProductListForDisplay(admin) {
+    const response = await admin.graphql(
+        `
+        #graphql
+        query {
+  products(first:8){
+    nodes{
+      id
+      title
+      onlineStoreUrl
+      onlineStorePreviewUrl
+      featuredMedia{
+        id
+        preview{
+          image{
+            url
+            height
+            width
+            
+          }
+        }
+      }
+      variants(first:6){
+        nodes{
+          id
+          displayName
+          price
+        }
+      }
+    }
+  }
+}`
+    );
+
+    const responseJson = await response.json();
+console.log("response", JSON.stringify(responseJson.data.products));
+
+return responseJson.data.products;
+
+
+}
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const { admin } = await authenticate.admin(request);
     const response = await admin.graphql(
@@ -142,7 +183,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         where: {
             currencyCode: currencyCode
         },
-        select:{
+        select: {
             id: true
         }
     });
@@ -151,15 +192,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         GlobalShopToCurrencyCodes[shopId] = currencyCode;
         GlobalCurrencyCodes[currencyCode] = getSymbolFromCurrency(currencyCode)
 
-        if (currencyFormatId != null || currencyFormatId != undefined) {
-            // js loose check 
+        if (currencyFormatId === null || currencyFormatId === undefined) {
+            // only upsert if it's not present.            
             currencyFormatId = await prismaClient.currencyFormat.create({
                 data: {
                     currencyCode: currencyCode,
                     currencySymbol: GlobalCurrencyCodes[currencyCode],
                     currencyFormat: data.data.shop.currencyFormats.moneyFormat
                 },
-                select:{
+                select: {
                     id: true
                 }
             });
@@ -168,7 +209,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const tagsData = await TagsData(admin);
 
-
+    const storeData = await FetchProductListForDisplay(admin);
     const store = await prismaClient.store.upsert({
         where: { shopId: shopId },
         update: {},
@@ -178,6 +219,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             name: data.data.shop.name,
             createdAt: new Date(data.data.shop.createdAt),
             currencyFormatId: currencyFormatId.id,
+            sample: JSON.stringify(storeData)
         }
     });
 
@@ -208,15 +250,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }
     });
 
-    return json({ success: true, 
-        data: { 
+
+    return json({
+        success: true,
+        data: {
             storeId: store.id,
-            helpModal: helpModals, 
-            tagsData: [...tagsData], 
-            currencyformats: data.data.currencyCode, 
-            offers: allOffers, 
-            customPages: customPages ,
-            currencySymbol: currencyCode
-        } 
+            helpModal: helpModals,
+            tagsData: [...tagsData],
+            currencyformats: data.data.currencyCode,
+            offers: allOffers,
+            customPages: customPages,
+            currencySymbol: currencyCode,
+            sampleData: storeData
+        }
     });
 };
