@@ -11,8 +11,10 @@ export default function CommonSettingsModal({ navigateToPage }) {
 
   const { modalsAndStoreId } = useStoreContext();
 
+  const commonSettings = modalsAndStoreId.customPages.find((page) => page.type === "CommonSettings");
+  console.log("commonSettings01", modalsAndStoreId.customPages);
   const methods = useForm({
-    defaultValues: modalsAndStoreId.customPages.find((page) => page.type === CustomizePageType.CommonSettings)
+    defaultValues: JSON.parse(commonSettings.content)
   });
 
   const onSubmit = async (data) => {

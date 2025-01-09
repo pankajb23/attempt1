@@ -145,7 +145,7 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
                 {/* Footer Section */}
                 <div id="footer">
                     <div className="total-price">
-                        <span style={{ color: "#000000" }} >
+                        <span >
                             Total price:
                         </span>
                         <span style={{ color: commonStyling[CommonConfigsName.TotalPriceTextColor] }}>
@@ -202,7 +202,7 @@ function Mobile({ products, commonStyling, productsCount }: { products: Product[
             {/* Footer Section */}
             <div id="mobile-footer">
                 <div className="total-price">
-                    <span style={{ color: "#FFFFFF" }} >
+                    <span style={{ color: "#000000" }} >
                         Total price:
                     </span>
                     <span style={{ color: commonStyling[CommonConfigsName.TotalPriceTextColor] || "#FF0000" }}>
