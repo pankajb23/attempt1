@@ -6,7 +6,6 @@ import * as  CommonConfigsName from 'app/components/customize/commonSettings/Com
 function Component({ product, shouldAddSignSymbol, commonStyling }: { product: Product, shouldAddSignSymbol: boolean, commonStyling }) {
     const [selectVariant, setSelectVariant] = useState(product.variants[0].id);
 
-    // console.log("variants", product.variants);
     const handleVariantChange = (e) => {
         const selectedId = e.target.value;
         const variant = product.variants.find((v) => v.id === selectedId);
@@ -17,22 +16,21 @@ function Component({ product, shouldAddSignSymbol, commonStyling }: { product: P
     };
 
     const selectV = product.variants.find(variant => variant.id === selectVariant);
-    // console.log("selectV", selectV);
     return (
         <>
-            <div className="product">
+            <div className="cross-sell-product">
 
-                <div className="product-image-container">
-                    <div className="checkbox-container">
-                        <input type="checkbox" className="product-checkbox" defaultChecked />
+                <div className="cross-sell-product-image-container">
+                    <div className="cross-sell-checkbox-container">
+                        <input type="checkbox" className="cross-sell-product-checkbox" defaultChecked />
                     </div>
                     <img
                         src={product.img}
                         alt="Product 2"
-                        className="product-image"
+                        className="cross-sell-product-image"
                     />
                 </div>
-                <div className="product-title">
+                <div className="cross-sell-product-title">
                     <span style={{ color: commonStyling?.textColor }} >
                         <a
                             href={product.url}
@@ -43,17 +41,10 @@ function Component({ product, shouldAddSignSymbol, commonStyling }: { product: P
                         </a>
                     </span>
                 </div>
-                <div className="variant-and-price" >
-                    <div className="variant">
-
+                <div className="cross-sell-variant-and-price" >
+                    <div className="cross-sell-variant">
                         {
-                            // product.variants.length === 1
-                            // ? (
-                            //     // If there's only one variant, just show its title
-                            //     product.variants[0].title
-                            // )
                             (
-                                // Otherwise, render a dropdown of all variants
                                 <select onChange={handleVariantChange}>
                                     {product.variants.map((variant, index) => (
                                         <option key={index} value={variant.id}>
@@ -64,13 +55,13 @@ function Component({ product, shouldAddSignSymbol, commonStyling }: { product: P
                             )
                         }
                     </div>
-                    <div className="product-price">
+                    <div className="cross-sell-product-price">
                         <span style={{ color: commonStyling[CommonConfigsName.TotalPriceComponentTextColor] }}>{selectV.price}</span>
                     </div>
                 </div>
 
             </div >
-            {shouldAddSignSymbol && <div className="plus-symbol">+</div>
+            {shouldAddSignSymbol && <div className="cross-sell-plus-symbol">+</div>
             }
         </>
     );
@@ -78,7 +69,7 @@ function Component({ product, shouldAddSignSymbol, commonStyling }: { product: P
 
 
 function Button({ commonStyling }: { commonStyling }) {
-    return <button className="add-to-cart-btn" style={{
+    return <button className="cross-sell-add-to-cart-btn" style={{
         "--button-border-radius": `${commonStyling[CommonConfigsName.ButtonBorderRadius]}px`,
         "--button-background-color": `${commonStyling[CommonConfigsName.ButtonBackgroundColor]}`,
         "--button-border-width": `${commonStyling[CommonConfigsName.ButtonBorderWidth]}px`,
@@ -107,7 +98,7 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
     };
 
     return (
-        <div id="sell-cross-container" style={{
+        <div id="cross-sell-container" style={{
             backgroundColor: commonStyling[CommonConfigsName.CanvasBackgroundColor],
             padding: [
                 commonStyling[CommonConfigsName.CanvasTopPadding],
@@ -119,8 +110,8 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
             borderRadius: `${commonStyling[CommonConfigsName.CanvasBorderRadius]}px`
         }}>
             {/* Heading Section */}
-            <div id="heading">
-            <div id="sell-title" style={{fontSize: commonStyling[CommonConfigsName.CanvasTextSize] + 'px', fontFamily: commonStyling[CommonConfigsName.CanvasTextFamily] , color: commonStyling[CommonConfigsName.CanvasTextColor] }}>
+            <div id="cross-sell-heading">
+            <div id="cross-sell-title" style={{fontSize: commonStyling[CommonConfigsName.CanvasTextSize] + 'px', fontFamily: commonStyling[CommonConfigsName.CanvasTextFamily] , color: commonStyling[CommonConfigsName.CanvasTextColor] }}>
                     <span  >
                         Frequently Bought Together
                     </span>
@@ -128,8 +119,8 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
             </div>
 
             {/* Products Section */}
-            <div id="content">
-                <div id="products">
+            <div id="cross-sell-content">
+                <div id="cross-sell-products">
                     {
                         slicedArray.map((product, index) => {
                             return <Component
@@ -143,15 +134,15 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
                 </div>
 
                 {/* Footer Section */}
-                <div id="footer">
-                    <div className="total-price">
+                <div id="cross-sell-footer">
+                    <div className="cross-sell-total-price">
                         <span >
                             Total price:
                         </span>
                         <span style={{ color: commonStyling[CommonConfigsName.TotalPriceTextColor] }}>
                             ₹2,323.00
                         </span>
-                        <span className='total-price-cross' style={{ marginLeft: '6px', color: commonStyling[CommonConfigsName.TotalPriceCrossedOutTextColor] }}>
+                        <span className='cross-sell-total-price-cross' style={{ marginLeft: '6px', color: commonStyling[CommonConfigsName.TotalPriceCrossedOutTextColor] }}>
                             ₹2,623.00
                         </span>
                     </div>
@@ -166,7 +157,7 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
 function Mobile({ products, commonStyling, productsCount }: { products: Product[], commonStyling, productsCount: number }) {
     const slicedArray = products.slice(0, productsCount);
     return (
-        <div id="sell-cross-container" style={{
+        <div id="cross-sell-container" style={{
             backgroundColor: commonStyling[CommonConfigsName.CanvasBackgroundColor],
             padding: [
                 commonStyling[CommonConfigsName.CanvasTopPadding],
@@ -176,8 +167,8 @@ function Mobile({ products, commonStyling, productsCount }: { products: Product[
             ].filter(value => value !== undefined).map(value => `${value}px`).join(' ') || undefined
         }}>
             {/* Heading Section */}
-            <div id="heading">
-                <div id="sell-title" style={{fontSize: commonStyling[CommonConfigsName.CanvasTextSize] + 'px', fontFamily: commonStyling[CommonConfigsName.CanvasTextFamily] , color: commonStyling[CommonConfigsName.CanvasTextColor] }}>
+            <div id="cross-sell-heading">
+                <div id="cross-sell-title" style={{fontSize: commonStyling[CommonConfigsName.CanvasTextSize] + 'px', fontFamily: commonStyling[CommonConfigsName.CanvasTextFamily] , color: commonStyling[CommonConfigsName.CanvasTextColor] }}>
                     <span  >
                         Frequently Bought Together
                     </span>
@@ -185,8 +176,8 @@ function Mobile({ products, commonStyling, productsCount }: { products: Product[
             </div>
 
             {/* Products Section */}
-            <div id="content">
-                <div id="products">
+            <div id="cross-sell-content">
+                <div id="cross-sell-products">
                     {
                         slicedArray.map((product, index) => {
                             return <Component
@@ -200,15 +191,15 @@ function Mobile({ products, commonStyling, productsCount }: { products: Product[
                 </div>
             </div>
             {/* Footer Section */}
-            <div id="mobile-footer">
-                <div className="total-price">
+            <div id="cross-sell-footer">
+                <div className="cross-sell-total-price">
                     <span style={{ color: "#000000" }} >
                         Total price:
                     </span>
                     <span style={{ color: commonStyling[CommonConfigsName.TotalPriceTextColor] || "#FF0000" }}>
                         ₹2,323.00
                     </span>
-                    <span className='total-price-cross' style={{ marginLeft: '6px', color: commonStyling[CommonConfigsName.TotalPriceCrossedOutTextColor] }}>
+                    <span className='cross-sell-total-price-cross' style={{ marginLeft: '6px', color: commonStyling[CommonConfigsName.TotalPriceCrossedOutTextColor] }}>
                         ₹2,623.00
                     </span>
                 </div>

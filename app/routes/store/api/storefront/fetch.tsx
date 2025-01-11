@@ -18,13 +18,14 @@ const GetProductDetails = async (pids, shop) => {
                   product(id: "${pid}") {
                     id
                     title
+                    onlineStoreUrl
                     featuredImage {
                       url
                       width
                       height
                     }
                     isGiftCard
-                    variants(first: 10) {
+                    variants(first: 20) {
                       nodes {
                         id
                         title
@@ -64,7 +65,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     console.log("Query params:", queryParams);
 
     const shop = url.searchParams.get('shop');
-    // const shopId = url.searchParams.get('shopId');
     const pid = "gid://shopify/Product/".concat(url.searchParams.get('pid'));
 
     const { storefront } = await unauthenticated.storefront(
@@ -84,6 +84,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const response = await shopQueryPromise.json();
     const shopId = response.data?.shop?.id;
     // console.log("shopId", shopId);
+    const currencyFormat = await prisma.currencyFormat.findFirst({
+        where: {
+          stores: {
+            some: {
+              shopId: shopId
+            },
+          },
+        }
+      });
+    console.log("currencyFormat", currencyFormat.currencyFormat);
     const storedOffers = await prismaClient.offer.findMany({
         where: {
             store: {
@@ -131,7 +141,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             message: "Offers fetched successfully!",
             layout: JSON.parse(layout.content),
             variants: variantsList,
-            offerId: highestValueOffer?.offerId
+            offerId: highestValueOffer?.offerId,
+            currencyFormat: currencyFormat.currencyFormat
         }
     });
 }

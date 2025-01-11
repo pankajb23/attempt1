@@ -1,0 +1,18 @@
+{
+  "name": "dev-extensions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "rollup": "^4.30.1",
+    "rollup-plugin-copy": "^3.5.0"
+  }
+}
