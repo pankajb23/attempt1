@@ -21,33 +21,43 @@ export class SellCrossContainer extends HTMLElement {
         this.innerHTML = template.innerHTML;
         this.UIConfigs = UIConfigs;
         this.currencyFormat = currencyFormat;
-
+        this.productContainers = [];
+        this.footer = null;
     }
 
     add(container) {
         container.appendChild(this);
     }
 
+    appendPx(property){
+        return property ? property + "px" : "0px";
+    }
+
     addHeading(content) {
         const heading = this.querySelector("#cross-sell-title-span");
         heading.textContent = content;
         heading.style.color = this.UIConfigs[ConfigNames.CanvasTextColor];
-        heading.style.fontSize = this.UIConfigs[ConfigNames.CanvasTextSize];
-        heading.style.fontWeight = this.UIConfigs[ConfigNames.CanvasTextWeight];
+        heading.style.fontSize = this.appendPx(this.UIConfigs[ConfigNames.CanvasTextSize]);
+        // heading.style.fontWeight = this.UIConfigs[ConfigNames.CanvasTextWeight];
         heading.style.fontFamily = this.UIConfigs[ConfigNames.CanvasTextFamily];
 
         const container = this.querySelector("#cross-sell-container");
 
         container.style.backgroundColor = this.UIConfigs[ConfigNames.CanvasBackgroundColor];
         
-        container.style.borderRadius = this.UIConfigs[ConfigNames.CanvasBorderRadius] ? this.UIConfigs[ConfigNames.CanvasBorderRadius] + "px" : "0px";
+        container.style.borderRadius = this.appendPx(this.UIConfigs[ConfigNames.CanvasBorderRadius]);
         container.style.borderColor = this.UIConfigs[ConfigNames.CanvasBorderColor];
-        container.style.borderWidth = this.UIConfigs[ConfigNames.CanvasBorderWidth] ? this.UIConfigs[ConfigNames.CanvasBorderWidth] + "px" : "0px";
+        container.style.borderWidth = this.appendPx(this.UIConfigs[ConfigNames.CanvasBorderWidth]);
 
-        container.style.paddingLeft = this.UIConfigs[ConfigNames.CanvasLeftPadding] ? this.UIConfigs[ConfigNames.CanvasLeftPadding] + "px" : "0px";
-        container.style.paddingRight = this.UIConfigs[ConfigNames.CanvasRightPadding] ? this.UIConfigs[ConfigNames.CanvasRightPadding] + "px" : "0px";
-        container.style.paddingTop = this.UIConfigs[ConfigNames.CanvasTopPadding] ? this.UIConfigs[ConfigNames.CanvasTopPadding] + "px" : "0px";
-        container.style.paddingBottom = this.UIConfigs[ConfigNames.CanvasBottomPadding] ? this.UIConfigs[ConfigNames.CanvasBottomPadding] + "px" : "0px";
+        container.style.paddingLeft = this.appendPx(this.UIConfigs[ConfigNames.CanvasLeftPadding]);
+        container.style.paddingRight = this.appendPx(this.UIConfigs[ConfigNames.CanvasRightPadding]);
+        container.style.paddingTop = this.appendPx(this.UIConfigs[ConfigNames.CanvasTopPadding]);
+        container.style.paddingBottom = this.appendPx(this.UIConfigs[ConfigNames.CanvasBottomPadding]);
+
+        container.style.marginLeft = this.appendPx(this.UIConfigs[ConfigNames.CanvasLeftMargin]);
+        container.style.marginRight = this.appendPx(this.UIConfigs[ConfigNames.CanvasRightMargin]);
+        container.style.marginTop = this.appendPx(this.UIConfigs[ConfigNames.CanvasTopMargin]);
+        container.style.marginBottom = this.appendPx(this.UIConfigs[ConfigNames.CanvasBottomMargin]);
     }
 
 
@@ -58,18 +68,20 @@ export class SellCrossContainer extends HTMLElement {
         variants.forEach((variantItem, index) => {
             const productContainer = new ProductContainer(this.UIConfigs, this.currencyFormat);
             productContainer.add(productsListContainer, variantItem);
-
+            this.productContainers.push(productContainer);
             // Add a plus sign between items if not the last
             if (index + 1 < variants.length) {
                 const plusSign = new PlusSign();
                 plusSign.add(productsListContainer);
             }
         });
+        this.footer.updateContainers(this.productContainers);
     }
 
     addFooter(offerId) {
         const footer = new Footer(this.currencyFormat, offerId);
         footer.add(this.querySelector("#cross-sell-footer"), this.UIConfigs);
+        this.footer = footer;
     }
 }
 
@@ -224,10 +236,11 @@ export class ProductContainer extends HTMLElement {
             );
         });
 
-
-
+        console.log("bypassing this");
         // Finally, append this entire component
-        container.appendChild(this);
+        while(this.firstChild) {
+            container.appendChild(this.firstChild);
+        }
     }
 }
 
@@ -258,7 +271,7 @@ export class Footer extends HTMLElement {
         template.innerHTML = `
       <div id="cross-sell-footer-id">
         <div class="cross-sell-total-price">
-          <span >Total price:</span>
+          <span style="color: '#000000'">Total price:</span>
           <span class="cross-sell-total-sale-price"></span>
           <span class="cross-sell-total-price-cross"></span>
         </div>
@@ -274,7 +287,13 @@ export class Footer extends HTMLElement {
 
         // Keep track of product prices in a Map
         this.prices = new Map();
+        this.productContainers = [];
     }
+
+    updateContainers(productContainers) {
+        this.productContainers = productContainers;
+    }
+
 
     add(container, layoutConfigs) {
         // Apply styles from layoutConfigs
@@ -325,8 +344,8 @@ export class Footer extends HTMLElement {
 
 
     async handleClick() {
-        const productContainers = document.querySelectorAll("product-container");
-        const selectedProducts = Array.from(productContainers).map((container) => ({
+        // const productContainers = document.querySelectorAll("product-container");
+        const selectedProducts = Array.from(this.productContainers).map((container) => ({
             productId: container.getProductId(),
             variantId: container.getSelectedVariantId(),
             isChecked: container.isChecked(),

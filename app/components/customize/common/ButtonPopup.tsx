@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import chroma from "chroma-js";
 import { useFormContext } from "react-hook-form";
 
-export default function ButtonPopup({ popoverActive, setPopoverActive, togglePopoverActive, activator, property }) {
+export default function ButtonPopup({ popoverActive, setPopoverActive, togglePopoverActive, activator, property, setButtonColor }) {
     const { setValue } = useFormContext();
 
     useEffect(() => {
@@ -48,7 +48,8 @@ export default function ButtonPopup({ popoverActive, setPopoverActive, togglePop
                     <ColorPicker onChange={(c) => {
                         const hex = hslToHexConverter(c);
                         setColor(hex);
-                        setValue(property, hex);
+                        setButtonColor(hex);
+                        // setValue(property, hex);
                     }} color={hexToHslConverter(color)} allowAlpha />
                     <div >
                         <div>

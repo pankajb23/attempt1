@@ -14,13 +14,18 @@ const CanvasRightPadding = "component.canvas.right.padding";
 const CanvasTopPadding = "component.canvas.top.padding";
 const CanvasBottomPadding = "component.canvas.bottom.padding";
 
+/** Canvas margins */
+const CanvasLeftMargin = "component.canvas.left.margin";
+const CanvasRightMargin = "component.canvas.right.margin";
+const CanvasTopMargin = "component.canvas.top.margin";
+const CanvasBottomMargin = "component.canvas.bottom.margin";
+
 const CanvasBorderRadius = "component.canvas.border.radius";
 const CanvasBorderWidth = "component.canvas.border.width";
 const CanvasBorderColor = "component.canvas.border.color";
 
 const CanvasTextColor = "component.canvas.text.color";
 const CanvasTextSize = "component.canvas.text.size";
-const CanvasTextWeight = "component.canvas.text.weight";
 const CanvasTextFamily = "component.canvas.text.family";
 
 /** Total Price */
@@ -33,7 +38,8 @@ const TotalPriceComponentTextColor = "component.total.price.component.text.color
 const TotalPriceCrossedOutTextColor = "component.total.price.crossed.out.text.color";
 
 function getHost() {
-    return "https://3dcf-2401-4900-1f37-cbfd-1d35-c7a8-c9fb-a870.ngrok-free.app";
+    // return "https://3dcf-2401-4900-1f37-cbfd-1d35-c7a8-c9fb-a870.ngrok-free.app";
+    return "https://7a81-2401-4900-1f37-2772-2951-b107-9e03-f06d.ngrok-free.app";
     // return `${location.origin}/apps/store`;
 }
 
@@ -57,33 +63,43 @@ class SellCrossContainer extends HTMLElement {
         this.innerHTML = template.innerHTML;
         this.UIConfigs = UIConfigs;
         this.currencyFormat = currencyFormat;
-
+        this.productContainers = [];
+        this.footer = null;
     }
 
     add(container) {
         container.appendChild(this);
     }
 
+    appendPx(property){
+        return property ? property + "px" : "0px";
+    }
+
     addHeading(content) {
         const heading = this.querySelector("#cross-sell-title-span");
         heading.textContent = content;
         heading.style.color = this.UIConfigs[CanvasTextColor];
-        heading.style.fontSize = this.UIConfigs[CanvasTextSize];
-        heading.style.fontWeight = this.UIConfigs[CanvasTextWeight];
+        heading.style.fontSize = this.appendPx(this.UIConfigs[CanvasTextSize]);
+        // heading.style.fontWeight = this.UIConfigs[ConfigNames.CanvasTextWeight];
         heading.style.fontFamily = this.UIConfigs[CanvasTextFamily];
 
         const container = this.querySelector("#cross-sell-container");
 
         container.style.backgroundColor = this.UIConfigs[CanvasBackgroundColor];
         
-        container.style.borderRadius = this.UIConfigs[CanvasBorderRadius] ? this.UIConfigs[CanvasBorderRadius] + "px" : "0px";
+        container.style.borderRadius = this.appendPx(this.UIConfigs[CanvasBorderRadius]);
         container.style.borderColor = this.UIConfigs[CanvasBorderColor];
-        container.style.borderWidth = this.UIConfigs[CanvasBorderWidth] ? this.UIConfigs[CanvasBorderWidth] + "px" : "0px";
+        container.style.borderWidth = this.appendPx(this.UIConfigs[CanvasBorderWidth]);
 
-        container.style.paddingLeft = this.UIConfigs[CanvasLeftPadding] ? this.UIConfigs[CanvasLeftPadding] + "px" : "0px";
-        container.style.paddingRight = this.UIConfigs[CanvasRightPadding] ? this.UIConfigs[CanvasRightPadding] + "px" : "0px";
-        container.style.paddingTop = this.UIConfigs[CanvasTopPadding] ? this.UIConfigs[CanvasTopPadding] + "px" : "0px";
-        container.style.paddingBottom = this.UIConfigs[CanvasBottomPadding] ? this.UIConfigs[CanvasBottomPadding] + "px" : "0px";
+        container.style.paddingLeft = this.appendPx(this.UIConfigs[CanvasLeftPadding]);
+        container.style.paddingRight = this.appendPx(this.UIConfigs[CanvasRightPadding]);
+        container.style.paddingTop = this.appendPx(this.UIConfigs[CanvasTopPadding]);
+        container.style.paddingBottom = this.appendPx(this.UIConfigs[CanvasBottomPadding]);
+
+        container.style.marginLeft = this.appendPx(this.UIConfigs[CanvasLeftMargin]);
+        container.style.marginRight = this.appendPx(this.UIConfigs[CanvasRightMargin]);
+        container.style.marginTop = this.appendPx(this.UIConfigs[CanvasTopMargin]);
+        container.style.marginBottom = this.appendPx(this.UIConfigs[CanvasBottomMargin]);
     }
 
 
@@ -94,18 +110,20 @@ class SellCrossContainer extends HTMLElement {
         variants.forEach((variantItem, index) => {
             const productContainer = new ProductContainer(this.UIConfigs, this.currencyFormat);
             productContainer.add(productsListContainer, variantItem);
-
+            this.productContainers.push(productContainer);
             // Add a plus sign between items if not the last
             if (index + 1 < variants.length) {
                 const plusSign = new PlusSign();
                 plusSign.add(productsListContainer);
             }
         });
+        this.footer.updateContainers(this.productContainers);
     }
 
     addFooter(offerId) {
         const footer = new Footer(this.currencyFormat, offerId);
         footer.add(this.querySelector("#cross-sell-footer"), this.UIConfigs);
+        this.footer = footer;
     }
 }
 
@@ -255,10 +273,12 @@ class ProductContainer extends HTMLElement {
             );
         });
 
-
-
+        console.log("bypassing this");
         // Finally, append this entire component
-        container.appendChild(this);
+        while(this.firstChild) {
+            container.appendChild(this.firstChild);
+        }
+        // container.appendChild(this);
     }
 }
 
@@ -289,7 +309,7 @@ class Footer extends HTMLElement {
         template.innerHTML = `
       <div id="cross-sell-footer-id">
         <div class="cross-sell-total-price">
-          <span >Total price:</span>
+          <span style="color: '#000000'">Total price:</span>
           <span class="cross-sell-total-sale-price"></span>
           <span class="cross-sell-total-price-cross"></span>
         </div>
@@ -305,7 +325,13 @@ class Footer extends HTMLElement {
 
         // Keep track of product prices in a Map
         this.prices = new Map();
+        this.productContainers = [];
     }
+
+    updateContainers(productContainers) {
+        this.productContainers = productContainers;
+    }
+
 
     add(container, layoutConfigs) {
         // Apply styles from layoutConfigs
@@ -356,8 +382,8 @@ class Footer extends HTMLElement {
 
 
     async handleClick() {
-        const productContainers = document.querySelectorAll("product-container");
-        const selectedProducts = Array.from(productContainers).map((container) => ({
+        // const productContainers = document.querySelectorAll("product-container");
+        const selectedProducts = Array.from(this.productContainers).map((container) => ({
             productId: container.getProductId(),
             variantId: container.getSelectedVariantId(),
             isChecked: container.isChecked(),

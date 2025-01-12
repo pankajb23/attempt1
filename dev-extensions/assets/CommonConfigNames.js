@@ -14,6 +14,12 @@ export const CanvasRightPadding = "component.canvas.right.padding";
 export const CanvasTopPadding = "component.canvas.top.padding";
 export const CanvasBottomPadding = "component.canvas.bottom.padding";
 
+/** Canvas margins */
+export const CanvasLeftMargin = "component.canvas.left.margin";
+export const CanvasRightMargin = "component.canvas.right.margin";
+export const CanvasTopMargin = "component.canvas.top.margin";
+export const CanvasBottomMargin = "component.canvas.bottom.margin";
+
 export const CanvasBorderRadius = "component.canvas.border.radius";
 export const CanvasBorderWidth = "component.canvas.border.width";
 export const CanvasBorderColor = "component.canvas.border.color";

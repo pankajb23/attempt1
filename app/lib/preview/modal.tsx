@@ -106,6 +106,12 @@ function Web({ products, commonStyling, productsCount }: { products: Product[], 
                 commonStyling[CommonConfigsName.CanvasBottomPadding],
                 commonStyling[CommonConfigsName.CanvasLeftPadding]
             ].filter(value => value !== undefined).map(value => `${value}px`).join(' ') || undefined,
+            margin: [
+                commonStyling[CommonConfigsName.CanvasTopMargin],
+                commonStyling[CommonConfigsName.CanvasRightMargin],
+                commonStyling[CommonConfigsName.CanvasBottomMargin],
+                commonStyling[CommonConfigsName.CanvasLeftMargin]
+            ].filter(value => value !== undefined).map(value => `${value}px`).join(' ') || undefined,
             border: `${commonStyling[CommonConfigsName.CanvasBorderWidth]}px solid ${commonStyling[CommonConfigsName.CanvasBorderColor]}`,
             borderRadius: `${commonStyling[CommonConfigsName.CanvasBorderRadius]}px`
         }}>
@@ -164,6 +170,12 @@ function Mobile({ products, commonStyling, productsCount }: { products: Product[
                 commonStyling[CommonConfigsName.CanvasRightPadding],
                 commonStyling[CommonConfigsName.CanvasBottomPadding],
                 commonStyling[CommonConfigsName.CanvasLeftPadding]
+            ].filter(value => value !== undefined).map(value => `${value}px`).join(' ') || undefined,
+            margin: [
+                commonStyling[CommonConfigsName.CanvasTopMargin],
+                commonStyling[CommonConfigsName.CanvasRightMargin],
+                commonStyling[CommonConfigsName.CanvasBottomMargin],
+                commonStyling[CommonConfigsName.CanvasLeftMargin]
             ].filter(value => value !== undefined).map(value => `${value}px`).join(' ') || undefined
         }}>
             {/* Heading Section */}

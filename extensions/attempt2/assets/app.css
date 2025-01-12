@@ -3,6 +3,8 @@
     border: 4px solid #000;
     margin: 0px;
     padding: 10px;
+    /* border-radius: 4px; */
+    /* border-color: #000000; */
     width: 100%;
     height: auto;
     background-color: #fff;
@@ -28,24 +30,26 @@
 /* Content */
 #cross-sell-content {
     display: flex;
-    gap: 20px;
+    flex-wrap:nowrap;
     padding-bottom: 5px;;
+    width: 99%;
 }
 
 #cross-sell-products {
     display: flex;
-    align-items: flex-start;
     padding-bottom: 5px;
+    width: 55%;
 }
 
 .cross-sell-product {
     position: relative;
     /* Allows child elements to be positioned relative to this */
-    flex: 1 1 calc(20% - 20px);
+    /* flex: 1 1 calc(20% - 20px); */
     /* height: 150px; */
     /* width: 100px; */
-    width:min-content;
-    min-width: 80px;
+    /* width:min-content; */
+    width: clamp(120px, 135px, 150px);
+
     display: flex;
     flex-direction: column;
     padding-left: 0px;
@@ -67,7 +71,7 @@
     /* Small padding around the checkbox */
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     /* Light shadow */
-    /* z-index: 5; */
+    z-index: 5;
     /* Ensure it's above other elements */
 }
 
@@ -78,21 +82,24 @@
     cursor: pointer;
 }
 
+.cross-sell-product-image-container, .cross-sell-product-title, .cross-sell-variant-and-price {
+    flex: 1;
+}
+
 .cross-sell-product-image-container {
-    /* width: 100%; */
-    position: relative;
-    /* Responsive image */
-    width: 100%;
-    max-width: 100px;
-    height: 100px;
+    max-width: 150px;
+    max-height: 150px;
     border-radius: 4px;
     border: 1px solid #ddd;
+    width: 100%;
 }
 
 .cross-sell-product-image {
-    width:100%;
-    height:100%;
+    width:inherit;
+    aspect-ratio: 1/1;
+    max-height: 100%;
     object-fit: contain;
+    display: block;
 }
 
 .cross-sell-checkbox-container input:not(:checked)~.cross-sell-product-image {
@@ -202,9 +209,8 @@
 
 /* Footer */
 #cross-sell-footer {
-    flex-direction: column;
-    padding-top: 4%;
-    padding-left: 35px;
+    padding-top: 4%; /** todo make this according to height*/
+    width: 100%;
 }
 
 #cross-sell-mobile-footer {
@@ -251,7 +257,9 @@
     font-weight: bold;
     color: var(--button-text-color, #111);
     height: auto;
-    width: 100%;
+    width: min(35%, 200px);
+    align-self: center;
+
     font-family: var(--button-text-family, Arial, sans-serif);
     border-radius: var(--button-border-radius, 10px);
     border-color: var(--button-border-color, #0f0c01);
@@ -288,4 +296,11 @@
     border: 2px solid #2196f3;
     /* Blue border to indicate selection */
     border-radius: 8px;
+}
+
+#cross-sell-footer-id{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }

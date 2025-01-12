@@ -69,6 +69,13 @@ function CanvasStyling({ open, handleOpen }) {
                     <BlockStack gap="300">
                         <Divider />
                         <InlineGrid columns="4" gap="200">
+                            <NumberTextField placeholder={"Auto"} heading={"Left margin"} property={CommonConfigsName.CanvasLeftMargin} defaultValue={0} />
+                            <NumberTextField placeholder={"Auto"} heading={"Right margin"} property={CommonConfigsName.CanvasRightMargin} defaultValue={0} />
+                            <NumberTextField placeholder={"Auto"} heading={"Top margin"} property={CommonConfigsName.CanvasTopMargin} defaultValue={0} />
+                            <NumberTextField placeholder={"Auto"} heading={"Bottom margin"} property={CommonConfigsName.CanvasBottomMargin} defaultValue={0} />
+                        </InlineGrid>
+                        <Divider />
+                        <InlineGrid columns="4" gap="200">
                             <NumberTextField placeholder={"Auto"} heading={"Left padding"} property={CommonConfigsName.CanvasLeftPadding} defaultValue={10} />
                             <NumberTextField placeholder={"Auto"} heading={"Right padding"} property={CommonConfigsName.CanvasRightPadding} />
                             <NumberTextField placeholder={"Auto"} heading={"Top padding"} property={CommonConfigsName.CanvasTopPadding} defaultValue={10} />

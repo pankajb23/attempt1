@@ -13,9 +13,14 @@ export default function ButtonWithColorAndPopup({ header, property, defaultValue
     const backgroundColor = watch(property) ?? defaultValue;
     console.log("property,  ", header, property, defaultValue, watch(property));
     const autoDetectColor = backgroundColor 
+
+    const [buttonColor, setButtonColor] = useState(backgroundColor);
+
+    console.log("buttonColor,  ", buttonColor);
+    
     const activator = (
         <div style={{
-            backgroundColor: backgroundColor, // Add opacity
+            backgroundColor: buttonColor, // Add opacity
             opacity: 0.8,
             border: '1px solid #ddd',
             fontWeight: 'bold',
@@ -23,7 +28,7 @@ export default function ButtonWithColorAndPopup({ header, property, defaultValue
             overflow: 'hidden',
         }}>
             <Button variant="tertiary" onClick={() => setPopoverActive(true)} fullWidth={true} >
-                {autoDetectColor}
+                {buttonColor}
             </Button>
         </div>
     )
@@ -50,6 +55,7 @@ export default function ButtonWithColorAndPopup({ header, property, defaultValue
                             togglePopoverActive={togglePopoverActive}
                             activator={activator}
                             property={property}
+                            setButtonColor={setButtonColor}
                         />
                     }
                 />

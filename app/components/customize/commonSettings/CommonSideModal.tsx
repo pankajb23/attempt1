@@ -83,7 +83,12 @@ export default function CommonSideModal() {
 
         [CommonConfigsName.TotalPriceTextColor]: watch(CommonConfigsName.TotalPriceTextColor) ?? '#fb0101ff',
         [CommonConfigsName.TotalPriceComponentTextColor]: watch(CommonConfigsName.TotalPriceComponentTextColor) ?? '#444',
-        [CommonConfigsName.TotalPriceCrossedOutTextColor]: watch(CommonConfigsName.TotalPriceCrossedOutTextColor) ?? '#444'
+        [CommonConfigsName.TotalPriceCrossedOutTextColor]: watch(CommonConfigsName.TotalPriceCrossedOutTextColor) ?? '#444',
+
+        [CommonConfigsName.CanvasLeftMargin]: watch(CommonConfigsName.CanvasLeftMargin) ?? '0',
+        [CommonConfigsName.CanvasRightMargin]: watch(CommonConfigsName.CanvasRightMargin) ?? '0',
+        [CommonConfigsName.CanvasTopMargin]: watch(CommonConfigsName.CanvasTopMargin) ?? '0',
+        [CommonConfigsName.CanvasBottomMargin]: watch(CommonConfigsName.CanvasBottomMargin) ?? '0'
         // [CommonConfigsName.TotalPriceTextSize]: watch(CommonConfigsName.TotalPriceTextSize) ?? '10',
         // [CommonConfigsName.TotalPriceTextWeight]: watch(CommonConfigsName.TotalPriceTextWeight) ?? 'normal',
         // [CommonConfigsName.TotalPriceTextFamily]: watch(CommonConfigsName.TotalPriceTextFamily) ?? 'Arial, sans-serif',
