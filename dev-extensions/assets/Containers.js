@@ -2,7 +2,7 @@ import { getHost } from "./Host";
 import * as ConfigNames from "./CommonConfigNames";
 
 export class SellCrossContainer extends HTMLElement {
-    constructor() {
+    constructor(UIConfigs, currencyFormat) {
         super();
         const template = document.createElement("template");
         template.innerHTML = `
@@ -19,6 +19,9 @@ export class SellCrossContainer extends HTMLElement {
             </div>
         `;
         this.innerHTML = template.innerHTML;
+        this.UIConfigs = UIConfigs;
+        this.currencyFormat = currencyFormat;
+
     }
 
     add(container) {
@@ -26,15 +29,34 @@ export class SellCrossContainer extends HTMLElement {
     }
 
     addHeading(content) {
-        this.querySelector("#cross-sell-title-span").textContent = content;
+        const heading = this.querySelector("#cross-sell-title-span");
+        heading.textContent = content;
+        heading.style.color = this.UIConfigs[ConfigNames.CanvasTextColor];
+        heading.style.fontSize = this.UIConfigs[ConfigNames.CanvasTextSize];
+        heading.style.fontWeight = this.UIConfigs[ConfigNames.CanvasTextWeight];
+        heading.style.fontFamily = this.UIConfigs[ConfigNames.CanvasTextFamily];
+
+        const container = this.querySelector("#cross-sell-container");
+
+        container.style.backgroundColor = this.UIConfigs[ConfigNames.CanvasBackgroundColor];
+        
+        container.style.borderRadius = this.UIConfigs[ConfigNames.CanvasBorderRadius] ? this.UIConfigs[ConfigNames.CanvasBorderRadius] + "px" : "0px";
+        container.style.borderColor = this.UIConfigs[ConfigNames.CanvasBorderColor];
+        container.style.borderWidth = this.UIConfigs[ConfigNames.CanvasBorderWidth] ? this.UIConfigs[ConfigNames.CanvasBorderWidth] + "px" : "0px";
+
+        container.style.paddingLeft = this.UIConfigs[ConfigNames.CanvasLeftPadding] ? this.UIConfigs[ConfigNames.CanvasLeftPadding] + "px" : "0px";
+        container.style.paddingRight = this.UIConfigs[ConfigNames.CanvasRightPadding] ? this.UIConfigs[ConfigNames.CanvasRightPadding] + "px" : "0px";
+        container.style.paddingTop = this.UIConfigs[ConfigNames.CanvasTopPadding] ? this.UIConfigs[ConfigNames.CanvasTopPadding] + "px" : "0px";
+        container.style.paddingBottom = this.UIConfigs[ConfigNames.CanvasBottomPadding] ? this.UIConfigs[ConfigNames.CanvasBottomPadding] + "px" : "0px";
     }
 
-    addProducts(variants, flattenedLayout, currencyFormat) {
+
+    addProducts(variants) {
         if (!variants || variants.length === 0) return;
 
         const productsListContainer = this.querySelector("#cross-sell-products");
         variants.forEach((variantItem, index) => {
-            const productContainer = new ProductContainer(currencyFormat);
+            const productContainer = new ProductContainer(this.UIConfigs, this.currencyFormat);
             productContainer.add(productsListContainer, variantItem);
 
             // Add a plus sign between items if not the last
@@ -45,9 +67,9 @@ export class SellCrossContainer extends HTMLElement {
         });
     }
 
-    addFooter(flattenedLayout) {
-        const footer = new Footer();
-        footer.add(this.querySelector("#cross-sell-footer"), flattenedLayout);
+    addFooter(offerId) {
+        const footer = new Footer(this.currencyFormat, offerId);
+        footer.add(this.querySelector("#cross-sell-footer"), this.UIConfigs);
     }
 }
 
@@ -55,7 +77,6 @@ export class ProductContainer extends HTMLElement {
     constructor(UIConfigs, currencyFormat) {
         super();
         this.UIConfigs = UIConfigs;
-        this.currencyFormat = currencyFormat;
         this.pid = null;
 
         // Create a template and set innerHTML once
@@ -89,12 +110,24 @@ export class ProductContainer extends HTMLElement {
 
         this.innerHTML = template.innerHTML;
         this.regex = /{{(.*?)}}/g;
+        this.currencyFormat = currencyFormat;
         // Cache DOM elements
+        this.titleSpan = this.querySelector(".cross-sell-product-title-span");
+        this.checkbox = this.querySelector(".cross-sell-product-checkbox");
+        this.img = this.querySelector(".cross-sell-product-image");
+        this.priceSpan = this.querySelector(".cross-sell-product-price-span");
+        this.variantSelect = this.querySelector(".cross-sell-variant");
     }
+
 
     // Get the variant ID of the selected option
     getSelectedVariantId() {
-        return this.variantSelect?.value || null;
+        const selectElement = this.querySelector('[name="variant-select"]');
+        if(selectElement) {
+            return selectElement.value;
+        }else{
+            return null;
+        }
     }
 
     // Get the product ID
@@ -104,7 +137,7 @@ export class ProductContainer extends HTMLElement {
 
     // Check if the checkbox is selected
     isChecked() {
-        return this.checkbox?.checked || false;
+        return this.checkbox?.checked ?? false;
     }
 
     add(container, productWithVariants) {
@@ -113,15 +146,11 @@ export class ProductContainer extends HTMLElement {
 
         this.pid = product.id;
 
-        this.titleSpan = this.querySelector(".cross-sell-product-title-span");
-        this.checkbox = this.querySelector(".cross-sell-product-checkbox");
-        this.img = this.querySelector(".cross-sell-product-image");
-        this.priceSpan = this.querySelector(".cross-sell-product-price-span");
-        this.variantSelect = this.querySelector(".cross-sell-variant");
-
         if (this.titleSpan) {
             const anchorElement = document.createElement("a");
-            anchorElement.href = product.onlineStoreUrl; // Dynamic link
+            if (product.onlineStoreUrl) {
+                anchorElement.href = product.onlineStoreUrl; // Dynamic link
+            }
             anchorElement.textContent = product.title; // Dynamic text
             anchorElement.target = "_blank"; // Open in a new tab if needed
 
@@ -131,61 +160,71 @@ export class ProductContainer extends HTMLElement {
         // Set image
         if (product.featuredImage?.url) {
             this.img.src = product.featuredImage.url;
-            this.img.alt = product.title || "Product Image";
+            this.img.alt = product.title ?? "Product Image";
         }
 
-        // Set title
-        if (product.title) {
-            this.titleSpan.textContent = product.title;
-            this.titleSpan.style.color = this.UIConfigs?.textColor;
+        function getPriceForVariantId(variantId) {
+            const variant = product.variants?.nodes?.find(v => v.id === variantId);
+            return variant?.price?.amount ?? 0;
         }
 
-        // Set initial price
-        if (productWithVariants?.price) {
-            this.priceSpan.textContent = this.currencyFormat.replace(this.regex, productWithVariants.price);
-            this.priceSpan.style.color = this.UIConfigs?.salePriceColor;
-        }
 
+        const selectElement = document.createElement("select");
+        selectElement.name = "variant-select";
         // Populate variants in the <select>
         product.variants?.nodes?.forEach((variant) => {
             const option = document.createElement("option");
             option.value = variant.id;
             option.textContent = variant.title;
-            this.variantSelect.appendChild(option);
+            selectElement.appendChild(option);
         });
+
+        this.variantSelect.appendChild(selectElement);
 
         // If there is at least one variant, show its price by default
         const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
-        if (firstVariantPrice) this.priceSpan.textContent = firstVariantPrice;
 
+        if (firstVariantPrice) this.priceSpan.textContent = this.currencyFormat.replace(this.regex, firstVariantPrice);
+
+        this.priceSpan.style.color = this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
         // TODO adding footer earlier than this.
         // Attach event listeners
         const footer = document.querySelector("cross-footer");
+        // Initialize the price in the footer
+
+        footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
+
+
         this.variantSelect.addEventListener("change", (e) => {
             const selectedVariant = product.variants?.nodes?.find(
                 (v) => v.id === e.target.value
             );
-            const newPrice = selectedVariant?.price?.amount || 0;
-            this.priceSpan.textContent = newPrice;
+            const newPrice = selectedVariant?.price?.amount ?? 0;
+            this.priceSpan.textContent = this.currencyFormat.replace(this.regex, newPrice);
 
             footer.updatePrice(
                 product.id,
-                parseFloat(newPrice),
+                newPrice,
                 this.isChecked()
             );
         });
 
         this.checkbox.addEventListener("change", (e) => {
+
+            const variantId = this.getSelectedVariantId();
+            const selectedVariant = product.variants?.nodes?.find(
+                (v) => v.id === variantId
+            );
+            const newPrice = selectedVariant?.price?.amount ?? 0;
+
             footer.updatePrice(
                 product.id,
-                parseFloat(this.priceSpan.textContent) || 0,
-                e.target.checked
+                newPrice,
+                this.isChecked()
             );
         });
 
-        console.log("footer01", footer);
-        // Initialize the price in the footer
-        footer.updatePrice(this.pid, parseFloat(this.priceSpan.textContent) || 0, this.isChecked());
+
 
         // Finally, append this entire component
         container.appendChild(this);
@@ -209,8 +248,11 @@ export class PlusSign extends HTMLElement {
 
 
 export class Footer extends HTMLElement {
-    constructor() {
+    constructor(currencyFormat, offerId) {
         super();
+        this.currencyFormat = currencyFormat;
+        this.offerId = offerId;
+        this.regex = /{{(.*?)}}/g;
         const template = document.createElement("template");
         // intentional div to wrap the footer
         template.innerHTML = `
@@ -237,7 +279,7 @@ export class Footer extends HTMLElement {
     add(container, layoutConfigs) {
         // Apply styles from layoutConfigs
         // Cache important elements
-        
+
         this.salePrice.style.color = layoutConfigs[ConfigNames.TotalPriceTextColor];
         this.crossedPrice.style.color = layoutConfigs[ConfigNames.TotalPriceCrossedOutTextColor];
 
@@ -257,9 +299,9 @@ export class Footer extends HTMLElement {
 
     async handleCartToken() {
         // Check if CartToken exists in localStorage
-        let existingCartToken = localStorage.getItem('cartToken');
+        let existingCartToken = localStorage.getItem('cross-sell-cartToken');
 
-        if (!existingCartToken) {
+        if (existingCartToken == null) {
             try {
                 // Call API to get new CartToken
                 const response = await fetch(`${location.origin}/cart.js`, {
@@ -269,18 +311,21 @@ export class Footer extends HTMLElement {
 
                 const cartData = await response.json();
                 const cartToken = cartData.token;
-
+                console.log("cartToken", cartData);
                 // Store the new CartToken in localStorage
-                localStorage.setItem('cartToken', cartToken);
+                localStorage.setItem('cross-sell-cartToken', cartToken);
+                return cartToken;
             } catch (error) {
                 console.error('Error getting cart token:', error);
+                return null;
             }
         }
+        return existingCartToken;
     };
 
 
     async handleClick() {
-        const productContainers = document.querySelectorAll("sell-cross-product-container");
+        const productContainers = document.querySelectorAll("product-container");
         const selectedProducts = Array.from(productContainers).map((container) => ({
             productId: container.getProductId(),
             variantId: container.getSelectedVariantId(),
@@ -290,13 +335,15 @@ export class Footer extends HTMLElement {
         // Request cart token
 
         const cartToken = await this.handleCartToken();
+        console.log("cartToken", cartToken);
         const uri = `${getHost()}/api/storefront/order-create?shop=${shopDomain}`;
         const body = JSON.stringify({
-            cartToken,
+            cartToken: cartToken,
             products: selectedProducts,
-            offerId,
+            offerId: this.offerId,
         });
 
+        console.log("body", body);
         // Create order in server
         const orderCreationResponse = await fetch(uri, {
             method: "POST",
@@ -314,13 +361,13 @@ export class Footer extends HTMLElement {
 
     updatePrice(productId, price, isChecked) {
         if (isChecked) {
-            this.prices.set(productId, price);
+            this.prices.set(productId, parseFloat(price));
         } else {
             this.prices.delete(productId);
         }
 
         const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
-        this.salePrice.textContent = `₹${totalPrice}`;
+        this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
     }
 }
 

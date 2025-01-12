@@ -12,12 +12,7 @@ customElements.define("cross-footer", Footer);
 customElements.define("sell-cross-container", SellCrossContainer);
 
 const renderSellCross = async () => {
-    // const sellCrossComponent = document.getElementById("sell-cross-component");
-    // if (!sellCrossComponent) {
-    //     console.error("Error: sell-cross-component not found in the DOM.");
-    //     return;
-    // }
-
+    
     function flattenObject(obj, parent = '', result = {}) {
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
@@ -73,8 +68,12 @@ const renderSellCross = async () => {
         const flattenedLayout = flattenObject(layout);
         console.log("flattenedlayouts", flattenedLayout);
 
-        offerId = fetchedOfferId; // store globally if needed
+        if(fetchedOfferId === null || fetchedOfferId === undefined) {
+            console.error("Error: offerId not found in the data.");
+            return;
+        }
 
+        // todo can be fetched from the backend. 
         const selectors = [
             // ".product-single",
             // ".section.product_section",
@@ -88,27 +87,23 @@ const renderSellCross = async () => {
 
         const topLevelComponent = await findComponent(selectors);
 
-        console.log("topLevelComponent01", topLevelComponent);
         if (!topLevelComponent) {
             console.error("Error: top level component not found in the DOM.");
             return;
         }
 
-        const sellCrossContainer = new SellCrossContainer();
+        const sellCrossContainer = new SellCrossContainer(flattenedLayout, currencyFormat);
         sellCrossContainer.add(topLevelComponent);
         // add heading
         sellCrossContainer.addHeading("Frequently Bought Together");
 
         // add footer
-        sellCrossContainer.addFooter(flattenedLayout);
+        sellCrossContainer.addFooter(fetchedOfferId);
 
         // add products
-        sellCrossContainer.addProducts(variants, flattenedLayout, currencyFormat);
+        sellCrossContainer.addProducts(variants);
 
-        console.log("attemp01");
         topLevelComponent.parentElement.appendChild(sellCrossContainer);
-
-        console.log("topLevelComponent -> Parent", topLevelComponent.parentElement);
     };
 
     // Fetch and render
