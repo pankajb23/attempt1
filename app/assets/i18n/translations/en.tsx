@@ -13,11 +13,11 @@ export const en = {
                 percentOrFixed:{
                     heading: "Percentage or Fixed value",
                     label:"Discount value",
-                    placeholder: "Optional, Eg. Buy this bundle and get {{discount}} off.",
+                    placeholder: "Optional, Eg. Buy this bundle and get 5% off.",
                 },
                 cheapestItemFree: {
                     heading:"Cheapest item free",
-                    placeholder:"Optional, Eg. Buy this bundle and get {{free_product}} for free.",
+                    placeholder:"Optional, Eg. Buy this bundle and get slippers for free.",
                 },
                 freeShipping:{
                     heading: "Free shipping",
@@ -33,7 +33,7 @@ export const en = {
         discount:{
             enable:{
                 heading:"Enable discount",
-                bundle:"Bundle discount for product page upsell",
+                bundle:"Offer discount on product page",
                 discount:{
                     heading:"Discount type",
                     text:"Discount text"
@@ -44,7 +44,7 @@ export const en = {
             override:{
                 heading:"Override default widget title that appears in online store",
                 content: "Widget title",
-                placeholder:"Optional, Eg. Accessories for {{trigger}}"
+                placeholder:"Optional, Eg. Buy with "
             },
             offer_priority:{
                 content: "Other priorities",

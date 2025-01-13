@@ -1,4 +1,4 @@
-import { Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select } from "@shopify/polaris";
+import { Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select, InlineError } from "@shopify/polaris";
 import { useCallback } from "react";
 import { AlertCircleIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from "@shopify/app-bridge-react";
@@ -23,7 +23,7 @@ const OfferAssetsType = "offerProducts.assets.type";
 
 
 export default function OfferProductRadioButtonModal({ toolTipContent = "Frequently bought together is a non-conspicous widget, automatic recommendations are available." }) {
-    const { control, setValue, watch } = useFormContext();
+    const { control, setValue, watch, formState } = useFormContext();
     const shopify = useAppBridge();
 
     const offerTemp = watch(OfferType);
@@ -124,7 +124,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
 
                                         const selectedPIds = await shopify.resourcePicker({
                                             type: "product",
-                                            multiple: true,
+                                            multiple: 3,
                                             selectionIds: selectionIds,
                                             action: 'select',
                                             filter: {
@@ -157,7 +157,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                                         })
                                         const selectedIds = await shopify.resourcePicker({
                                             type: "product",
-                                            multiple: true,
+                                            multiple: 3,
                                             selectionIds: selectionIds,
                                             action: 'select',
                                             filter: {
@@ -203,6 +203,14 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                         </div>
                     ) : <>
                         <AutomaticOfferProducts />
+                        {
+                            formState.isSubmitted && (selectedPidsArray.length === 0 || selectedVariantsArray.length === 0) && (
+                                <InlineError
+                                    message="Please select at least one product/variant"
+                                    fieldID="offerProducts.assets.products"
+                                />
+                            )
+                        }
                     </>
                 }
 

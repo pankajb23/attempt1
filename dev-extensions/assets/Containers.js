@@ -228,7 +228,7 @@ export class ProductContainer extends HTMLElement {
                 (v) => v.id === variantId
             );
             const newPrice = selectedVariant?.price?.amount ?? 0;
-
+            console.log("newPrice", newPrice, variantId);
             footer.updatePrice(
                 product.id,
                 newPrice,

@@ -39,12 +39,11 @@ export default function CommonSideModal() {
 
     const { modalsAndStoreId } = useStoreContext();
     const currencyFormat = modalsAndStoreId.currencyFormat;
-    const regex = /{{(.*?)}}/g;
     const products = modalsAndStoreId.storeData.map((node, index) => {
         const variants = node.variants?.nodes.map((variant, index) => {
             return {
                 id: variant.id,
-                price: currencyFormat.replace(regex, variant?.price),
+                price: variant?.price,
                 title: variant.displayName
             }
         })
@@ -89,6 +88,7 @@ export default function CommonSideModal() {
         [CommonConfigsName.CanvasRightMargin]: watch(CommonConfigsName.CanvasRightMargin) ?? '0',
         [CommonConfigsName.CanvasTopMargin]: watch(CommonConfigsName.CanvasTopMargin) ?? '0',
         [CommonConfigsName.CanvasBottomMargin]: watch(CommonConfigsName.CanvasBottomMargin) ?? '0'
+
         // [CommonConfigsName.TotalPriceTextSize]: watch(CommonConfigsName.TotalPriceTextSize) ?? '10',
         // [CommonConfigsName.TotalPriceTextWeight]: watch(CommonConfigsName.TotalPriceTextWeight) ?? 'normal',
         // [CommonConfigsName.TotalPriceTextFamily]: watch(CommonConfigsName.TotalPriceTextFamily) ?? 'Arial, sans-serif',
@@ -136,7 +136,13 @@ export default function CommonSideModal() {
                 </Card>
 
                 <Card padding={{ xs: "0", sm: "0" }} roundedAbove="sm">
-                    <ProductPreview products={products} commonStyling={commonStyling} isWeb={isWeb} productCounts={previewCount} />
+                    <ProductPreview 
+                        products={products} 
+                        commonStyling={commonStyling} 
+                        isWeb={isWeb} 
+                        productCounts={previewCount} 
+                        currencyFormat={currencyFormat}
+                        />
                 </Card>
             </BlockStack>
         </div>
