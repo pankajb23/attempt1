@@ -10,6 +10,14 @@ import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 import { PrismaClient } from '@prisma/client';
 import prisma from "./db.server";
 
+import { Pool } from 'pg'
+import { PrismaPg } from '@prisma/adapter-pg'
+
+const connectionString = `${process.env.DATABASE_URL}`
+
+const pool = new Pool({ connectionString })
+const adapter = new PrismaPg(pool)
+
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
