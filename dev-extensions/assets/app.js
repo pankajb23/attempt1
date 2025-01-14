@@ -1,5 +1,5 @@
 import * as ConfigNames from "./CommonConfigNames";
-import { PlusSign, ProductContainer,  Footer, SellCrossContainer } from "./Containers";
+import { PlusSign, ProductContainer, Footer, SellCrossContainer } from "./Containers";
 import { getHost } from "./Host";
 
 let offerId = null;
@@ -12,7 +12,7 @@ customElements.define("cross-footer", Footer);
 customElements.define("sell-cross-container", SellCrossContainer);
 
 const renderSellCross = async () => {
-    
+
     function flattenObject(obj, parent = '', result = {}) {
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
@@ -63,13 +63,12 @@ const renderSellCross = async () => {
         return null;
     }
     // Render UI
-    const renderUI = async(data) => {
-        const { variants, layout, offerId: fetchedOfferId, currencyFormat } = data.data;
+    const renderUI = async (data) => {
+        const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText } = data.data;
         const flattenedLayout = flattenObject(layout);
-        console.log("flattenedlayouts", flattenedLayout);
 
-        if(fetchedOfferId === null || fetchedOfferId === undefined) {
-            console.error("Error: offerId not found in the data.");
+        if (fetchedOfferId === null || fetchedOfferId === undefined) {
+            console.warn("Error: offerId not found in the data.");
             return;
         }
 
@@ -95,13 +94,15 @@ const renderSellCross = async () => {
         const sellCrossContainer = new SellCrossContainer(flattenedLayout, currencyFormat);
         sellCrossContainer.add(topLevelComponent);
         // add heading
-        sellCrossContainer.addHeading("Frequently Bought Together");
+        sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : "Frequently Bought Together", discountText);
 
         // add footer
         sellCrossContainer.addFooter(fetchedOfferId);
 
         // add products
         sellCrossContainer.addProducts(variants);
+
+        sellCrossContainer.initialize();
 
         topLevelComponent.parentElement.appendChild(sellCrossContainer);
     };

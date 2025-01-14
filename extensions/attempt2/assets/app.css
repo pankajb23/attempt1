@@ -49,7 +49,7 @@
     /* width: 100px; */
     /* width:min-content; */
     width: clamp(120px, 135px, 150px);
-
+    opacity: 1;
     display: flex;
     flex-direction: column;
     padding-left: 0px;
@@ -71,7 +71,7 @@
     /* Small padding around the checkbox */
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     /* Light shadow */
-    z-index: 5;
+    z-index: 1;
     /* Ensure it's above other elements */
 }
 
@@ -102,17 +102,6 @@
     display: block;
 }
 
-.cross-sell-checkbox-container input:not(:checked)~.cross-sell-product-image {
-    opacity: 0.1;
-    /* Adjust the opacity for unchecked state */
-    transition: opacity 0.1ms ease;
-    /* Smooth transition */
-}
-
-.cross-sell-checkbox-container input:checked~.cross-sell-product-image {
-    opacity: 1;
-    /* Reset to full opacity for checked state */
-}
 
 /* .product:hover .product-image {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow when hovering image */
@@ -209,8 +198,8 @@
 
 /* Footer */
 #cross-sell-footer {
+    padding-left: 40px;
     padding-top: 4%; /** todo make this according to height*/
-    width: 100%;
 }
 
 #cross-sell-mobile-footer {
@@ -257,7 +246,7 @@
     font-weight: bold;
     color: var(--button-text-color, #111);
     height: auto;
-    width: min(35%, 200px);
+    width: 300px;
     align-self: center;
 
     font-family: var(--button-text-family, Arial, sans-serif);
@@ -299,8 +288,14 @@
 }
 
 #cross-sell-footer-id{
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
     width: 100%;
+}
+
+#cross-sell-discount-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
 }

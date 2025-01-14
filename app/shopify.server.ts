@@ -9,7 +9,6 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 import { PrismaClient } from '@prisma/client';
 import prisma from "./db.server";
-import { handleAfterAuth } from "./routes/after_auth";
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -29,7 +28,9 @@ const shopify = shopifyApp({
     },
   },
   hooks: {
-    afterAuth: handleAfterAuth
+    afterAuth: async ({ session }) => {
+      await shopify.registerWebhooks({ session });
+    }
   },
   future: {
     unstable_newEmbeddedAuthStrategy: true,

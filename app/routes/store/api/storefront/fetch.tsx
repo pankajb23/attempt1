@@ -103,7 +103,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     });
 
     const layout = await prismaClient.widget.findFirst({
-        // console.log("storedOffers", storedOffers);
         where: {
             store: {
                 shopId: shopId
@@ -131,10 +130,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }, null); // Initialize with `null` in case no offers match
 
     let variantsList = null;
+    let defaultWidgetTitle = null;
+    let discountText = null;
     if (highestValueOffer !== null) {
-        const productList = JSON.parse(highestValueOffer.offerContent).offerProducts?.assets?.products.map(product => (product.pid));
+        const offerContent = JSON.parse(highestValueOffer.offerContent);
+        const productList = offerContent.offerProducts?.assets?.products.map(product => (product.pid));
         variantsList = await GetProductDetails(productList, shop);
+        defaultWidgetTitle = offerContent.otherPriorities?.defaultWidgetTitle;
+        discountText = offerContent.discountState?.isEnabled ? offerContent.discountState?.discountText : null;
     }
+
 
     return json({
         status: 200, data: {
@@ -142,7 +147,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             layout: JSON.parse(layout.content),
             variants: variantsList,
             offerId: highestValueOffer?.offerId,
-            currencyFormat: currencyFormat.currencyFormat
+            currencyFormat: currencyFormat.currencyFormat,
+            defaultWidgetTitle: defaultWidgetTitle,
+            discountText: discountText
         }
     });
 }

@@ -73,7 +73,7 @@
     /* Small padding around the checkbox */
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     /* Light shadow */
-    z-index: 5;
+    z-index: 1;
     /* Ensure it's above other elements */
 }
 
@@ -102,10 +102,6 @@
     max-height: 100%;
     object-fit: contain;
     display: block;
-}
-
-.cross-sell-product-checkbox:not(:checked) ~ * {
-    opacity: 0.2;
 }
 
 /* .product:hover .product-image {
@@ -269,7 +265,7 @@
     background-color: #504d3e;
 } */
 
-/* Plus Symbol */
+/* Plus Symbol fix + button*/
 .cross-sell-plus-symbol {
     padding-top: calc(40% * var(--parent-height));
     position: relative;
