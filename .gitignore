@@ -14,7 +14,7 @@ database.sqlite
 .env.*
 
 node_modules/*
-
+package-lock.json
 
 
 /extensions/*/dist
