@@ -10,12 +10,12 @@ import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 import { PrismaClient } from '@prisma/client';
 import prisma from "./db.server";
 
-import { Pool } from 'pg'
+import pg from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 
 const connectionString = `${process.env.DATABASE_URL}`
 
-const pool = new Pool({ connectionString })
+const pool = new pg.Pool({ connectionString })
 const adapter = new PrismaPg(pool)
 
 const shopify = shopifyApp({
