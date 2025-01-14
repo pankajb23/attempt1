@@ -99,7 +99,7 @@ export default defineConfig({
         });
       },
       appDirectory: "app",
-      ignoredRouteFiles: ["**/.*"],
+      ignoredRouteFiles: ["**/.*", "app/routes/store/backend/**/*.server.tsx"],
     }),
     tsconfigPaths(),
   ],
