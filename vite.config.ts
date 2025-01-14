@@ -65,7 +65,7 @@ export default defineConfig({
       routes(defineRoutes) {
         return defineRoutes(route => {
           // Manually define routes based on file system
-          const routesDir = path.resolve(__dirname, 'app', 'routes', 'store');
+          const routesDir = path.resolve(__dirname, 'app', 'routes', 'store', 'api');
 
           function addRoutes(dir: string, basePath: string = '') {
             const files = fs.readdirSync(dir);
@@ -99,7 +99,7 @@ export default defineConfig({
         });
       },
       appDirectory: "app",
-      ignoredRouteFiles: ["**/.*", "app/routes/store/backend/**/*.server.tsx"],
+      ignoredRouteFiles: ["**/.*", "**/*.server.tsx"],
     }),
     tsconfigPaths(),
   ],
