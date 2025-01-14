@@ -11,11 +11,12 @@ import { PrismaClient } from '@prisma/client';
 import prisma from "./db.server";
 
 import pg from 'pg'
+const { Pool } = pg
 import { PrismaPg } from '@prisma/adapter-pg'
 
 const connectionString = `${process.env.DATABASE_URL}`
 
-const pool = new pg.Pool({ connectionString })
+const pool = new Pool({ connectionString })
 const adapter = new PrismaPg(pool)
 
 const shopify = shopifyApp({
