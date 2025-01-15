@@ -10,15 +10,6 @@ import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 import { PrismaClient } from '@prisma/client';
 import prisma from "./db.server";
 
-import pg from 'pg'
-const { Pool } = pg
-import { PrismaPg } from '@prisma/adapter-pg'
-
-const connectionString = `${process.env.DATABASE_URL}`
-
-const pool = new Pool({ connectionString })
-const adapter = new PrismaPg(pool)
-
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
@@ -26,8 +17,7 @@ const shopify = shopifyApp({
   scopes: process.env.SCOPES?.split(","),
   appUrl: process.env.SHOPIFY_APP_URL || "",
   authPathPrefix: "/auth",
-  sessionStorage: null,
-  // sessionStorage: new PrismaSessionStorage(prisma),
+  sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
   isEmbeddedApp: true,
