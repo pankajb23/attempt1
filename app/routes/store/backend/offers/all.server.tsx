@@ -141,12 +141,12 @@ async function FetchProductListForDisplay(admin) {
     );
 
     const responseJson = await response.json();
-console.log("response", JSON.stringify(responseJson.data.products));
+    console.log("response", JSON.stringify(responseJson.data.products));
 
-return responseJson.data.products;
-
+    return responseJson.data.products;
 
 }
+
 export const loader = async (request) => {
     const { admin } = await authenticate.admin(request);
     const response = await admin.graphql(
@@ -188,9 +188,9 @@ export const loader = async (request) => {
         }
     });
 
-    let currencyFormatId = currencyFormatsResponse.id;
-    const currencyFormat = currencyFormatsResponse.currencyFormat;
-    
+    let currencyFormatId = currencyFormatsResponse?.id;
+    let currencyFormat = currencyFormatsResponse?.currencyFormat;
+
     if (GlobalShopToCurrencyCodes[shopId] !== currencyCode) {
         GlobalShopToCurrencyCodes[shopId] = currencyCode;
         GlobalCurrencyCodes[currencyCode] = getSymbolFromCurrency(currencyCode)
@@ -208,6 +208,7 @@ export const loader = async (request) => {
                 }
             });
             currencyFormatId = k.id;
+            currencyFormat = data.data.shop.currencyFormats.moneyFormat;
         }
     }
 
