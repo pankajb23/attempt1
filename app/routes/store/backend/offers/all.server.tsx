@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { prismaClient, authenticate } from "app/shopify.server";
 import { json } from "@remix-run/node";
-import { TagsData } from "../../api/tags";
+import { TagsData } from "../../rest/api/tags";
 import { GlobalShopToCurrencyCodes, GlobalCurrencyCodes } from "app/components/common/states";
 import getSymbolFromCurrency from 'currency-symbol-map';
 
