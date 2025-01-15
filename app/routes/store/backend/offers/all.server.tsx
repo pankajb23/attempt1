@@ -223,7 +223,7 @@ export const loader = async (request) => {
             contactEmail: data.data.shop.contactEmail,
             name: data.data.shop.name,
             createdAt: new Date(data.data.shop.createdAt),
-            currencyFormatId: currencyFormatId.id,
+            currencyFormatId: currencyFormatId,
             sample: JSON.stringify(storeData)
         }
     });
