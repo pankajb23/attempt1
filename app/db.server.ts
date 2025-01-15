@@ -2,14 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from '@prisma/adapter-pg'
 
 const connectionString = `${process.env.DATABASE_URL}`
+const { Pool } = require('pg');
 
-
-let adapter = null;
-await (async () => {
-  const pg = await import('pg');
-  const { Pool } = pg.default;
-  adapter = new PrismaPg(new Pool({ connectionString }))
-})();
+let adapter = new PrismaPg(new Pool({ connectionString }))
 
 declare global {
   var prisma: PrismaClient;
