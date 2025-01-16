@@ -12,7 +12,7 @@ function Component({ product, shouldAddSignSymbol, commonStyling, updateProductT
     const handleVariantChange = (e) => {
         const selectedId = e.target.value;
         const variant = product.variants.find((v) => v.id === selectedId);
-        console.log("selectId", selectedId, variant.id);
+        // console.log("selectId", selectedId, variant.id);
 
 
         setSelectVariant(variant.id); // Update the selected variant
@@ -31,7 +31,7 @@ function Component({ product, shouldAddSignSymbol, commonStyling, updateProductT
 
     useEffect(() => {
         // Initialize with the first variant's price
-        console.log("product", product);
+        // console.log("product", product);
         alterProducts(true);
     }, []); // Empty dependency array means this runs once on mount
 
@@ -112,12 +112,20 @@ function Button({ commonStyling, isCartEmpty }: { commonStyling, isCartEmpty: bo
  */
 
 
-function Footer({ commonStyling, isWeb, productToPriceMap, currencyFormat }: { commonStyling, isWeb: Boolean, productToPriceMap: Record<string, number>, currencyFormat: string }) {
+function Footer({ commonStyling, isWeb, productToPriceMap, currencyFormat, slicedArray }: { commonStyling, isWeb: Boolean, productToPriceMap: Record<string, number>, currencyFormat: string, slicedArray: Product[]     }) {
     const mobileClassName = isWeb ? 'cross-sell-footer' : 'cross-sell-mobile-footer';
-    const sumOfPrices = Object.values(productToPriceMap).reduce((sum, price) =>{
-        const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
-        return sum + numericPrice;
+
+
+    const sumOfPrices = Object.entries(productToPriceMap).reduce((sum, [key, price]) => {
+        const product = slicedArray.find(product => product.id === key);
+
+        if(product){
+            const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+            return sum + numericPrice;
+        }
+        return sum;
     }, 0);
+    
     const nintyPercentOff = sumOfPrices * 0.9;
 
     const formattedTotal = isNaN(nintyPercentOff) ? '0.00' : nintyPercentOff.toFixed(2).toString();
@@ -125,8 +133,17 @@ function Footer({ commonStyling, isWeb, productToPriceMap, currencyFormat }: { c
 
     const regex = /{{(.*?)}}/g;
 
-    console.log("productToPriceMap", productToPriceMap);
-    console.log("currencyFormat", formattedTotal, formattedOriginal, '  ',sumOfPrices, '   ',nintyPercentOff);
+    // console.log("productToPriceMap", productToPriceMap);
+    // console.log("currencyFormat", formattedTotal, formattedOriginal, '  ',sumOfPrices, '   ',nintyPercentOff);
+
+    useEffect(() => {
+        if(sumOfPrices > 0){
+            document.querySelector('.cross-sell-add-to-cart-btn').disabled = false
+        }else{
+            document.querySelector('.cross-sell-add-to-cart-btn').disabled = true
+        }
+    }, [sumOfPrices]);
+
     return (
         <div id={mobileClassName}>
             <div className="cross-sell-total-price">
@@ -160,6 +177,24 @@ function Web({ products, commonStyling, productsCount, isWeb, currencyFormat }: 
         });
     };
 
+    const [height, setHeight] = useState(0);
+
+    useEffect(() => {
+        const imageElement = document.querySelector('.cross-sell-product-image');
+        if (imageElement) {
+            const newHeight = imageElement.height; // Use offsetHeight to get the height
+            // console.log("Height:", newHeight);
+    
+            // Apply the height to all elements
+            document.querySelectorAll('.cross-sell-plus-symbol').forEach(element => {
+                // console.log("Element:", element);
+                element.style.paddingTop = `${newHeight/2}px`;
+            });
+        }
+
+    }, [products, isWeb]);
+    
+
 
     const updateProductToPriceMap = (productId, price) => {
         setProductToPriceMap((prevMap) => ({
@@ -173,7 +208,7 @@ function Web({ products, commonStyling, productsCount, isWeb, currencyFormat }: 
         borderRadius: `${borderRadius}px`,
     };
 
-    const footer = <Footer commonStyling={commonStyling} isWeb={isWeb} productToPriceMap={productToPriceMap} currencyFormat={currencyFormat} />
+    const footer = <Footer commonStyling={commonStyling} isWeb={isWeb} productToPriceMap={productToPriceMap} currencyFormat={currencyFormat} slicedArray={slicedArray}/>
 
     return (
         <div id="cross-sell-container" style={{

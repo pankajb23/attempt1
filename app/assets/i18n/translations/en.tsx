@@ -32,8 +32,8 @@ export const en = {
         },
         discount:{
             enable:{
-                heading:"Enable discount",
-                bundle:"Offer discount on product page",
+                heading:"Offer discounts",
+                bundle:"This will enable discounts for frequently bought together offers",
                 discount:{
                     heading:"Discount type",
                     text:"Discount text"
@@ -47,7 +47,7 @@ export const en = {
                 placeholder:"Optional, Eg. Buy with "
             },
             offer_priority:{
-                content: "Other priorities",
+                content: "Offer priority",
                 heading:"Offer priority",
                 placeholder:"Optional, Eg: 10"
             },

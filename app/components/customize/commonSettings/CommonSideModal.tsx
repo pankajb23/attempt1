@@ -103,7 +103,7 @@ export default function CommonSideModal() {
         // [CommonConfigsName.TotalPriceCrossedOutTextWeight]: watch(CommonConfigsName.TotalPriceCrossedOutTextWeight),
         // [CommonConfigsName.TotalPriceCrossedOutTextFamily]: watch(CommonConfigsName.TotalPriceCrossedOutTextFamily) ,
     }
-    console.log("commonStyling", commonStyling);
+    // console.log("commonStyling", commonStyling);
     const isWeb = web === 'web';
     const width = isWeb ? '100%' : '50%';
 

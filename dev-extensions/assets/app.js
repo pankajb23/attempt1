@@ -1,13 +1,15 @@
 import * as ConfigNames from "./CommonConfigNames";
-import { PlusSign, ProductContainer, Footer, SellCrossContainer } from "./Containers";
+import { SellCrossContainer } from "./Containers";
 import { getHost } from "./Host";
+import { PlusSign, ProductContainer } from "./ProductContainer";
+import { Footer } from "./FooterContainer";
 
 let offerId = null;
 
 
 // Register custom elements
 customElements.define("plus-sign", PlusSign);
-customElements.define("product-container", ProductContainer);
+customElements.define("cross-sell-product", ProductContainer);
 customElements.define("cross-footer", Footer);
 customElements.define("sell-cross-container", SellCrossContainer);
 
@@ -67,8 +69,9 @@ const renderSellCross = async () => {
         const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText } = data.data;
         const flattenedLayout = flattenObject(layout);
 
-        if (fetchedOfferId === null || fetchedOfferId === undefined) {
-            console.warn("Error: offerId not found in the data.");
+        console.log("flattenedLayout", flattenedLayout);
+        if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
+            console.warn("Error: offerId/layout not found in the data.");
             return;
         }
 

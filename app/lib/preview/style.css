@@ -200,6 +200,7 @@
 /* Footer */
 #cross-sell-footer {
     padding-left: 30px;
+    width: 280px;
     padding-top: 4%; /** todo make this according to height*/
 }
 

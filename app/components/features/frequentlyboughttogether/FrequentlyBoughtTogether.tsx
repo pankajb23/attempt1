@@ -150,7 +150,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
                                             checkboxHelpText={t("pages.discount.enable.bundle")}
                                             choices={choices}
                                             discountTextPlaceholder={t("pages.frequently_bought_together.checkbox.percentOrFixed.placeholder")} />
-                                        <OtherDetailsModal />
+                                        
                                     </BlockStack>
 
                                 </Layout.Section>
@@ -160,9 +160,10 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
                                             <ToggleModal />
                                         )
                                     }
-                                    <SideModal heading={"Frequently bought together"}
+                                    <OtherDetailsModal />
+                                    {/* <SideModal heading={"Frequently bought together"}
                                         explanation={"This widget is usually displayed below the Add to Cart button."}
-                                        img={"https://lb-apps-media.s3.amazonaws.com/Selleasy-media/FBT.png"} />
+                                        img={"https://lb-apps-media.s3.amazonaws.com/Selleasy-media/FBT.png"} /> */}
                                 </Layout.Section>
                             </Layout>
                         </BlockStack>

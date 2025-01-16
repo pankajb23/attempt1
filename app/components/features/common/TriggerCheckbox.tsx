@@ -74,13 +74,13 @@ export default function TriggerCheckbox({offerType}) {
                                 }}
                                 choices={[
                                     {
-                                        label: "Products",
+                                        label: "Specific products",
                                         value: "specific_products",
                                     },
-                                    {
-                                        label: "Tags",
-                                        value: "tags",
-                                    },
+                                    // {
+                                    //     label: "Tags",
+                                    //     value: "tags",
+                                    // },
                                     {
                                         label: "All products",
                                         value: "all_products",

@@ -1,10 +1,4 @@
 /** Button */
-const ButtonBackgroundColor = "component.button.background.color";
-const ButtonTextColor = "component.button.text.color";
-const ButtonTextFamily = "component.button.text.family";
-const ButtonBorderRadius = "component.button.border.radius";
-const ButtonBorderWidth = "component.button.border.width";
-const ButtonBorderColor = "component.button.border.color";
 
 /** Canvas */
 const CanvasBackgroundColor = "component.canvas.background.color";
@@ -28,20 +22,333 @@ const CanvasTextColor = "component.canvas.text.color";
 const CanvasTextSize = "component.canvas.text.size";
 const CanvasTextFamily = "component.canvas.text.family";
 
-/** Total Price */
-const TotalPriceTextColor = "component.total.price.text.color";
+function getHost$1() {
+    // return "https://sellcross-bc95eb582641.herokuapp.com";
+    return "https://8107-2401-4900-1f37-916c-bd81-1bad-9d1e-8926.ngrok-free.app";
+}
 
-/** Total Price Component */
-const TotalPriceComponentTextColor = "component.total.price.component.text.color";
+class Footer extends HTMLElement {
+    constructor(currencyFormat, offerId) {
+        super();
+        this.currencyFormat = currencyFormat;
+        this.offerId = offerId;
+        this.regex = /{{(.*?)}}/g;
+        const template = document.createElement("template");
+        // intentional div to wrap the footer
+        template.innerHTML = `
+      <div id="cross-sell-footer">
+        <div class="cross-sell-total-price">
+          <span style="color: '#000000'">Total price:</span>
+          <span class="cross-sell-total-sale-price"></span>
+          <span class="cross-sell-total-price-cross"></span>
+        </div>
+        <button class="cross-sell-add-to-cart-btn">Add To Cart</button>
+      </div>
+    `;
 
-/** Total Price Crossed Out */
-const TotalPriceCrossedOutTextColor = "component.total.price.crossed.out.text.color";
+        this.innerHTML = template.innerHTML;
 
-function getHost() {
-    // return "https://3dcf-2401-4900-1f37-cbfd-1d35-c7a8-c9fb-a870.ngrok-free.app";
-    // return "https://7a81-2401-4900-1f37-2772-2951-b107-9e03-f06d.ngrok-free.app";
-    return "https://sellcross-bc95eb582641.herokuapp.com/";
-    // return `${location.origin}/apps/store`;
+        this.salePrice = this.querySelector(".cross-sell-total-sale-price");
+        this.crossedPrice = this.querySelector(".cross-sell-total-price-cross");
+        this.addToCartBtn = this.querySelector(".cross-sell-add-to-cart-btn");
+
+        // Keep track of product prices in a Map
+        this.prices = new Map();
+        this.productContainers = [];
+    }
+
+    updateContainers(productContainers) {
+        this.productContainers = productContainers;
+    }
+
+
+    add(container, layoutConfigs) {
+        // Apply styles from layoutConfigs
+        // Cache important elements
+
+        this.salePrice.style.color = layoutConfigs[ConfigNames.TotalPriceTextColor];
+        this.crossedPrice.style.color = layoutConfigs[ConfigNames.TotalPriceCrossedOutTextColor];
+
+        this.addToCartBtn.style.backgroundColor = layoutConfigs[ConfigNames.ButtonBackgroundColor];
+        this.addToCartBtn.style.borderRadius = layoutConfigs[ConfigNames.ButtonBorderRadius];
+        this.addToCartBtn.style.borderColor = layoutConfigs[ConfigNames.ButtonBorderColor];
+        this.addToCartBtn.style.textFamily = layoutConfigs[ConfigNames.ButtonTextFamily];
+        this.addToCartBtn.style.textColor = layoutConfigs[ConfigNames.ButtonTextColor];
+        this.addToCartBtn.style.borderWidth = layoutConfigs[ConfigNames.ButtonBorderWidth];
+
+        this.addToCartBtn.addEventListener("click", () => {
+            this.handleClick();
+        });
+
+        container.appendChild(this);
+    }
+
+    async handleCartToken() {
+        // Check if CartToken exists in localStorage
+        let existingCartToken = localStorage.getItem('cross-sell-cartToken');
+
+        if (existingCartToken == null) {
+            try {
+                // Call API to get new CartToken
+                const response = await fetch(`${location.origin}/cart.js`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                const cartData = await response.json();
+                const cartToken = cartData.token;
+                console.log("cartToken", cartData);
+                // Store the new CartToken in localStorage
+                localStorage.setItem('cross-sell-cartToken', cartToken);
+                return cartToken;
+            } catch (error) {
+                console.error('Error getting cart token:', error);
+                return null;
+            }
+        }
+        return existingCartToken;
+    };
+
+
+    async handleClick() {
+        // const productContainers = document.querySelectorAll("product-container");
+        const selectedProducts = Array.from(this.productContainers).map((container) => ({
+            productId: container.getProductId(),
+            variantId: container.getSelectedVariantId(),
+            isChecked: container.isChecked(),
+        }));
+
+        // Request cart token
+
+        const cartToken = await this.handleCartToken();
+        console.log("cartToken", cartToken);
+        const uri = `${getHost()}/api/storefront/order-create?shop=${shopDomain}`;
+        const body = JSON.stringify({
+            cartToken: cartToken,
+            products: selectedProducts,
+            offerId: this.offerId,
+        });
+
+        console.log("body", body);
+        // Create order in server
+        const orderCreationResponse = await fetch(uri, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true"
+            },
+            body,
+        });
+        const orderCreationResponseJson = await orderCreationResponse.json();
+
+        // Redirect after order creation
+        window.location.href = orderCreationResponseJson.data.redirectUrl;
+    }
+
+    updatePrice(productId, price, isChecked) {
+        if (isChecked) {
+            this.prices.set(productId, parseFloat(price));
+        } else {
+            this.prices.delete(productId);
+        }
+
+        const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
+        this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
+    }
+}
+
+class ProductContainer extends HTMLElement {
+    constructor(UIConfigs, currencyFormat, footer) {
+        super();
+        this.UIConfigs = UIConfigs;
+        this.pid = null;
+        this.footer = footer;
+        // Create a template and set innerHTML once
+        const template = document.createElement("template");
+        template.innerHTML = `
+        <div class="cross-sell-product-image-container">
+          <div class="cross-sell-checkbox-container">
+            <input type="checkbox" class="cross-sell-product-checkbox" checked />
+          </div>
+          <img
+            src=""
+            alt="Product Image"
+            class="cross-sell-product-image"
+        />
+        </div>
+        <div class="cross-sell-product-title">
+          <span class="cross-sell-product-title-span">
+          </span>
+        </div>
+        <div class="cross-sell-variant-and-price">
+          <div class="cross-sell-variant">
+            
+          </div>
+          <div class="cross-sell-product-price">
+            <span class="cross-sell-product-price-span"></span>
+          </div>
+        </div>
+    `;
+
+        this.innerHTML = template.innerHTML;
+        this.regex = /{{(.*?)}}/g;
+        this.currencyFormat = currencyFormat;
+        // Cache DOM elements
+        this.titleSpan = this.querySelector(".cross-sell-product-title-span");
+        this.checkbox = this.querySelector(".cross-sell-product-checkbox");
+        this.img = this.querySelector(".cross-sell-product-image");
+        this.priceSpan = this.querySelector(".cross-sell-product-price-span");
+        this.variantSelect = this.querySelector(".cross-sell-variant");
+        this.product = null;
+    }
+
+
+    // Get the variant ID of the selected option
+    getSelectedVariantId() {
+        const selectElement = this.querySelector('[name="variant-select"]');
+        if (selectElement) {
+            return selectElement.value;
+        } else {
+            return null;
+        }
+    }
+
+    // Get the product ID
+    getProductId() {
+        return this.pid;
+    }
+
+    // Check if the checkbox is selected
+    isChecked() {
+        return this.checkbox?.checked ?? false;
+    }
+
+    add(container, productWithVariants) {
+
+        const product = productWithVariants?.product;
+        this.product = productWithVariants?.product;
+
+
+        if (!product) return;
+
+        this.pid = product.id;
+
+        if (this.titleSpan) {
+            const anchorElement = document.createElement("a");
+            if (product.onlineStoreUrl) {
+                anchorElement.href = product.onlineStoreUrl; // Dynamic link
+            }
+            anchorElement.textContent = product.title; // Dynamic text
+            anchorElement.target = "_blank"; // Open in a new tab if needed
+
+            this.titleSpan.appendChild(anchorElement);
+        }
+
+        // Set image
+        if (product.featuredImage?.url) {
+            this.img.src = product.featuredImage.url;
+            this.img.alt = product.title ?? "Product Image";
+        }
+
+
+        const selectElement = document.createElement("select");
+        selectElement.name = "variant-select";
+        // Populate variants in the <select>
+        product.variants?.nodes?.forEach((variant) => {
+            const option = document.createElement("option");
+            option.value = variant.id;
+            option.textContent = variant.title;
+            selectElement.appendChild(option);
+        });
+
+        this.variantSelect.appendChild(selectElement);
+
+        // If there is at least one variant, show its price by default
+        const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
+
+        if (firstVariantPrice) this.priceSpan.textContent = this.currencyFormat.replace(this.regex, firstVariantPrice);
+
+        this.priceSpan.style.color = this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
+        // TODO adding footer earlier than this.
+        // Attach event listeners
+        // const footer = document.querySelector("cross-footer");
+        // Initialize the price in the footer
+        // console.log("bypassing this");
+        // Finally, append this entire component
+        console.log("new method 01");
+        container.appendChild(this); 
+    }
+
+
+    initialize(footer) {
+        this.footer = footer;
+        const firstVariantPrice = this.product?.variants?.nodes?.[0]?.price?.amount;
+
+        this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
+
+        this.variantSelect.addEventListener("change", (e) => {
+            const selectedVariant = this.product.variants?.nodes?.find(
+                (v) => v.id === e.target.value
+            );
+            const newPrice = selectedVariant?.price?.amount ?? 0;
+            this.priceSpan.textContent = this.currencyFormat.replace(this.regex, newPrice);
+
+            this.footer.updatePrice(
+                this.product.id,
+                newPrice,
+                this.isChecked()
+            );
+        });
+
+        this.checkbox.addEventListener("change", (e) => {
+            console.log("checkbox changed", e);
+            const variantId = this.getSelectedVariantId();
+            const selectedVariant = this.product.variants?.nodes?.find(
+                (v) => v.id === variantId
+            );
+            const newPrice = selectedVariant?.price?.amount ?? 0;
+            this.footer.updatePrice(
+                this.product.id,
+                newPrice,
+                this.isChecked()
+            );
+
+            const element = this.querySelector(".cross-sell-product");
+            console.log(" changing opacity to ", this.isChecked(), element);
+            if (this.isChecked()) {
+                element.style.opacity = 1;
+            } else {
+                element.style.opacity = 0.5;
+            }
+        });
+
+        function resize() {
+            const height = this.querySelector(".cross-sell-product-image").style.height;
+            console.log("height", height);
+            this.querySelector(".cross-sell-plus-symbol").style.paddingTop = height / 2;
+        }
+
+        window.addEventListener("resize", () => {
+            resize();
+        });
+
+        resize();
+    }
+}
+
+class PlusSign extends HTMLElement {
+    constructor() {
+        super();
+        const template = document.createElement("template");
+        template.innerHTML = `
+      <div class="cross-sell-plus-symbol"> + </div>
+    `;
+        this.innerHTML = template.innerHTML;
+    }
+
+    add(container) {
+        container.appendChild(this);
+    }
 }
 
 class SellCrossContainer extends HTMLElement {
@@ -133,349 +440,44 @@ class SellCrossContainer extends HTMLElement {
 
     addFooter(offerId) {
         this.footer = new Footer(this.currencyFormat, offerId);
-        // footer.add(this.querySelector("#cross-sell-footer"), this.UIConfigs);
-        this.footer = footer;
     }
 
-    handleResponsiveLayout() {
-        const footer = this.querySelector("#cross-sell-footer");
-        const crossSellContent = this.querySelector("#cross-sell-content");
-        const crossSellContainer = this.querySelector("#cross-sell-container");
-
-        if (window.innerWidth < 768) {
-            if (footer.parentNode === crossSellContent) {
-                // move footer outside, append the css classes
-                crossSellContainer.appendChild(footer);
-                footer.classList.add("cross-sell-footer-mobile");
-                footer.classList.remove("cross-sell-footer");
-            }
-        } else {
-            if (footer.parentNode !== crossSellContent) {
-                // move footer inside.
-                crossSellContent.appendChild(footer);
-                footer.classList.add("cross-sell-footer");
-                footer.classList.remove("cross-sell-footer-mobile");
-            }
-        }
-    }
     initialize() {
         const productsListContainer = this.querySelector("#cross-sell-content");
-        this.footer.add(productsListContainer);
+        this.footer.add(productsListContainer, this.UIConfigs);
         this.footer.updateContainers(this.productContainers);
 
-        window.addEventListener("resize", handleResponsiveLayout());
-    }
-}
-
-class ProductContainer extends HTMLElement {
-    constructor(UIConfigs, currencyFormat, footer) {
-        super();
-        this.UIConfigs = UIConfigs;
-        this.pid = null;
-        this.footer = footer;
-        // Create a template and set innerHTML once
-        const template = document.createElement("template");
-        template.innerHTML = `
-      <div class="cross-sell-product">
-        <div class="cross-sell-product-image-container">
-          <div class="cross-sell-checkbox-container">
-            <input type="checkbox" class="cross-sell-product-checkbox" checked />
-          </div>
-          <img
-            src=""
-            alt="Product Image"
-            class="cross-sell-product-image"
-        />
-        </div>
-        <div class="cross-sell-product-title">
-          <span class="cross-sell-product-title-span">
-          </span>
-        </div>
-        <div class="cross-sell-variant-and-price">
-          <div class="cross-sell-variant">
-            
-          </div>
-          <div class="cross-sell-product-price">
-            <span class="cross-sell-product-price-span"></span>
-          </div>
-        </div>
-      </div>
-    `;
-
-        this.innerHTML = template.innerHTML;
-        this.regex = /{{(.*?)}}/g;
-        this.currencyFormat = currencyFormat;
-        // Cache DOM elements
-        this.titleSpan = this.querySelector(".cross-sell-product-title-span");
-        this.checkbox = this.querySelector(".cross-sell-product-checkbox");
-        this.img = this.querySelector(".cross-sell-product-image");
-        this.priceSpan = this.querySelector(".cross-sell-product-price-span");
-        this.variantSelect = this.querySelector(".cross-sell-variant");
-    }
-
-
-    // Get the variant ID of the selected option
-    getSelectedVariantId() {
-        const selectElement = this.querySelector('[name="variant-select"]');
-        if (selectElement) {
-            return selectElement.value;
-        } else {
-            return null;
-        }
-    }
-
-    // Get the product ID
-    getProductId() {
-        return this.pid;
-    }
-
-    // Check if the checkbox is selected
-    isChecked() {
-        return this.checkbox?.checked ?? false;
-    }
-
-    add(container, productWithVariants) {
-        const product = productWithVariants?.product;
-        if (!product) return;
-
-        this.pid = product.id;
-
-        if (this.titleSpan) {
-            const anchorElement = document.createElement("a");
-            if (product.onlineStoreUrl) {
-                anchorElement.href = product.onlineStoreUrl; // Dynamic link
-            }
-            anchorElement.textContent = product.title; // Dynamic text
-            anchorElement.target = "_blank"; // Open in a new tab if needed
-
-            this.titleSpan.appendChild(anchorElement);
-        }
-
-        // Set image
-        if (product.featuredImage?.url) {
-            this.img.src = product.featuredImage.url;
-            this.img.alt = product.title ?? "Product Image";
-        }
-
-
-        const selectElement = document.createElement("select");
-        selectElement.name = "variant-select";
-        // Populate variants in the <select>
-        product.variants?.nodes?.forEach((variant) => {
-            const option = document.createElement("option");
-            option.value = variant.id;
-            option.textContent = variant.title;
-            selectElement.appendChild(option);
+        this.productContainers.forEach(productContainer => {
+            productContainer.initialize(this.footer);
         });
 
-        this.variantSelect.appendChild(selectElement);
+        window.addEventListener("resize", () => {
+            const footer = this.querySelector("#cross-sell-footer");
+            const crossSellContent = this.querySelector("#cross-sell-content");
+            const crossSellContainer = this.querySelector("#cross-sell-container");
 
-        // If there is at least one variant, show its price by default
-        const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
-
-        if (firstVariantPrice) this.priceSpan.textContent = this.currencyFormat.replace(this.regex, firstVariantPrice);
-
-        this.priceSpan.style.color = this.UIConfigs[TotalPriceComponentTextColor];
-        // TODO adding footer earlier than this.
-        // Attach event listeners
-        // const footer = document.querySelector("cross-footer");
-        // Initialize the price in the footer
-
-        this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
-
-
-        this.variantSelect.addEventListener("change", (e) => {
-            const selectedVariant = product.variants?.nodes?.find(
-                (v) => v.id === e.target.value
-            );
-            const newPrice = selectedVariant?.price?.amount ?? 0;
-            this.priceSpan.textContent = this.currencyFormat.replace(this.regex, newPrice);
-
-            this.footer.updatePrice(
-                product.id,
-                newPrice,
-                this.isChecked()
-            );
-        });
-
-        this.checkbox.addEventListener("change", (e) => {
-
-            const variantId = this.getSelectedVariantId();
-            const selectedVariant = product.variants?.nodes?.find(
-                (v) => v.id === variantId
-            );
-            const newPrice = selectedVariant?.price?.amount ?? 0;
-            console.log("newPrice", newPrice, variantId);
-            this.footer.updatePrice(
-                product.id,
-                newPrice,
-                this.isChecked()
-            );
-
-            if (this.isChecked()) {
-                this.firstChild.style.opacity = 1;
+            if (window.innerWidth < 768) {
+                if (footer.parentNode === crossSellContent) {
+                    // move footer outside, append the css classes
+                    crossSellContainer.appendChild(footer);
+                    footer.classList.add("cross-sell-footer-mobile");
+                    footer.classList.remove("cross-sell-footer");
+                }
             } else {
-                this.firstChild.style.opacity = 0.5;
+                if (footer.parentNode !== crossSellContent) {
+                    // move footer inside.
+                    crossSellContent.appendChild(footer);
+                    footer.classList.add("cross-sell-footer");
+                    footer.classList.remove("cross-sell-footer-mobile");
+                }
             }
         });
-
-        console.log("bypassing this");
-        // Finally, append this entire component
-        while (this.firstChild) {
-            container.appendChild(this.firstChild);
-        }
-    }
-}
-
-class PlusSign extends HTMLElement {
-    constructor() {
-        super();
-        const template = document.createElement("template");
-        template.innerHTML = `
-      <div class="cross-sell-plus-symbol"> + </div>
-    `;
-        this.innerHTML = template.innerHTML;
-    }
-
-    add(container) {
-        container.appendChild(this);
-    }
-}
-
-
-class Footer extends HTMLElement {
-    constructor(currencyFormat, offerId) {
-        super();
-        this.currencyFormat = currencyFormat;
-        this.offerId = offerId;
-        this.regex = /{{(.*?)}}/g;
-        const template = document.createElement("template");
-        // intentional div to wrap the footer
-        template.innerHTML = `
-      <div id="cross-sell-footer-id">
-        <div class="cross-sell-total-price">
-          <span style="color: '#000000'">Total price:</span>
-          <span class="cross-sell-total-sale-price"></span>
-          <span class="cross-sell-total-price-cross"></span>
-        </div>
-        <button class="cross-sell-add-to-cart-btn">Add To Cart</button>
-      </div>
-    `;
-
-        this.innerHTML = template.innerHTML;
-
-        this.salePrice = this.querySelector(".cross-sell-total-sale-price");
-        this.crossedPrice = this.querySelector(".cross-sell-total-price-cross");
-        this.addToCartBtn = this.querySelector(".cross-sell-add-to-cart-btn");
-
-        // Keep track of product prices in a Map
-        this.prices = new Map();
-        this.productContainers = [];
-    }
-
-    updateContainers(productContainers) {
-        this.productContainers = productContainers;
-    }
-
-
-    add(container, layoutConfigs) {
-        // Apply styles from layoutConfigs
-        // Cache important elements
-
-        this.salePrice.style.color = layoutConfigs[TotalPriceTextColor];
-        this.crossedPrice.style.color = layoutConfigs[TotalPriceCrossedOutTextColor];
-
-        this.addToCartBtn.style.backgroundColor = layoutConfigs[ButtonBackgroundColor];
-        this.addToCartBtn.style.borderRadius = layoutConfigs[ButtonBorderRadius];
-        this.addToCartBtn.style.borderColor = layoutConfigs[ButtonBorderColor];
-        this.addToCartBtn.style.textFamily = layoutConfigs[ButtonTextFamily];
-        this.addToCartBtn.style.textColor = layoutConfigs[ButtonTextColor];
-        this.addToCartBtn.style.borderWidth = layoutConfigs[ButtonBorderWidth];
-
-        this.addToCartBtn.addEventListener("click", () => {
-            this.handleClick();
-        });
-
-        container.appendChild(this);
-    }
-
-    async handleCartToken() {
-        // Check if CartToken exists in localStorage
-        let existingCartToken = localStorage.getItem('cross-sell-cartToken');
-
-        if (existingCartToken == null) {
-            try {
-                // Call API to get new CartToken
-                const response = await fetch(`${location.origin}/cart.js`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-
-                const cartData = await response.json();
-                const cartToken = cartData.token;
-                console.log("cartToken", cartData);
-                // Store the new CartToken in localStorage
-                localStorage.setItem('cross-sell-cartToken', cartToken);
-                return cartToken;
-            } catch (error) {
-                console.error('Error getting cart token:', error);
-                return null;
-            }
-        }
-        return existingCartToken;
-    };
-
-
-    async handleClick() {
-        // const productContainers = document.querySelectorAll("product-container");
-        const selectedProducts = Array.from(this.productContainers).map((container) => ({
-            productId: container.getProductId(),
-            variantId: container.getSelectedVariantId(),
-            isChecked: container.isChecked(),
-        }));
-
-        // Request cart token
-
-        const cartToken = await this.handleCartToken();
-        console.log("cartToken", cartToken);
-        const uri = `${getHost()}/api/storefront/order-create?shop=${shopDomain}`;
-        const body = JSON.stringify({
-            cartToken: cartToken,
-            products: selectedProducts,
-            offerId: this.offerId,
-        });
-
-        console.log("body", body);
-        // Create order in server
-        const orderCreationResponse = await fetch(uri, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "ngrok-skip-browser-warning": "true"
-            },
-            body,
-        });
-        const orderCreationResponseJson = await orderCreationResponse.json();
-
-        // Redirect after order creation
-        window.location.href = orderCreationResponseJson.data.redirectUrl;
-    }
-
-    updatePrice(productId, price, isChecked) {
-        if (isChecked) {
-            this.prices.set(productId, parseFloat(price));
-        } else {
-            this.prices.delete(productId);
-        }
-
-        const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
-        this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
     }
 }
 
 // Register custom elements
 customElements.define("plus-sign", PlusSign);
-customElements.define("product-container", ProductContainer);
+customElements.define("cross-sell-product", ProductContainer);
 customElements.define("cross-footer", Footer);
 customElements.define("sell-cross-container", SellCrossContainer);
 
@@ -503,7 +505,7 @@ const renderSellCross = async () => {
 
     // Fetch UI config
     const fetchUIConfig = async () => {
-        const uri = `${getHost()}/api/storefront/fetch?` +
+        const uri = `${getHost$1()}/api/storefront/fetch?` +
             new URLSearchParams({ shop: shopDomain, pid: productId });
         const response = await fetch(uri, {
             method: "GET",
@@ -535,8 +537,9 @@ const renderSellCross = async () => {
         const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText } = data.data;
         const flattenedLayout = flattenObject(layout);
 
-        if (fetchedOfferId === null || fetchedOfferId === undefined) {
-            console.warn("Error: offerId not found in the data.");
+        console.log("flattenedLayout", flattenedLayout);
+        if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
+            console.warn("Error: offerId/layout not found in the data.");
             return;
         }
 

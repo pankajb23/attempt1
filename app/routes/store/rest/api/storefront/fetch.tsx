@@ -112,9 +112,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const highestValueOffer = storedOffers.filter(offer => offer.status === "active").filter(offer => {
         const offerContent = JSON.parse(offer.offerContent)
+        console.log("offerContent", offerContent.trigger);
         const pids: string[] = offerContent.trigger.products?.map((product) => (product.pid));
+        console.log("pids", pids);
         // let fbtProducts;
-        if (pids.includes(pid) || offerContent.trigger.type === "all_products") {
+        if (pids?.includes(pid) || offerContent.trigger.type === "all_products") {
             // fbtProducts = GetProductDetails(offerContent.assets.products.map(product => product.pid), shop);
             return true;
         } else {
@@ -144,7 +146,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return json({
         status: 200, data: {
             message: "Offers fetched successfully!",
-            layout: JSON.parse(layout.content),
+            layout: layout?.content ? JSON.parse(layout.content) : null,
             variants: variantsList,
             offerId: highestValueOffer?.offerId,
             currencyFormat: currencyFormat.currencyFormat,

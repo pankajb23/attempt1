@@ -35,9 +35,6 @@ export default function AutomaticOfferProducts() {
                                 helpText="You can show a maximum of 4 offer products."
                             />
                         )} />
-                    <Text as="p" fontWeight="semibold" variant="bodySm">
-                        Note - We will use Shopify’s automatic product recommendations. If you are a new store, automatic recommendations might not be available.
-                    </Text>
                 </BlockStack>
             </div>
         </>

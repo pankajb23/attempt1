@@ -11,12 +11,12 @@ export default function ButtonWithColorAndPopup({ header, property, defaultValue
         [],
     );
     const backgroundColor = watch(property) ?? defaultValue;
-    console.log("property,  ", header, property, defaultValue, watch(property));
+    // console.log("property,  ", header, property, defaultValue, watch(property));
     const autoDetectColor = backgroundColor 
 
     const [buttonColor, setButtonColor] = useState(backgroundColor);
 
-    console.log("buttonColor,  ", buttonColor);
+    // console.log("buttonColor,  ", buttonColor);
     
     const activator = (
         <div style={{

@@ -22,7 +22,7 @@ const OfferAssetsVariants = "offerProducts.assets.variants";
 const OfferAssetsType = "offerProducts.assets.type";
 
 
-export default function OfferProductRadioButtonModal({ toolTipContent = "Frequently bought together is a non-conspicous widget, automatic recommendations are available." }) {
+export default function OfferProductRadioButtonModal({ toolTipContent = "Shopify recommended products are based on the products that are frequently bought together." }) {
     const { control, setValue, watch, formState } = useFormContext();
     const shopify = useAppBridge();
 
@@ -67,7 +67,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
         (
             <>
                 <InlineStack>
-                    <Text as="p" variant="bodyMd" > Automatic </Text>
+                    <Text as="p" variant="bodyMd" > Shopfiy recommended </Text>
                     <Tooltip content={toolTipContent}>
                         <Icon source={AlertCircleIcon} tone="base" />
                     </Tooltip>
@@ -77,7 +77,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
 
     const selectOption = [
         { label: 'by Products', value: 'products' },
-        { label: 'by Variants', value: 'variants' },
+        // { label: 'by Variants', value: 'variants' },
     ];
 
 
@@ -93,7 +93,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                             < ChoiceList
                                 title={<Text as="p" variant="headingSm" fontWeight="bold">Choose products for the offer</Text>}
                                 choices={[
-                                    { label: 'Manual', value: 'manual' },
+                                    { label: 'Select Products', value: 'manual' },
                                     { label: automaticOption, value: 'automatic' },
                                 ]}
                                 selected={value ? [value] : []}
@@ -215,7 +215,7 @@ export default function OfferProductRadioButtonModal({ toolTipContent = "Frequen
                 }
 
                 <div style={{ marginTop: '14px' }}>
-                    <Text as="dd" variant="bodySm" tone="subdued"> The offer will be displayed on product pages.</Text>
+                    <Text as="dd" variant="bodySm" tone="subdued"> The offers will be on product pages.</Text>
                 </div>
             </Card >
         </>
