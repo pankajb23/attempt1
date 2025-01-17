@@ -1,6 +1,10 @@
+import * as ConfigNames from "./CommonConfigNames";
+import { getHost } from "./Host";
+
 export class Footer extends HTMLElement {
-    constructor(currencyFormat, offerId) {
+    constructor(UIConfigs, currencyFormat, offerId) {
         super();
+        this.UIConfigs = UIConfigs;
         this.currencyFormat = currencyFormat;
         this.offerId = offerId;
         this.regex = /{{(.*?)}}/g;
@@ -33,19 +37,19 @@ export class Footer extends HTMLElement {
     }
 
 
-    add(container, layoutConfigs) {
-        // Apply styles from layoutConfigs
+    add(container) {
+        // Apply styles from UIConfigs
         // Cache important elements
 
-        this.salePrice.style.color = layoutConfigs[ConfigNames.TotalPriceTextColor];
-        this.crossedPrice.style.color = layoutConfigs[ConfigNames.TotalPriceCrossedOutTextColor];
+        this.salePrice.style.color = this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
+        this.crossedPrice.style.color = this.UIConfigs[ConfigNames.TotalPriceCrossedOutTextColor];
 
-        this.addToCartBtn.style.backgroundColor = layoutConfigs[ConfigNames.ButtonBackgroundColor];
-        this.addToCartBtn.style.borderRadius = layoutConfigs[ConfigNames.ButtonBorderRadius];
-        this.addToCartBtn.style.borderColor = layoutConfigs[ConfigNames.ButtonBorderColor];
-        this.addToCartBtn.style.textFamily = layoutConfigs[ConfigNames.ButtonTextFamily];
-        this.addToCartBtn.style.textColor = layoutConfigs[ConfigNames.ButtonTextColor];
-        this.addToCartBtn.style.borderWidth = layoutConfigs[ConfigNames.ButtonBorderWidth];
+        this.addToCartBtn.style.backgroundColor = this.UIConfigs[ConfigNames.ButtonBackgroundColor];
+        this.addToCartBtn.style.borderRadius = this.UIConfigs[ConfigNames.ButtonBorderRadius];
+        this.addToCartBtn.style.borderColor = this.UIConfigs[ConfigNames.ButtonBorderColor];
+        this.addToCartBtn.style.textFamily = this.UIConfigs[ConfigNames.ButtonTextFamily];
+        this.addToCartBtn.style.textColor = this.UIConfigs[ConfigNames.ButtonTextColor];
+        this.addToCartBtn.style.borderWidth = this.UIConfigs[ConfigNames.ButtonBorderWidth];
 
         this.addToCartBtn.addEventListener("click", () => {
             this.handleClick();
@@ -123,8 +127,14 @@ export class Footer extends HTMLElement {
             this.prices.delete(productId);
         }
 
-        const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
-        this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
+        if(this.prices.size > 0) {
+            this.addToCartBtn.disabled = false;
+            const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
+            this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
+            
+        }else{
+            this.addToCartBtn.disabled = true;
+        }
     }
 }
 

@@ -282,11 +282,9 @@ cross-sell-product{
 
 /* Plus Symbol */
 .cross-sell-plus-symbol {
-    padding-top: calc(40% * var(--parent-height));
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    line-height: 1;
+    letter-spacing: 0;
+    margin-top: 0px;
     font-size: 24px;
     font-weight: 200;
     color: #555;

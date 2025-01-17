@@ -1,12 +1,21 @@
+// latching styles to this class itself.
+import * as ConfigNames from "./CommonConfigNames";
+
 export class ProductContainer extends HTMLElement {
-    constructor(UIConfigs, currencyFormat, footer) {
+    constructor(UIConfigs, currencyFormat, footer, productWithVariants) {
         super();
         this.UIConfigs = UIConfigs;
         this.pid = null;
         this.footer = footer;
+        this.productWithVariants = productWithVariants;
+        
+        this.product = productWithVariants?.product;
+        console.log("productWithVariants", productWithVariants, this.product);
+
         // Create a template and set innerHTML once
         const template = document.createElement("template");
         template.innerHTML = `
+        <div>
         <div class="cross-sell-product-image-container">
           <div class="cross-sell-checkbox-container">
             <input type="checkbox" class="cross-sell-product-checkbox" checked />
@@ -29,6 +38,7 @@ export class ProductContainer extends HTMLElement {
             <span class="cross-sell-product-price-span"></span>
           </div>
         </div>
+        </div>
     `;
 
         this.innerHTML = template.innerHTML;
@@ -40,7 +50,6 @@ export class ProductContainer extends HTMLElement {
         this.img = this.querySelector(".cross-sell-product-image");
         this.priceSpan = this.querySelector(".cross-sell-product-price-span");
         this.variantSelect = this.querySelector(".cross-sell-variant");
-        this.product = null;
     }
 
 
@@ -64,13 +73,14 @@ export class ProductContainer extends HTMLElement {
         return this.checkbox?.checked ?? false;
     }
 
-    add(container, productWithVariants) {
+    add(container) {
 
-        const product = productWithVariants?.product;
-        this.product = productWithVariants?.product;
+        const product = this.product;
 
-
-        if (!product) return;
+        if (product == null){
+            console.log("product is null");
+            return;
+        } 
 
         this.pid = product.id;
 
@@ -122,12 +132,12 @@ export class ProductContainer extends HTMLElement {
         // console.log("bypassing this");
         // Finally, append this entire component
         console.log("new method 01");
-        container.appendChild(this); 
+        container.appendChild(this);
     }
-
 
     initialize(footer) {
         this.footer = footer;
+
         const firstVariantPrice = this.product?.variants?.nodes?.[0]?.price?.amount;
 
         this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
@@ -158,27 +168,13 @@ export class ProductContainer extends HTMLElement {
                 newPrice,
                 this.isChecked()
             );
-
-            const element = this.querySelector(".cross-sell-product");
-            console.log(" changing opacity to ", this.isChecked(), element);
+            console.log(" changing opacity to ", this.isChecked());
             if (this.isChecked()) {
-                element.style.opacity = 1;
+                this.style.opacity = 1;
             } else {
-                element.style.opacity = 0.5;
+                this.style.opacity = 0.5;
             }
         });
-
-        function resize() {
-            const height = this.querySelector(".cross-sell-product-image").style.height
-            console.log("height", height);
-            this.querySelector(".cross-sell-plus-symbol").style.paddingTop = height / 2;
-        }
-
-        window.addEventListener("resize", () => {
-            resize();
-        });
-
-        resize();
     }
 }
 
@@ -187,7 +183,7 @@ export class PlusSign extends HTMLElement {
         super();
         const template = document.createElement("template");
         template.innerHTML = `
-      <div class="cross-sell-plus-symbol"> + </div>
+      <div class="cross-sell-plus-symbol">+</div>
     `;
         this.innerHTML = template.innerHTML;
     }

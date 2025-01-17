@@ -73,41 +73,42 @@ const renderSellCross = async () => {
         if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
             console.warn("Error: offerId/layout not found in the data.");
             return;
+        } else {
+
+            // todo can be fetched from the backend. 
+            const selectors = [
+                // ".product-single",
+                // ".section.product_section",
+                // ".product-single__content",
+                // "#productHead",
+                // "#ProductSection--product-template",
+                // "#shopify-section-product-template",
+                ".product--large",
+                ".product--left"
+            ]
+
+            const topLevelComponent = await findComponent(selectors);
+
+            if (!topLevelComponent) {
+                console.error("Error: top level component not found in the DOM.");
+                return;
+            }
+
+            const sellCrossContainer = new SellCrossContainer(flattenedLayout, currencyFormat);
+            sellCrossContainer.add(topLevelComponent);
+            // add heading
+            sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : "Frequently Bought Together", discountText);
+
+            // add footer
+            sellCrossContainer.addFooter(fetchedOfferId);
+
+            // add products
+            sellCrossContainer.addProducts(variants);
+
+            topLevelComponent.parentElement.appendChild(sellCrossContainer);
+
+            sellCrossContainer.initialize();
         }
-
-        // todo can be fetched from the backend. 
-        const selectors = [
-            // ".product-single",
-            // ".section.product_section",
-            // ".product-single__content",
-            // "#productHead",
-            // "#ProductSection--product-template",
-            // "#shopify-section-product-template",
-            ".product--large",
-            ".product--left"
-        ]
-
-        const topLevelComponent = await findComponent(selectors);
-
-        if (!topLevelComponent) {
-            console.error("Error: top level component not found in the DOM.");
-            return;
-        }
-
-        const sellCrossContainer = new SellCrossContainer(flattenedLayout, currencyFormat);
-        sellCrossContainer.add(topLevelComponent);
-        // add heading
-        sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : "Frequently Bought Together", discountText);
-
-        // add footer
-        sellCrossContainer.addFooter(fetchedOfferId);
-
-        // add products
-        sellCrossContainer.addProducts(variants);
-
-        sellCrossContainer.initialize();
-
-        topLevelComponent.parentElement.appendChild(sellCrossContainer);
     };
 
     // Fetch and render
