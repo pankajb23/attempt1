@@ -5,12 +5,15 @@ import { json } from "@remix-run/node";
 /**
  * storefront request where we get the products related information
  */
-const GetProductDetails = async (pids, shop) => {
+const GetProductDetails = async (pids, productId, shop) => {
     const { storefront } = await unauthenticated.storefront(
         shop
     );
 
-    const productsResponse = await Promise.all(pids.map(async (pid) => {
+    const updatedPids = [productId, ...pids.filter(pid => pid !== productId)];
+
+    const productsResponse = await Promise.all(updatedPids.map(async (pid) => {
+        console.log("pid", pid);
         try {
             const response = await storefront.graphql(
                 `#graphql
@@ -55,6 +58,42 @@ const GetProductDetails = async (pids, shop) => {
     return productsResponse;
 }
 
+const CartLevelDetails = async (cartToken, storefront) => {
+    const cartId = `gid://shopify/Cart/${cartToken}`;
+    const response = await storefront.graphql(
+        `#graphql
+        query {
+            cart(id: "${cartId}") {
+                id
+                discountAllocations{
+                    targetType
+                    discountedAmount{
+                        amount
+                        currencyCode
+                    }
+                }
+                lines(first:250){
+                        nodes{
+                            id
+                            quantity
+                            discountAllocations{
+                                targetType
+                                discountedAmount{
+                                    amount
+                                    currencyCode
+                                }
+                                
+                            }   
+                            }
+                        }
+                    }
+            }`
+    );
+    const cartData = await response.json();
+    console.log("cartData", JSON.stringify(cartData));
+    return cartData;
+}
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     // console.log("Adming", admin);
 
@@ -65,34 +104,42 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     console.log("Query params:", queryParams);
 
     const shop = url.searchParams.get('shop');
-    const pid = "gid://shopify/Product/".concat(url.searchParams.get('pid'));
-
+    const productId = url.searchParams.get('pid');
+    const pid = "gid://shopify/Product/".concat(productId);
+    const cartToken = url.searchParams.get('cartToken');
     const { storefront } = await unauthenticated.storefront(
         shop
     );
-    const shopQueryPromise = await storefront.graphql(
-        `#graphql
+
+    const [shopQueryPromise, cartDataJsonResponse] = await Promise.all([
+        storefront.graphql(
+            `#graphql
          query {
             shop{
                 id
                 name
             }
          }
-        `
+        `),
+        CartLevelDetails(cartToken, storefront)]
     );
 
     const response = await shopQueryPromise.json();
+    console.log("response", response);
+    // const cartDataJsonResponse = await CartLevelDetails(cartToken, storefront);
+    // const cart = cartDataJsonResponse.data?.cart;
     const shopId = response.data?.shop?.id;
     // console.log("shopId", shopId);
     const currencyFormat = await prisma.currencyFormat.findFirst({
         where: {
-          stores: {
-            some: {
-              shopId: shopId
+            stores: {
+                some: {
+                    shopId: shopId
+                },
             },
-          },
         }
-      });
+    });
+
     console.log("currencyFormat", currencyFormat.currencyFormat);
     const storedOffers = await prismaClient.offer.findMany({
         where: {
@@ -137,7 +184,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (highestValueOffer !== null) {
         const offerContent = JSON.parse(highestValueOffer.offerContent);
         const productList = offerContent.offerProducts?.assets?.products.map(product => (product.pid));
-        variantsList = await GetProductDetails(productList, shop);
+        variantsList = await GetProductDetails(productList, pid, shop);
         defaultWidgetTitle = offerContent.otherPriorities?.defaultWidgetTitle;
         discountText = offerContent.discountState?.isEnabled ? offerContent.discountState?.discountText : null;
     }

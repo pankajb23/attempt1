@@ -58,32 +58,7 @@ export class Footer extends HTMLElement {
         container.appendChild(this);
     }
 
-    async handleCartToken() {
-        // Check if CartToken exists in localStorage
-        let existingCartToken = localStorage.getItem('cross-sell-cartToken');
-
-        if (existingCartToken == null) {
-            try {
-                // Call API to get new CartToken
-                const response = await fetch(`${location.origin}/cart.js`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-
-                const cartData = await response.json();
-                const cartToken = cartData.token;
-                console.log("cartToken", cartData);
-                // Store the new CartToken in localStorage
-                localStorage.setItem('cross-sell-cartToken', cartToken);
-                return cartToken;
-            } catch (error) {
-                console.error('Error getting cart token:', error);
-                return null;
-            }
-        }
-        return existingCartToken;
-    };
-
+    
 
     async handleClick() {
         // const productContainers = document.querySelectorAll("product-container");
@@ -95,7 +70,7 @@ export class Footer extends HTMLElement {
 
         // Request cart token
 
-        const cartToken = await this.handleCartToken();
+        const cartToken = localStorage.getItem('CROSS-SELL-CART-TOKEN');
         console.log("cartToken", cartToken);
         const uri = `${getHost()}/api/storefront/order-create?shop=${shopDomain}`;
         const body = JSON.stringify({
@@ -128,6 +103,7 @@ export class Footer extends HTMLElement {
         }
 
         if(this.prices.size > 0) {
+
             this.addToCartBtn.disabled = false;
             const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
             this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);

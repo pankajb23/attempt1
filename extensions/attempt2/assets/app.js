@@ -36,7 +36,7 @@ const TotalPriceCrossedOutTextColor = "component.total.price.crossed.out.text.co
 
 function getHost() {
     // return "https://sellcross-bc95eb582641.herokuapp.com";
-    return "https://e8f3-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app";
+    return "https://0ef0-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app";
 }
 
 class Footer extends HTMLElement {
@@ -96,32 +96,7 @@ class Footer extends HTMLElement {
         container.appendChild(this);
     }
 
-    async handleCartToken() {
-        // Check if CartToken exists in localStorage
-        let existingCartToken = localStorage.getItem('cross-sell-cartToken');
-
-        if (existingCartToken == null) {
-            try {
-                // Call API to get new CartToken
-                const response = await fetch(`${location.origin}/cart.js`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-
-                const cartData = await response.json();
-                const cartToken = cartData.token;
-                console.log("cartToken", cartData);
-                // Store the new CartToken in localStorage
-                localStorage.setItem('cross-sell-cartToken', cartToken);
-                return cartToken;
-            } catch (error) {
-                console.error('Error getting cart token:', error);
-                return null;
-            }
-        }
-        return existingCartToken;
-    };
-
+    
 
     async handleClick() {
         // const productContainers = document.querySelectorAll("product-container");
@@ -133,7 +108,7 @@ class Footer extends HTMLElement {
 
         // Request cart token
 
-        const cartToken = await this.handleCartToken();
+        const cartToken = localStorage.getItem('CROSS-SELL-CART-TOKEN');
         console.log("cartToken", cartToken);
         const uri = `${getHost()}/api/storefront/order-create?shop=${shopDomain}`;
         const body = JSON.stringify({
@@ -166,6 +141,7 @@ class Footer extends HTMLElement {
         }
 
         if(this.prices.size > 0) {
+
             this.addToCartBtn.disabled = false;
             const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
             this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
@@ -537,10 +513,37 @@ const renderSellCross = async () => {
         return result;
     }
 
+    const handleCartToken = async () => {
+        // Check if CartToken exists in localStorage
+        let existingCartToken = localStorage.getItem('CROSS-SELL-CART-TOKEN');
+        console.log("existingCartToken", existingCartToken);
+        if (existingCartToken == null) {
+            try {
+                // Call API to get new CartToken
+                const response = await fetch(`${location.origin}/cart.js`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                const cartData = await response.json();
+                const cartToken = cartData.token;
+                console.log("cartToken", cartData);
+                // Store the new CartToken in localStorage
+                localStorage.setItem('CROSS-SELL-CART-TOKEN', cartToken);
+                return cartToken;
+            } catch (error) {
+                console.error('Error getting cart token:', error);
+                return null;
+            }
+        }
+        return existingCartToken;
+    };
+
+
     // Fetch UI config
-    const fetchUIConfig = async () => {
+    const fetchUIConfig = async (cartToken) => {
         const uri = `${getHost()}/api/storefront/fetch?` +
-            new URLSearchParams({ shop: shopDomain, pid: productId });
+            new URLSearchParams({ shop: shopDomain, pid: productId, cartToken: cartToken });
         const response = await fetch(uri, {
             method: "GET",
             headers: {
@@ -614,7 +617,8 @@ const renderSellCross = async () => {
     };
 
     // Fetch and render
-    const uiConfig = await fetchUIConfig();
+    const cartToken = await handleCartToken();
+    const uiConfig = await fetchUIConfig(cartToken);
     if (uiConfig) {
         await renderUI(uiConfig);
     }
