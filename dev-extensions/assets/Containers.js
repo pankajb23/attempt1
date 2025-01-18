@@ -2,6 +2,7 @@ import { getHost } from "./Host";
 import * as ConfigNames from "./CommonConfigNames";
 import { Footer } from "./FooterContainer";
 import { ProductContainer, PlusSign } from "./ProductContainer";
+import { log, error } from "./Logging";
 
 export class SellCrossContainer extends HTMLElement {
     constructor(UIConfigs, currencyFormat) {
@@ -94,20 +95,20 @@ export class SellCrossContainer extends HTMLElement {
 
     }
 
-    addFooter(offerId) {
-        this.footer = new Footer(this.UIConfigs, this.currencyFormat, offerId);
+    addFooter(offerId, discountAmount, discountMode, variantsLength, discountTitle) {
+        log("discountTitle in containers", discountTitle);
+        this.footer = new Footer(this.UIConfigs, this.currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle);
     }
 
     resize() {
-        const componentHeight = document.querySelector(".cross-sell-product-image").height
-        console.log("componentHeight", componentHeight);
+        const componentHeight = document.querySelector(".cross-sell-product-image")?.height
 
         document.querySelectorAll(".cross-sell-plus-symbol").forEach(plusSign => {
             plusSign.style.paddingTop = `${componentHeight / 2}px`;
         });
-        
+
     }
-    
+
     initialize() {
         const productsListContainer = this.querySelector("#cross-sell-content");
         this.footer.add(productsListContainer);
@@ -118,30 +119,35 @@ export class SellCrossContainer extends HTMLElement {
         });
 
         window.addEventListener("resize", () => {
-            const footer = this.querySelector("#cross-sell-footer");
+            const footer = this.querySelector("cross-sell-footer");
+            console.log("footer", footer);
             const crossSellContent = this.querySelector("#cross-sell-content");
             const crossSellContainer = this.querySelector("#cross-sell-container");
 
-            console.log("window.innerWidth", window.innerWidth);
+            log("window.innerWidth", window.innerWidth);
 
             if (window.innerWidth < 768 && footer.parentNode === crossSellContent) {
                 // move footer outside, append the css classes
                 crossSellContainer.appendChild(footer);
                 footer.classList.add("cross-sell-footer-mobile");
-                footer.classList.remove("cross-sell-footer");
-            } else if (footer.parentNode !== crossSellContent) {
+                footer.classList.add("right-padding-5");
+                // footer.classList.remove("cross-sell-footer");
+            } else if (window.innerWidth > 768 && footer.parentNode !== crossSellContent) {
                 // move footer inside.
                 crossSellContent.appendChild(footer);
-                footer.classList.add("cross-sell-footer");
+                // footer.classList.add("cross-sell-footer");
                 footer.classList.remove("cross-sell-footer-mobile");
+                footer.classList.remove("right-padding-5");
             }
         });
 
         window.addEventListener("resize", () => {
+            // console.log("resizing");
             this.resize();
         });
 
         requestAnimationFrame(() => {   
+            console.log("initializing resize");
             this.resize();
         });
     }

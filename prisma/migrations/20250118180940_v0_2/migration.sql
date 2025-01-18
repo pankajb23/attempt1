@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Offer" ADD COLUMN     "lastUpdated" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP;

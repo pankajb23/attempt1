@@ -3,7 +3,7 @@
 client_id = "6707189c25e41c08024c15e8f2cb6520"
 name = "Sellcross"
 handle = "sellcross"
-application_url = "https://sellcross-bc95eb582641.herokuapp.com"
+application_url = "https://3025-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products, read_metaobjects, write_metaobjects,read_metaobject_de
 
 [auth]
 redirect_urls = [
-  "https://sellcross-bc95eb582641.herokuapp.com/auth/callback",
-  "https://sellcross-bc95eb582641.herokuapp.com/auth/shopify/callback",
-  "https://sellcross-bc95eb582641.herokuapp.com/api/auth/callback"
+  "https://3025-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app/auth/callback",
+  "https://3025-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app/auth/shopify/callback",
+  "https://3025-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app/api/auth/callback"
 ]
 
 [webhooks]

@@ -17,7 +17,7 @@ sell-cross-container{
 #cross-sell-title {
     font-size: 18px;
     font-weight: bold;
-    padding: 4px 4px 12px 0px;
+    padding: 4px 4px 0px 0px;
     color: var(--canvas-text-color, rgb(1, 11, 1));
 }
 
@@ -215,10 +215,16 @@ cross-sell-product{
 
 
 /* Footer */
-#cross-sell-footer {
-    padding-left: 40px;
-    width: 300px;
-    padding-top: 7%; /** todo make this according to height*/
+.cross-sell-footer {
+    padding-left: 5%;
+    width: 27%;
+    padding-top: 5%; /** todo make this according to height*/
+}
+
+cross-sell-footer{
+    padding-left: 5%;
+    width: 30%;
+    padding-top: 5%; /** todo make this according to height*/
 }
 
 #cross-sell-mobile-footer {
@@ -226,8 +232,12 @@ cross-sell-product{
     width: 100%;
 }
 
+.right-padding-5{
+    padding-right: 5%;
+}
 /* Total Price */
 .cross-sell-total-price {
+    display: inline-flex;
     font-size: 12px;
     font-weight: bold;
     color: #333;
@@ -241,7 +251,8 @@ cross-sell-product{
     /* Add line-through effect */
     color: #999;
     /* Lighter color for original price */
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: 400;
     font-family: 'Courier New', Courier, monospace
 }
 
@@ -265,7 +276,7 @@ cross-sell-product{
     font-weight: bold;
     color: var(--button-text-color, #111);
     height: auto;
-    width: 300px;
+    width: 100%;
     align-self: center;
 
     font-family: var(--button-text-family, Arial, sans-serif);

@@ -3,6 +3,7 @@ import { SellCrossContainer } from "./Containers";
 import { getHost } from "./Host";
 import { PlusSign, ProductContainer } from "./ProductContainer";
 import { Footer } from "./FooterContainer";
+import { log, error } from "./Logging";
 
 let offerId = null;
 
@@ -10,7 +11,7 @@ let offerId = null;
 // Register custom elements
 customElements.define("plus-sign", PlusSign);
 customElements.define("cross-sell-product", ProductContainer);
-customElements.define("cross-footer", Footer);
+customElements.define("cross-sell-footer", Footer);
 customElements.define("sell-cross-container", SellCrossContainer);
 
 const renderSellCross = async () => {
@@ -38,7 +39,7 @@ const renderSellCross = async () => {
     const handleCartToken = async () => {
         // Check if CartToken exists in localStorage
         let existingCartToken = localStorage.getItem('CROSS-SELL-CART-TOKEN');
-        console.log("existingCartToken", existingCartToken);
+        log("existingCartToken", existingCartToken);
         if (existingCartToken == null) {
             try {
                 // Call API to get new CartToken
@@ -49,7 +50,7 @@ const renderSellCross = async () => {
 
                 const cartData = await response.json();
                 const cartToken = cartData.token;
-                console.log("cartToken", cartData);
+                log("cartToken", cartToken);
                 // Store the new CartToken in localStorage
                 localStorage.setItem('CROSS-SELL-CART-TOKEN', cartToken);
                 return cartToken;
@@ -93,10 +94,11 @@ const renderSellCross = async () => {
     }
     // Render UI
     const renderUI = async (data) => {
-        const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText } = data.data;
+        const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText, discountAmount, discountMode, discountTitle } = data.data;
         const flattenedLayout = flattenObject(layout);
 
-        console.log("flattenedLayout", flattenedLayout);
+        log("discountTitle", discountTitle, data.data.discountTitle);
+        log("flattenedLayout", flattenedLayout);
         if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
             console.warn("Error: offerId/layout not found in the data.");
             return;
@@ -127,7 +129,7 @@ const renderSellCross = async () => {
             sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : "Frequently Bought Together", discountText);
 
             // add footer
-            sellCrossContainer.addFooter(fetchedOfferId);
+            sellCrossContainer.addFooter(fetchedOfferId, discountAmount, discountMode, variants.length, discountTitle);
 
             // add products
             sellCrossContainer.addProducts(variants);

@@ -65,6 +65,7 @@ model Offer {
   offerContent String?
   status       String      @default("active")
   createdAt    DateTime    @default(now())
+  lastUpdated  DateTime?   @default(now())
   Discounts    Discounts[]
 
   @@unique([storeId, offerName])

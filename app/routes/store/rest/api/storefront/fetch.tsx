@@ -5,10 +5,27 @@ import { json } from "@remix-run/node";
 /**
  * storefront request where we get the products related information
  */
+
+const GetProductUrl = async (admin, productId) => {
+    const response = await admin.graphql(
+        `#graphql
+        query {
+            product(id: "${productId}") {
+                onlineStoreUrl
+                onlineStorePreviewUrl
+            }
+        }`
+    );
+    const data = await response.json();
+    return data.data.product.onlineStorePreviewUrl ? data.data.product.onlineStorePreviewUrl : data.data.product.onlineStoreUrl;
+}
+
 const GetProductDetails = async (pids, productId, shop) => {
     const { storefront } = await unauthenticated.storefront(
         shop
     );
+
+    const { admin } = await unauthenticated.admin(shop);
 
     const updatedPids = [productId, ...pids.filter(pid => pid !== productId)];
 
@@ -43,7 +60,14 @@ const GetProductDetails = async (pids, productId, shop) => {
             const data = await response.json();
             if (response.ok) {
                 // console.log("data", JSON.stringify(data), data);
-                return data.data;
+                const productData = data.data.product;
+                if(productData.onlineStoreUrl == null){
+                    const productUrl = await GetProductUrl(admin, pid)
+                    productData.onlineStoreUrl = productUrl;
+                    console.log("productData with image", productData);
+                }
+                
+                return productData;
             } else {
                 console.error("GraphQL Error:", data.errors);
                 return null; // Return null on API errors
@@ -181,12 +205,28 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let variantsList = null;
     let defaultWidgetTitle = null;
     let discountText = null;
+    let discountAmount = null;
+    let discountMode = null;
+    let discountTitle = null;
     if (highestValueOffer !== null) {
         const offerContent = JSON.parse(highestValueOffer.offerContent);
         const productList = offerContent.offerProducts?.assets?.products.map(product => (product.pid));
         variantsList = await GetProductDetails(productList, pid, shop);
         defaultWidgetTitle = offerContent.otherPriorities?.defaultWidgetTitle;
-        discountText = offerContent.discountState?.isEnabled ? offerContent.discountState?.discountText : null;
+        const discountState = offerContent?.discountState;
+
+        console.log("discountState", discountState, offerContent);
+
+        discountText = discountState?.isEnabled ? discountState?.discountText : null;
+        if (discountState?.isEnabled) {
+            if (discountState?.selectedType === "percentOrFixed") {
+                discountAmount = discountState?.discountValue
+                discountMode = discountState?.discountUnit
+                discountTitle = "percentOrFixed"
+            }else if(discountState?.selectedType === "cheapestItemFree"){
+                discountTitle = "cheapestItemFree"
+            }
+        }
     }
 
 
@@ -198,7 +238,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             offerId: highestValueOffer?.offerId,
             currencyFormat: currencyFormat.currencyFormat,
             defaultWidgetTitle: defaultWidgetTitle,
-            discountText: discountText
+            discountText: discountText,
+            discountAmount: discountAmount,
+            discountMode: discountMode,
+            discountTitle: discountTitle
         }
     });
 }

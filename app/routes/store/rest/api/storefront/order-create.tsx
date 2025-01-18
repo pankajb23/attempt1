@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { type ActionFunction, json } from "@remix-run/node";
 import { unauthenticated, authenticate, prismaClient } from "app/shopify.server";
 import cookie from "cookie";
@@ -142,131 +143,6 @@ const UPDATE = async (storefront, cartId, cartDetails, payloadProducts) => {
     return toUpdateGraphQlResponse;
 }
 
-const CREATE_DISCOUNT = async (shop, offerId) => {
-    const { admin } = await unauthenticated.admin(shop);
-
-    const generateCode = () => {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        return Array.from({ length: 5 }, () =>
-            characters.charAt(Math.floor(Math.random() * characters.length))
-        ).join('');
-    };
-
-    const now = new Date();
-    const startDate = new Date(now.getTime() + 20 * 1000); // Now + 20 seconds
-    const endDate = new Date(startDate.getTime() + 30 * 60 * 1000); // Start + 30 minutes
-
-    console.log("offerID 01", offerId);
-    const offerContent = await prismaClient.offer.findFirst({
-        where: {
-            offerId: offerId
-        },
-        select: {
-            offerContent: true
-        }
-    });
-    const discountCode = `DSCNT-${generateCode()}`; // Random code
-    console.log("offerContent", JSON.stringify(offerContent));
-    let data = null;
-    try {
-        const graphQlResponse = await admin.graphql(
-            `#graphql
-  mutation discountCodeBasicCreate($basicCodeDiscount: DiscountCodeBasicInput!) {
-    discountCodeBasicCreate(basicCodeDiscount: $basicCodeDiscount) {
-      codeDiscountNode {
-        id
-        codeDiscount {
-          ... on DiscountCodeBasic {
-            title
-            codes(first: 10) {
-              nodes {
-                code
-              }
-            }
-            startsAt
-            endsAt
-            customerSelection {
-              ... on DiscountCustomerAll {
-                allCustomers
-              }
-            }
-            customerGets {
-              value {
-                ... on DiscountPercentage {
-                  percentage
-                }
-              }
-              items {
-                ... on AllDiscountItems {
-                  allItems
-                }
-              }
-            }
-            appliesOncePerCustomer
-          }
-        }
-      }
-      userErrors {
-        field
-        code
-        message
-      }
-    }
-  }`,
-            {
-                variables: {
-                    "basicCodeDiscount": {
-                        title: `A Generous Discount for You! ${discountCode}`, // Updated title
-                        code: `${discountCode}`, // Random code
-                        startsAt: startDate.toISOString(), // Start time in ISO format
-                        endsAt: endDate.toISOString(), // End time in ISO format
-                        "customerSelection": {
-                            "all": true
-                        },
-                        "customerGets": {
-                            "value": {
-                                "percentage": 0.2
-                            },
-                            "items": {
-                                "all": true
-                            }
-                        },
-                        "appliesOncePerCustomer": true
-                    }
-                }
-            }
-        );
-        data = await graphQlResponse.json();
-    } catch (e) {
-        console.log("error", e);
-    }
-
-    // Check and print GraphQL errors if any
-    if (data.errors) {
-        console.error("GraphQL Errors:", data.errors);
-    } else {
-        // console.log("GraphQL Response Data:", data);
-    }
-
-    // console.log("data", JSON.stringify(data));
-    const id = data.data?.discountCodeBasicCreate?.codeDiscountNode?.id;
-    const code = discountCode;
-    const startsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
-    const endsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
-
-    console.log("offerId", offerId);
-    await prismaClient.discounts.create({
-        data: {
-            offerId: offerId,
-            discountCode: code,
-            discountId: id,
-            startDate: startsAt,
-            endDate: endsAt
-        }
-    });
-
-    return code;
-}
 
 const ADD_OFFER = async (shop, offerId, cartId, discountCodes) => {
     const { admin } = await unauthenticated.admin(shop);
@@ -279,9 +155,17 @@ const ADD_OFFER = async (shop, offerId, cartId, discountCodes) => {
         where: {
             offerId: offerId,
             endDate: {
-                gt: minutesLater
+                lte: minutesLater
+            },
+            offer:{
+                lastUpdated: {
+                    lte: Prisma.sql`discounts.startDate`
+                },
             },
         },
+        include:{
+            offer: true,
+        }
     });
 
     let code = null;

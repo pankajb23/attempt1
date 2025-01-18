@@ -36,23 +36,36 @@ const TotalPriceCrossedOutTextColor = "component.total.price.crossed.out.text.co
 
 function getHost() {
     // return "https://sellcross-bc95eb582641.herokuapp.com";
-    return "https://0ef0-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app";
+    return "https://3025-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app";
+    // return "https://0ef0-2401-4900-1f37-cef1-986e-851-b68a-cb9c.ngrok-free.app";
 }
 
+const log = (...message) => {
+    {
+        console.log(...message);
+    }
+};
+
 class Footer extends HTMLElement {
-    constructor(UIConfigs, currencyFormat, offerId) {
+    constructor(UIConfigs, currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle) {
         super();
         this.UIConfigs = UIConfigs;
         this.currencyFormat = currencyFormat;
         this.offerId = offerId;
+        this.discountAmount = discountAmount;
+        this.discountMode = discountMode;
+        this.variantsLength = variantsLength;
+        this.discountTitle = discountTitle;
+
+        log("this.discountTitle in footer", this.discountTitle, discountTitle);
         this.regex = /{{(.*?)}}/g;
         const template = document.createElement("template");
         // intentional div to wrap the footer
         template.innerHTML = `
       <div id="cross-sell-footer">
         <div class="cross-sell-total-price">
-          <span style="color: '#000000'">Total price:</span>
-          <span class="cross-sell-total-sale-price"></span>
+          <span style="color: '#000000'">Total price:</span>&nbsp;&nbsp;
+          <span class="cross-sell-total-sale-price"></span>&nbsp;&nbsp;
           <span class="cross-sell-total-price-cross"></span>
         </div>
         <button class="cross-sell-add-to-cart-btn">Add To Cart</button>
@@ -96,7 +109,7 @@ class Footer extends HTMLElement {
         container.appendChild(this);
     }
 
-    
+
 
     async handleClick() {
         // const productContainers = document.querySelectorAll("product-container");
@@ -109,7 +122,7 @@ class Footer extends HTMLElement {
         // Request cart token
 
         const cartToken = localStorage.getItem('CROSS-SELL-CART-TOKEN');
-        console.log("cartToken", cartToken);
+        // console.log("cartToken", cartToken);
         const uri = `${getHost()}/api/storefront/order-create?shop=${shopDomain}`;
         const body = JSON.stringify({
             cartToken: cartToken,
@@ -117,7 +130,7 @@ class Footer extends HTMLElement {
             offerId: this.offerId,
         });
 
-        console.log("body", body);
+        // console.log("body", body);
         // Create order in server
         const orderCreationResponse = await fetch(uri, {
             method: "POST",
@@ -140,13 +153,39 @@ class Footer extends HTMLElement {
             this.prices.delete(productId);
         }
 
-        if(this.prices.size > 0) {
+        if (this.prices.size > 0) {
 
             this.addToCartBtn.disabled = false;
             const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
-            this.salePrice.textContent = this.currencyFormat.replace(this.regex, totalPrice);
-            
-        }else {
+            log("totalPrice", totalPrice, this.discountTitle, this.discountMode, this.discountAmount);
+            if (this.discountTitle != null) {
+                log("this.discountTitle", this.discountTitle);
+                if (this.discountTitle === "cheapestItemFree" && this.variantsLength == this.prices.size) {
+                    log("cheapestItemFree");
+                    const cheapestPrice = Math.min(...Array.from(this.prices.values()));
+                    const newAmount = totalPrice - cheapestPrice;
+                    this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(newAmount).toFixed(2));
+                    this.crossedPrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
+                } else if (this.discountTitle === "percentOrFixed") {
+                    log("percentOrFixed");
+                    const discount = this.discountMode === "%" ? totalPrice * (parseFloat(this.discountAmount) / 100) : parseFloat(this.discountAmount);
+                    const newAmount = totalPrice - discount;
+                    log("newAmount", newAmount);
+                    this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(newAmount).toFixed(2));
+                    this.crossedPrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
+                }else {
+                    this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
+                    this.crossedPrice.textContent = null;    
+                }
+            } else {
+                this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
+                this.crossedPrice.textContent = null;
+            }
+
+
+        } else {
+            this.salePrice.textContent = this.currencyFormat.replace(this.regex, "0.00");
+            this.crossedPrice.textContent = null;
             this.addToCartBtn.disabled = true;
         }
     }
@@ -163,7 +202,7 @@ class ProductContainer extends HTMLElement {
         this.productWithVariants = productWithVariants;
         
         this.product = productWithVariants?.product;
-        console.log("productWithVariants", productWithVariants, this.product);
+        // console.log("productWithVariants", productWithVariants, this.product);
 
         // Create a template and set innerHTML once
         const template = document.createElement("template");
@@ -279,7 +318,7 @@ class ProductContainer extends HTMLElement {
         // Initialize the price in the footer
         // console.log("bypassing this");
         // Finally, append this entire component
-        console.log("new method 01");
+        // console.log("new method 01");
         container.appendChild(this);
     }
 
@@ -305,7 +344,7 @@ class ProductContainer extends HTMLElement {
         });
 
         this.checkbox.addEventListener("change", (e) => {
-            console.log("checkbox changed", e);
+            // console.log("checkbox changed", e);
             const variantId = this.getSelectedVariantId();
             const selectedVariant = this.product.variants?.nodes?.find(
                 (v) => v.id === variantId
@@ -316,7 +355,7 @@ class ProductContainer extends HTMLElement {
                 newPrice,
                 this.isChecked()
             );
-            console.log(" changing opacity to ", this.isChecked());
+            // console.log(" changing opacity to ", this.isChecked());
             if (this.isChecked()) {
                 this.style.opacity = 1;
             } else {
@@ -432,20 +471,20 @@ class SellCrossContainer extends HTMLElement {
 
     }
 
-    addFooter(offerId) {
-        this.footer = new Footer(this.UIConfigs, this.currencyFormat, offerId);
+    addFooter(offerId, discountAmount, discountMode, variantsLength, discountTitle) {
+        log("discountTitle in containers", discountTitle);
+        this.footer = new Footer(this.UIConfigs, this.currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle);
     }
 
     resize() {
-        const componentHeight = document.querySelector(".cross-sell-product-image").height;
-        console.log("componentHeight", componentHeight);
+        const componentHeight = document.querySelector(".cross-sell-product-image")?.height;
 
         document.querySelectorAll(".cross-sell-plus-symbol").forEach(plusSign => {
             plusSign.style.paddingTop = `${componentHeight / 2}px`;
         });
-        
+
     }
-    
+
     initialize() {
         const productsListContainer = this.querySelector("#cross-sell-content");
         this.footer.add(productsListContainer);
@@ -456,30 +495,35 @@ class SellCrossContainer extends HTMLElement {
         });
 
         window.addEventListener("resize", () => {
-            const footer = this.querySelector("#cross-sell-footer");
+            const footer = this.querySelector("cross-sell-footer");
+            console.log("footer", footer);
             const crossSellContent = this.querySelector("#cross-sell-content");
             const crossSellContainer = this.querySelector("#cross-sell-container");
 
-            console.log("window.innerWidth", window.innerWidth);
+            log("window.innerWidth", window.innerWidth);
 
             if (window.innerWidth < 768 && footer.parentNode === crossSellContent) {
                 // move footer outside, append the css classes
                 crossSellContainer.appendChild(footer);
                 footer.classList.add("cross-sell-footer-mobile");
-                footer.classList.remove("cross-sell-footer");
-            } else if (footer.parentNode !== crossSellContent) {
+                footer.classList.add("right-padding-5");
+                // footer.classList.remove("cross-sell-footer");
+            } else if (window.innerWidth > 768 && footer.parentNode !== crossSellContent) {
                 // move footer inside.
                 crossSellContent.appendChild(footer);
-                footer.classList.add("cross-sell-footer");
+                // footer.classList.add("cross-sell-footer");
                 footer.classList.remove("cross-sell-footer-mobile");
+                footer.classList.remove("right-padding-5");
             }
         });
 
         window.addEventListener("resize", () => {
+            // console.log("resizing");
             this.resize();
         });
 
         requestAnimationFrame(() => {   
+            console.log("initializing resize");
             this.resize();
         });
     }
@@ -488,7 +532,7 @@ class SellCrossContainer extends HTMLElement {
 // Register custom elements
 customElements.define("plus-sign", PlusSign);
 customElements.define("cross-sell-product", ProductContainer);
-customElements.define("cross-footer", Footer);
+customElements.define("cross-sell-footer", Footer);
 customElements.define("sell-cross-container", SellCrossContainer);
 
 const renderSellCross = async () => {
@@ -516,7 +560,7 @@ const renderSellCross = async () => {
     const handleCartToken = async () => {
         // Check if CartToken exists in localStorage
         let existingCartToken = localStorage.getItem('CROSS-SELL-CART-TOKEN');
-        console.log("existingCartToken", existingCartToken);
+        log("existingCartToken", existingCartToken);
         if (existingCartToken == null) {
             try {
                 // Call API to get new CartToken
@@ -527,7 +571,7 @@ const renderSellCross = async () => {
 
                 const cartData = await response.json();
                 const cartToken = cartData.token;
-                console.log("cartToken", cartData);
+                log("cartToken", cartToken);
                 // Store the new CartToken in localStorage
                 localStorage.setItem('CROSS-SELL-CART-TOKEN', cartToken);
                 return cartToken;
@@ -571,10 +615,11 @@ const renderSellCross = async () => {
     };
     // Render UI
     const renderUI = async (data) => {
-        const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText } = data.data;
+        const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText, discountAmount, discountMode, discountTitle } = data.data;
         const flattenedLayout = flattenObject(layout);
 
-        console.log("flattenedLayout", flattenedLayout);
+        log("discountTitle", discountTitle, data.data.discountTitle);
+        log("flattenedLayout", flattenedLayout);
         if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
             console.warn("Error: offerId/layout not found in the data.");
             return;
@@ -605,7 +650,7 @@ const renderSellCross = async () => {
             sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : "Frequently Bought Together", discountText);
 
             // add footer
-            sellCrossContainer.addFooter(fetchedOfferId);
+            sellCrossContainer.addFooter(fetchedOfferId, discountAmount, discountMode, variants.length, discountTitle);
 
             // add products
             sellCrossContainer.addProducts(variants);

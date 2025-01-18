@@ -1,5 +1,6 @@
 // latching styles to this class itself.
 import * as ConfigNames from "./CommonConfigNames";
+import { log, error } from "./Logging";
 
 export class ProductContainer extends HTMLElement {
     constructor(UIConfigs, currencyFormat, footer, productWithVariants) {
@@ -10,7 +11,7 @@ export class ProductContainer extends HTMLElement {
         this.productWithVariants = productWithVariants;
         
         this.product = productWithVariants?.product;
-        console.log("productWithVariants", productWithVariants, this.product);
+        // console.log("productWithVariants", productWithVariants, this.product);
 
         // Create a template and set innerHTML once
         const template = document.createElement("template");
@@ -131,7 +132,7 @@ export class ProductContainer extends HTMLElement {
         // Initialize the price in the footer
         // console.log("bypassing this");
         // Finally, append this entire component
-        console.log("new method 01");
+        // console.log("new method 01");
         container.appendChild(this);
     }
 
@@ -157,7 +158,7 @@ export class ProductContainer extends HTMLElement {
         });
 
         this.checkbox.addEventListener("change", (e) => {
-            console.log("checkbox changed", e);
+            // console.log("checkbox changed", e);
             const variantId = this.getSelectedVariantId();
             const selectedVariant = this.product.variants?.nodes?.find(
                 (v) => v.id === variantId
@@ -168,7 +169,7 @@ export class ProductContainer extends HTMLElement {
                 newPrice,
                 this.isChecked()
             );
-            console.log(" changing opacity to ", this.isChecked());
+            // console.log(" changing opacity to ", this.isChecked());
             if (this.isChecked()) {
                 this.style.opacity = 1;
             } else {

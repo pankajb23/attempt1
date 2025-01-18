@@ -27,7 +27,8 @@ export const action: ActionFunction = async ({ params, request }) => {
                 data: {
                     offerName: body.offerName,
                     offerContent: JSON.stringify(body),
-                    status: body.status
+                    status: body.status,
+                    lastUpdated: new Date()
                 }
             });
         } else {
