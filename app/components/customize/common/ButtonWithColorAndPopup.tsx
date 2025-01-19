@@ -1,64 +1,79 @@
-import { useFormContext, Controller } from "react-hook-form";
-import { useState, useCallback } from "react";
-import ButtonPopup from "../common/ButtonPopup";
-import { Button, TextField, Text } from "@shopify/polaris";
+import { useFormContext, Controller } from 'react-hook-form';
+import { useState, useCallback } from 'react';
+import ButtonPopup from '../common/ButtonPopup';
+import { Button, TextField, Text } from '@shopify/polaris';
 
-export default function ButtonWithColorAndPopup({ header, property, defaultValue }) {
-    const { watch, control } = useFormContext();
-    const [popoverActive, setPopoverActive] = useState(false);
-    const togglePopoverActive = useCallback(
-        () => setPopoverActive((popoverActive) => !popoverActive),
-        [],
-    );
-    const backgroundColor = watch(property) ?? defaultValue;
-    // console.log("property,  ", header, property, defaultValue, watch(property));
-    const autoDetectColor = backgroundColor 
+export default function ButtonWithColorAndPopup({
+  header,
+  property,
+  defaultValue,
+}) {
+  const { watch, control } = useFormContext();
+  const [popoverActive, setPopoverActive] = useState(false);
+  const togglePopoverActive = useCallback(
+    () => setPopoverActive((popoverActive) => !popoverActive),
+    []
+  );
+  const backgroundColor = watch(property) ?? defaultValue;
+  // console.log("property,  ", header, property, defaultValue, watch(property));
+  const autoDetectColor = backgroundColor;
 
-    const [buttonColor, setButtonColor] = useState(backgroundColor);
+  const [buttonColor, setButtonColor] = useState(backgroundColor);
 
-    // console.log("buttonColor,  ", buttonColor);
-    
-    const activator = (
-        <div style={{
-            backgroundColor: buttonColor, // Add opacity
-            opacity: 0.8,
-            border: '1px solid #ddd',
-            fontWeight: 'bold',
-            width: '70px',
-            overflow: 'hidden',
-        }}>
-            <Button variant="tertiary" onClick={() => setPopoverActive(true)} fullWidth={true} >
-                {buttonColor}
-            </Button>
-        </div>
-    )
+  // console.log("buttonColor,  ", buttonColor);
 
-    const textHeader = <Text as="p" variant="bodySm" fontWeight="bold">{header}</Text>
+  const activator = (
+    <div
+      style={{
+        backgroundColor: buttonColor, // Add opacity
+        opacity: 0.8,
+        border: '1px solid #ddd',
+        fontWeight: 'bold',
+        width: '70px',
+        overflow: 'hidden',
+      }}
+    >
+      <Button
+        variant="tertiary"
+        onClick={() => setPopoverActive(true)}
+        fullWidth={true}
+      >
+        {buttonColor}
+      </Button>
+    </div>
+  );
 
-    return (
-        <Controller
-            control={control}
-            name={property}
-            defaultValue={backgroundColor}
-            render={({ field: { value, onChange } }) => (
-                <TextField
-                    label={textHeader}
-                    value={value}
-                    autoSize={false}
-                    onChange={onChange}
-                    autoComplete="off"
-                    placeholder="Auto-detect"
-                    connectedRight={
-                        <ButtonPopup
-                            popoverActive={popoverActive}
-                            setPopoverActive={setPopoverActive}
-                            togglePopoverActive={togglePopoverActive}
-                            activator={activator}
-                            property={property}
-                            setButtonColor={setButtonColor}
-                        />
-                    }
-                />
-            )}
-        />);
+  const textHeader = (
+    <Text as="p" variant="bodySm" fontWeight="bold">
+      {header}
+    </Text>
+  );
+
+  return (
+    <Controller
+      control={control}
+      name={property}
+      defaultValue={backgroundColor}
+      render={({ field: { value, onChange } }) => (
+        <TextField
+          label={textHeader}
+          value={value}
+          autoSize={false}
+          onChange={onChange}
+          autoComplete="off"
+          placeholder="Auto-detect"
+          connectedRight={
+            <ButtonPopup
+              popoverActive={popoverActive}
+              setPopoverActive={setPopoverActive}
+              togglePopoverActive={togglePopoverActive}
+              activator={activator}
+              property={property}
+              setButtonColor={setButtonColor}
+            />
+          }
+        />
+      )}
+    />
+  );
 }

@@ -1,3 +1,3 @@
-export const GlobalCurrencyCodes = {}
-export const GlobalShopToCurrencyCodes = {}
-export const AmountFormat = {}
+export const GlobalCurrencyCodes = {};
+export const GlobalShopToCurrencyCodes = {};
+export const AmountFormat = {};

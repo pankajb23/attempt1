@@ -3,12 +3,10 @@ import { useAppBridge } from '@shopify/app-bridge-react';
 
 const MyComponent = () => {
   const selected = await shopify.resourcePicker({
-    type: "product",
+    type: 'product',
     multiple: true,
-    query: "Find product",
+    query: 'Find product',
     selectionIds: [],
-    action: 'select'
+    action: 'select',
   });
-
-
 };

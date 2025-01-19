@@ -8,14 +8,14 @@ interface SafeSpanProps {
 const SafeSpan = ({ children, className }: SafeSpanProps) => {
   const getText = (content: React.ReactNode): string => {
     try {
-      console.log("Reached here", content);
+      console.log('Reached here', content);
       if (typeof content === 'string') {
         return content.trim();
       }
 
       if (React.isValidElement(content)) {
         const props = content.props;
-        console.log("checking here for content " + content);
+        console.log('checking here for content ' + content);
         if (typeof props.children === 'string') {
           return props.children.trim();
         }
@@ -23,16 +23,12 @@ const SafeSpan = ({ children, className }: SafeSpanProps) => {
 
       return '';
     } catch (e) {
-      console.log("Error in SafeSpan", e);
+      console.log('Error in SafeSpan', e);
       return '';
     }
   };
 
-  return (
-    <span className={className}>
-      {getText(children)}
-    </span>
-  );
+  return <span className={className}>{getText(children)}</span>;
 };
 
 export default SafeSpan;

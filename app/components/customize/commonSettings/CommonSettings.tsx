@@ -1,20 +1,23 @@
-import { Layout, BlockStack } from "@shopify/polaris"
-import TopHeadingBanner from "../../common/TopHeaderBanner";
-import { CustomizePageType } from "../../types/CustomizeTypes";
-import GeneralSettings from "./GeneralSettings";
+import { Layout, BlockStack } from '@shopify/polaris';
+import TopHeadingBanner from '../../common/TopHeaderBanner';
+import { CustomizePageType } from '../../types/CustomizeTypes';
+import GeneralSettings from './GeneralSettings';
 import { FormProvider, useForm } from 'react-hook-form';
-import CommonStylingModal from "./CommonStyling";
-import { useStoreContext } from "../../../lib/context/StoreContext";
-import CommonSideModal from "./CommonSideModal";
+import CommonStylingModal from './CommonStyling';
+import { useStoreContext } from '../../../lib/context/StoreContext';
+import CommonSideModal from './CommonSideModal';
 
 export default function CommonSettingsModal({ navigateToPage }) {
-
   const { modalsAndStoreId } = useStoreContext();
 
-  const commonSettings = modalsAndStoreId.customPages.find((page) => page.type === "CommonSettings");
-  console.log("commonSettings01", commonSettings);
+  const commonSettings = modalsAndStoreId.customPages.find(
+    (page) => page.type === 'CommonSettings'
+  );
+  console.log('commonSettings01', commonSettings);
   const methods = useForm({
-    defaultValues: commonSettings?.content?  JSON.parse(commonSettings.content) : null
+    defaultValues: commonSettings?.content
+      ? JSON.parse(commonSettings.content)
+      : null,
   });
 
   const onSubmit = async (data) => {
@@ -22,36 +25,43 @@ export default function CommonSettingsModal({ navigateToPage }) {
       method: 'POST',
       body: JSON.stringify({
         type: 'CommonSettings',
-        content: data
+        content: data,
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        shopify.toast.show(`Successfully saved customization`, {
+          duration: 500,
+        });
       })
-    }).then((response) => {
-      console.log(response);
-      shopify.toast.show(`Successfully saved customization`, { duration: 500 });
-    }).catch((error) => {
-      console.error(error);
-      shopify.toast.show(`Failed to saved customization`, { duration: 500, isError: true });
-    });
+      .catch((error) => {
+        console.error(error);
+        shopify.toast.show(`Failed to saved customization`, {
+          duration: 500,
+          isError: true,
+        });
+      });
   };
 
   return (
     <>
       <Layout.Section>
         <FormProvider {...methods}>
-          <BlockStack >
+          <BlockStack>
             <TopHeadingBanner
               navigateTo={navigateToPage}
-              heading={"Common settings and customizations"}
+              heading={'Common settings and customizations'}
               saveOfferButton={true}
               saveButtonContent="Save"
               onSave={methods.handleSubmit(onSubmit)}
               mainPage={CustomizePageType.LandingPage}
             />
           </BlockStack>
-          <div style={{ marginTop: "16px" }}>
-            <BlockStack gap='200'>
+          <div style={{ marginTop: '16px' }}>
+            <BlockStack gap="200">
               <Layout>
                 <Layout.Section variant="oneHalf">
-                  <BlockStack gap='300' >
+                  <BlockStack gap="300">
                     {/* <GeneralSettings /> */}
                     <CommonStylingModal />
                     {/* <CustomCssModal /> */}
@@ -66,5 +76,5 @@ export default function CommonSettingsModal({ navigateToPage }) {
         </FormProvider>
       </Layout.Section>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { AutoTable } from "@gadgetinc/react/auto/polaris";
+import { AutoTable } from '@gadgetinc/react/auto/polaris';
 import {
   Banner,
   BlockStack,
@@ -8,8 +8,8 @@ import {
   Link,
   Page,
   Text,
-} from "@shopify/polaris";
-import { api } from "../api";
+} from '@shopify/polaris';
+import { api } from '../api';
 
 export default function () {
   return (
@@ -30,7 +30,7 @@ export default function () {
             />
             <BlockStack gap="200">
               <Text variant="headingMd" as="h1" alignment="center">
-                Edit this page:{" "}
+                Edit this page:{' '}
                 <Link
                   url={`/edit/${window.gadgetConfig.env.GADGET_ENV}/files/web/routes/index.tsx`}
                   target="_blank"
@@ -48,11 +48,11 @@ export default function () {
             <AutoTable
               //@ts-ignore
               model={api.shopifyShop}
-              columns={["name", "countryName", "currency", "customerEmail"]}
+              columns={['name', 'countryName', 'currency', 'customerEmail']}
             />
             <Box padding="400">
               <Text variant="headingMd" as="h6">
-                Shop records fetched from:{" "}
+                Shop records fetched from:{' '}
                 <Link
                   url={`/edit/${window.gadgetConfig.env.GADGET_ENV}/model/DataModel-Shopify-Shop/data`}
                   target="_blank"

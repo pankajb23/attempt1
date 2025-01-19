@@ -6,19 +6,19 @@ export enum CustomizePageType {
   CartAddOns,
   UpsellFunnel,
   PostPurchaseUpsell,
-  ThankYouPageAddOns
+  ThankYouPageAddOns,
 }
 
 export interface CardModalProps {
-  heading: string,
-  content: string,
-  buttonContent: string,
-  link: string,
-  modalType: CustomizePageType
+  heading: string;
+  content: string;
+  buttonContent: string;
+  link: string;
+  modalType: CustomizePageType;
 }
 
 export interface TranslationComponent {
-  property: string,
-  heading: string,
-  defaultValue: string
+  property: string;
+  heading: string;
+  defaultValue: string;
 }

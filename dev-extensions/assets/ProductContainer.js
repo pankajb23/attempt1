@@ -1,21 +1,21 @@
 // latching styles to this class itself.
-import * as ConfigNames from "./CommonConfigNames";
-import { log, error } from "./Logging";
+import * as ConfigNames from './CommonConfigNames';
+import { log, error } from './Logging';
 
 export class ProductContainer extends HTMLElement {
-    constructor(UIConfigs, currencyFormat, footer, productWithVariants) {
-        super();
-        this.UIConfigs = UIConfigs;
-        this.pid = null;
-        this.footer = footer;
-        this.productWithVariants = productWithVariants;
-        
-        this.product = productWithVariants?.product;
-        // console.log("productWithVariants", productWithVariants, this.product);
+  constructor(UIConfigs, currencyFormat, footer, productWithVariants) {
+    super();
+    this.UIConfigs = UIConfigs;
+    this.pid = null;
+    this.footer = footer;
+    this.productWithVariants = productWithVariants;
 
-        // Create a template and set innerHTML once
-        const template = document.createElement("template");
-        template.innerHTML = `
+    this.product = productWithVariants?.product;
+    // console.log("productWithVariants", productWithVariants, this.product);
+
+    // Create a template and set innerHTML once
+    const template = document.createElement('template');
+    template.innerHTML = `
         <div>
         <div class="cross-sell-product-image-container">
           <div class="cross-sell-checkbox-container">
@@ -42,155 +42,159 @@ export class ProductContainer extends HTMLElement {
         </div>
     `;
 
-        this.innerHTML = template.innerHTML;
-        this.regex = /{{(.*?)}}/g;
-        this.currencyFormat = currencyFormat;
-        // Cache DOM elements
-        this.titleSpan = this.querySelector(".cross-sell-product-title-span");
-        this.checkbox = this.querySelector(".cross-sell-product-checkbox");
-        this.img = this.querySelector(".cross-sell-product-image");
-        this.priceSpan = this.querySelector(".cross-sell-product-price-span");
-        this.variantSelect = this.querySelector(".cross-sell-variant");
+    this.innerHTML = template.innerHTML;
+    this.regex = /{{(.*?)}}/g;
+    this.currencyFormat = currencyFormat;
+    // Cache DOM elements
+    this.titleSpan = this.querySelector('.cross-sell-product-title-span');
+    this.checkbox = this.querySelector('.cross-sell-product-checkbox');
+    this.img = this.querySelector('.cross-sell-product-image');
+    this.priceSpan = this.querySelector('.cross-sell-product-price-span');
+    this.variantSelect = this.querySelector('.cross-sell-variant');
+  }
+
+  // Get the variant ID of the selected option
+  getSelectedVariantId() {
+    const selectElement = this.querySelector('[name="variant-select"]');
+    if (selectElement) {
+      return selectElement.value;
+    } else {
+      return null;
+    }
+  }
+
+  // Get the product ID
+  getProductId() {
+    return this.pid;
+  }
+
+  // Check if the checkbox is selected
+  isChecked() {
+    return this.checkbox?.checked ?? false;
+  }
+
+  price() {
+    const variantId = this.getSelectedVariantId();
+    const selectedVariant = this.product.variants?.nodes?.find(
+      (v) => v.id === variantId
+    );
+    return selectedVariant?.price?.amount ?? 0;
+  }
+
+  add(container) {
+    const product = this.product;
+
+    if (product == null) {
+      console.log('product is null');
+      return;
     }
 
+    this.pid = product.id;
 
-    // Get the variant ID of the selected option
-    getSelectedVariantId() {
-        const selectElement = this.querySelector('[name="variant-select"]');
-        if (selectElement) {
-            return selectElement.value;
-        } else {
-            return null;
-        }
+    if (this.titleSpan) {
+      const anchorElement = document.createElement('a');
+      if (product.onlineStoreUrl) {
+        anchorElement.href = product.onlineStoreUrl; // Dynamic link
+      }
+      anchorElement.textContent = product.title; // Dynamic text
+      anchorElement.target = '_blank'; // Open in a new tab if needed
+
+      this.titleSpan.appendChild(anchorElement);
     }
 
-    // Get the product ID
-    getProductId() {
-        return this.pid;
+    // Set image
+    if (product.featuredImage?.url) {
+      this.img.src = product.featuredImage.url;
+      this.img.alt = product.title ?? 'Product Image';
     }
 
-    // Check if the checkbox is selected
-    isChecked() {
-        return this.checkbox?.checked ?? false;
+    function getPriceForVariantId(variantId) {
+      const variant = product.variants?.nodes?.find((v) => v.id === variantId);
+      return variant?.price?.amount ?? 0;
     }
 
-    add(container) {
+    const selectElement = document.createElement('select');
+    selectElement.name = 'variant-select';
+    // Populate variants in the <select>
+    product.variants?.nodes?.forEach((variant) => {
+      const option = document.createElement('option');
+      option.value = variant.id;
+      option.textContent = variant.title;
+      selectElement.appendChild(option);
+    });
 
-        const product = this.product;
+    this.variantSelect.appendChild(selectElement);
 
-        if (product == null){
-            console.log("product is null");
-            return;
-        } 
+    // If there is at least one variant, show its price by default
+    const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
 
-        this.pid = product.id;
+    if (firstVariantPrice)
+      this.priceSpan.textContent = this.currencyFormat.replace(
+        this.regex,
+        firstVariantPrice
+      );
 
-        if (this.titleSpan) {
-            const anchorElement = document.createElement("a");
-            if (product.onlineStoreUrl) {
-                anchorElement.href = product.onlineStoreUrl; // Dynamic link
-            }
-            anchorElement.textContent = product.title; // Dynamic text
-            anchorElement.target = "_blank"; // Open in a new tab if needed
+    this.priceSpan.style.color =
+      this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
+    // TODO adding footer earlier than this.
+    // Attach event listeners
+    // const footer = document.querySelector("cross-footer");
+    // Initialize the price in the footer
+    // console.log("bypassing this");
+    // Finally, append this entire component
+    // console.log("new method 01");
+    container.appendChild(this);
+  }
 
-            this.titleSpan.appendChild(anchorElement);
-        }
+  initialize(footer) {
+    this.footer = footer;
 
-        // Set image
-        if (product.featuredImage?.url) {
-            this.img.src = product.featuredImage.url;
-            this.img.alt = product.title ?? "Product Image";
-        }
+    const firstVariantPrice = this.product?.variants?.nodes?.[0]?.price?.amount;
 
-        function getPriceForVariantId(variantId) {
-            const variant = product.variants?.nodes?.find(v => v.id === variantId);
-            return variant?.price?.amount ?? 0;
-        }
+    this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
 
+    this.variantSelect.addEventListener('change', (e) => {
+      const selectedVariant = this.product.variants?.nodes?.find(
+        (v) => v.id === e.target.value
+      );
+      const newPrice = selectedVariant?.price?.amount ?? 0;
+      this.priceSpan.textContent = this.currencyFormat.replace(
+        this.regex,
+        newPrice
+      );
 
-        const selectElement = document.createElement("select");
-        selectElement.name = "variant-select";
-        // Populate variants in the <select>
-        product.variants?.nodes?.forEach((variant) => {
-            const option = document.createElement("option");
-            option.value = variant.id;
-            option.textContent = variant.title;
-            selectElement.appendChild(option);
-        });
+      this.footer.updatePrice(this.product.id, newPrice, this.isChecked());
+    });
 
-        this.variantSelect.appendChild(selectElement);
-
-        // If there is at least one variant, show its price by default
-        const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
-
-        if (firstVariantPrice) this.priceSpan.textContent = this.currencyFormat.replace(this.regex, firstVariantPrice);
-
-        this.priceSpan.style.color = this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
-        // TODO adding footer earlier than this.
-        // Attach event listeners
-        // const footer = document.querySelector("cross-footer");
-        // Initialize the price in the footer
-        // console.log("bypassing this");
-        // Finally, append this entire component
-        // console.log("new method 01");
-        container.appendChild(this);
-    }
-
-    initialize(footer) {
-        this.footer = footer;
-
-        const firstVariantPrice = this.product?.variants?.nodes?.[0]?.price?.amount;
-
-        this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
-
-        this.variantSelect.addEventListener("change", (e) => {
-            const selectedVariant = this.product.variants?.nodes?.find(
-                (v) => v.id === e.target.value
-            );
-            const newPrice = selectedVariant?.price?.amount ?? 0;
-            this.priceSpan.textContent = this.currencyFormat.replace(this.regex, newPrice);
-
-            this.footer.updatePrice(
-                this.product.id,
-                newPrice,
-                this.isChecked()
-            );
-        });
-
-        this.checkbox.addEventListener("change", (e) => {
-            // console.log("checkbox changed", e);
-            const variantId = this.getSelectedVariantId();
-            const selectedVariant = this.product.variants?.nodes?.find(
-                (v) => v.id === variantId
-            );
-            const newPrice = selectedVariant?.price?.amount ?? 0;
-            this.footer.updatePrice(
-                this.product.id,
-                newPrice,
-                this.isChecked()
-            );
-            // console.log(" changing opacity to ", this.isChecked());
-            if (this.isChecked()) {
-                this.style.opacity = 1;
-            } else {
-                this.style.opacity = 0.5;
-            }
-        });
-    }
+    this.checkbox.addEventListener('change', (e) => {
+      // console.log("checkbox changed", e);
+      const variantId = this.getSelectedVariantId();
+      const selectedVariant = this.product.variants?.nodes?.find(
+        (v) => v.id === variantId
+      );
+      const newPrice = selectedVariant?.price?.amount ?? 0;
+      this.footer.updatePrice(this.product.id, newPrice, this.isChecked());
+      // console.log(" changing opacity to ", this.isChecked());
+      if (this.isChecked()) {
+        this.style.opacity = 1;
+      } else {
+        this.style.opacity = 0.5;
+      }
+    });
+  }
 }
 
 export class PlusSign extends HTMLElement {
-    constructor() {
-        super();
-        const template = document.createElement("template");
-        template.innerHTML = `
+  constructor() {
+    super();
+    const template = document.createElement('template');
+    template.innerHTML = `
       <div class="cross-sell-plus-symbol">+</div>
     `;
-        this.innerHTML = template.innerHTML;
-    }
+    this.innerHTML = template.innerHTML;
+  }
 
-    add(container) {
-        container.appendChild(this);
-    }
+  add(container) {
+    container.appendChild(this);
+  }
 }
-

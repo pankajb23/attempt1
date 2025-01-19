@@ -11,17 +11,12 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "target": "es2020",
-    "lib": [
-      "es2020",
-      "DOM"
-    ],
+    "lib": ["es2020", "DOM"],
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "baseUrl": "/",
-    "types": [
-      "@shopify/app-bridge-types"
-    ]
+    "types": ["@shopify/app-bridge-types"]
   }
 }

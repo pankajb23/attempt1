@@ -1,5 +1,5 @@
-import { Page, Text } from "@shopify/polaris";
-import { useNavigate } from "react-router";
+import { Page, Text } from '@shopify/polaris';
+import { useNavigate } from 'react-router';
 
 export default function () {
   const navigate = useNavigate();
@@ -8,8 +8,8 @@ export default function () {
     <Page
       title="About"
       backAction={{
-        content: "Shop Information",
-        onAction: () => navigate("/"),
+        content: 'Shop Information',
+        onAction: () => navigate('/'),
       }}
     >
       <Text variant="bodyMd" as="p">

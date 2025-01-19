@@ -1,47 +1,72 @@
-import { type FrequentlyBoughtTogetherType, getMockedData } from "app/components/types/FrequentlyBoughtTogetherTypes"
+import {
+  type FrequentlyBoughtTogetherType,
+  getMockedData,
+} from 'app/components/types/FrequentlyBoughtTogetherTypes';
 
 export interface FrequentlyBoughtTogetherDAO {
-    // we will not allow duplicates here.
-    find(offerName: string, userId: string): Promise<FrequentlyBoughtTogetherType>
-    delete(offerName: string, label: string, userId: string): Promise<void>
-    upsert(userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType>
+  // we will not allow duplicates here.
+  find(
+    offerName: string,
+    userId: string
+  ): Promise<FrequentlyBoughtTogetherType>;
+  delete(offerName: string, label: string, userId: string): Promise<void>;
+  upsert(
+    userId: string,
+    type: FrequentlyBoughtTogetherType,
+    offerId?: string
+  ): Promise<FrequentlyBoughtTogetherType>;
 }
 
-export class MockedFrequentlyBoughtTogetherDAO implements FrequentlyBoughtTogetherDAO {
-    private mockedData: FrequentlyBoughtTogetherType = getMockedData();
+export class MockedFrequentlyBoughtTogetherDAO
+  implements FrequentlyBoughtTogetherDAO
+{
+  private mockedData: FrequentlyBoughtTogetherType = getMockedData();
 
-    upsert(userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType> {
-        this.mockedData = type
-        return Promise.resolve(this.mockedData);
-    }
+  upsert(
+    userId: string,
+    type: FrequentlyBoughtTogetherType,
+    offerId?: string
+  ): Promise<FrequentlyBoughtTogetherType> {
+    this.mockedData = type;
+    return Promise.resolve(this.mockedData);
+  }
 
-    find(offerName: string, userId: string): Promise<FrequentlyBoughtTogetherType> {
-        return Promise.resolve(this.mockedData);
-    }
+  find(
+    offerName: string,
+    userId: string
+  ): Promise<FrequentlyBoughtTogetherType> {
+    return Promise.resolve(this.mockedData);
+  }
 
-    delete(offerName: string, label: string, userId: string): Promise<void> {
-        this.mockedData = null;
-        return Promise.resolve();
-    }
+  delete(offerName: string, label: string, userId: string): Promise<void> {
+    this.mockedData = null;
+    return Promise.resolve();
+  }
 }
 
 export class FrequentlyBoughtTogetherService {
-    private dao: FrequentlyBoughtTogetherDAO;
+  private dao: FrequentlyBoughtTogetherDAO;
 
-    constructor(useMock: boolean = false) {
-        this.dao = new MockedFrequentlyBoughtTogetherDAO();
-    }
+  constructor(useMock: boolean = false) {
+    this.dao = new MockedFrequentlyBoughtTogetherDAO();
+  }
 
-    find(offerName: string, userId: string): Promise<FrequentlyBoughtTogetherType> {
-        return this.dao.find(offerName, userId);
-    }
+  find(
+    offerName: string,
+    userId: string
+  ): Promise<FrequentlyBoughtTogetherType> {
+    return this.dao.find(offerName, userId);
+  }
 
-    delete(offerName: string, label: string, userId: string): Promise<void> {
-        return this.dao.delete(offerName, label, userId);
-    }
+  delete(offerName: string, label: string, userId: string): Promise<void> {
+    return this.dao.delete(offerName, label, userId);
+  }
 
-    upsert(userId: string, type: FrequentlyBoughtTogetherType, offerId?: string): Promise<FrequentlyBoughtTogetherType> {
-        return this.dao.upsert(userId, type, offerId);
-    }
+  upsert(
+    userId: string,
+    type: FrequentlyBoughtTogetherType,
+    offerId?: string
+  ): Promise<FrequentlyBoughtTogetherType> {
+    return this.dao.upsert(userId, type, offerId);
+  }
 }
-
