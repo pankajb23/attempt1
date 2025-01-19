@@ -1,24 +1,11 @@
-import {
-  Layout,
-  BlockStack,
-  Card,
-  Text,
-  Button,
-  ButtonGroup,
-  Banner,
-} from '@shopify/polaris';
+import { Layout, BlockStack, Card, Text, Button, ButtonGroup, Banner } from '@shopify/polaris';
 import TopHeadingBanner from '../../common/TopHeaderBanner';
 import TriggerCheckbox from '../common/TriggerCheckbox';
 import OfferProductRadioButtonModal from '../common/OfferProductRadioButtonModal';
 import DiscountModal from '../common/DiscountsModal';
 import OtherDetailsModal from '../common/OtherDetailsModal';
 import { useTranslation } from 'react-i18next';
-import {
-  FormProvider,
-  useForm,
-  useFormContext,
-  Controller,
-} from 'react-hook-form';
+import { FormProvider, useForm, useFormContext, Controller } from 'react-hook-form';
 import SideModal from './SideModal';
 import OfferNameModal from '../common/OfferNameModal';
 import { useStoreContext } from 'app/lib/context/StoreContext';
@@ -43,16 +30,10 @@ function ToggleModal() {
               defaultValue={defaultValue}
               render={({ field: { value, onChange } }) => (
                 <ButtonGroup variant="segmented">
-                  <Button
-                    pressed={value === 'active'}
-                    onClick={() => onChange('active')}
-                  >
+                  <Button pressed={value === 'active'} onClick={() => onChange('active')}>
                     Active
                   </Button>
-                  <Button
-                    pressed={!(value === 'active')}
-                    onClick={() => onChange('draft')}
-                  >
+                  <Button pressed={!(value === 'active')} onClick={() => onChange('draft')}>
                     Draft
                   </Button>
                 </ButtonGroup>
@@ -74,10 +55,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
   const storeId = modalsAndStoreId.storeId;
 
   const onSubmit = async (data) => {
-    const uri =
-      offer?.offerId === undefined
-        ? `api/offers/save?storeId=${storeId}`
-        : `api/offers/save?storeId=${storeId}&offerId=${offer.offerId}`;
+    const uri = offer?.offerId === undefined ? `api/offers/save?storeId=${storeId}` : `api/offers/save?storeId=${storeId}&offerId=${offer.offerId}`;
     const response = await fetch(`${uri}`, {
       method: 'POST',
       headers: {
@@ -86,10 +64,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
       body: JSON.stringify(data),
     });
     if (!response.ok) {
-      shopify.toast.show(
-        `Failed to save offer ${data.offerName} successfully`,
-        { duration: 2000, isError: true }
-      );
+      shopify.toast.show(`Failed to save offer ${data.offerName} successfully`, { duration: 2000, isError: true });
     } else {
       const content = await response.json();
       if (content.status === 200) {
@@ -106,9 +81,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
           } else {
             // console.log("All offers", JSON.stringify(modalsAndStoreId.offers));
             // modalsAndStoreId.offers.forEach(offer => {console.log("offer -->", offer)});
-            const restOfTheOffers = modalsAndStoreId.offers.filter(
-              (offer) => offer['offerId'] !== content.data.response.offerId
-            );
+            const restOfTheOffers = modalsAndStoreId.offers.filter((offer) => offer['offerId'] !== content.data.response.offerId);
             updateModalsAndStoreId({
               offers: [...restOfTheOffers, content.data.response],
             });
@@ -116,10 +89,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
         }
         console.log('All offers', JSON.stringify(modalsAndStoreId.offers));
       } else {
-        shopify.toast.show(
-          `Failed to save offer ${data.offerName} successfully`,
-          { duration: 2000, isError: true }
-        );
+        shopify.toast.show(`Failed to save offer ${data.offerName} successfully`, { duration: 2000, isError: true });
       }
     }
   };
@@ -132,9 +102,7 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
     });
   };
 
-  const offerContent = offer?.offerContent
-    ? JSON.parse(offer.offerContent)
-    : null;
+  const offerContent = offer?.offerContent ? JSON.parse(offer.offerContent) : null;
   if (offer?.status != null) {
     offerContent['status'] = offer.status;
   }
@@ -146,21 +114,15 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
 
   const choices = [
     {
-      label: t(
-        'pages.frequently_bought_together.checkbox.percentOrFixed.heading'
-      ),
+      label: t('pages.frequently_bought_together.checkbox.percentOrFixed.heading'),
       value: 'percentOrFixed',
     },
     {
-      label: t(
-        'pages.frequently_bought_together.checkbox.cheapestItemFree.heading'
-      ),
+      label: t('pages.frequently_bought_together.checkbox.cheapestItemFree.heading'),
       value: 'cheapestItemFree',
     },
     {
-      label: t(
-        'pages.frequently_bought_together.checkbox.freeShipping.heading'
-      ),
+      label: t('pages.frequently_bought_together.checkbox.freeShipping.heading'),
       value: 'freeShipping',
     },
   ];
@@ -184,19 +146,13 @@ export default function FrequentlyBoughtTogether({ navigateTo, offer = null }) {
               <Layout>
                 <Layout.Section>
                   <BlockStack gap="300">
-                    <OfferNameModal
-                      placeholder={t(
-                        'pages.frequently_bought_together.offer_name.placeholder'
-                      )}
-                    />
+                    <OfferNameModal placeholder={t('pages.frequently_bought_together.offer_name.placeholder')} />
                     <TriggerCheckbox offerType={'frequently_bought_together'} />
                     <OfferProductRadioButtonModal />
                     <DiscountModal
                       checkboxHelpText={t('pages.discount.enable.bundle')}
                       choices={choices}
-                      discountTextPlaceholder={t(
-                        'pages.frequently_bought_together.checkbox.percentOrFixed.placeholder'
-                      )}
+                      discountTextPlaceholder={t('pages.frequently_bought_together.checkbox.percentOrFixed.placeholder')}
                     />
                   </BlockStack>
                 </Layout.Section>

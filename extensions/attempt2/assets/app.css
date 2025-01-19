@@ -38,6 +38,14 @@ sell-cross-container {
   width: 99%;
 }
 
+/* .justify-content-normal {
+  justify-content: normal;
+} */
+
+.justify-content-center {
+  justify-content: center;
+}
+
 #cross-sell-products {
   display: flex;
   padding-bottom: 5px;

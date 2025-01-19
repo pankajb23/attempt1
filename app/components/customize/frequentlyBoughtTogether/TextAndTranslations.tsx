@@ -27,11 +27,7 @@ export function Component({ component }: { component: TranslationComponent }) {
   );
 }
 
-export default function TextAndTranslations({
-  translationComponents,
-}: {
-  translationComponents: TranslationComponent[];
-}) {
+export default function TextAndTranslations({ translationComponents }: { translationComponents: TranslationComponent[] }) {
   return (
     <Card roundedAbove="sm">
       <BlockStack gap="300">

@@ -1,13 +1,4 @@
-import {
-  Page,
-  Layout,
-  BlockStack,
-  SkeletonPage,
-  LegacyCard,
-  SkeletonBodyText,
-  TextContainer,
-  SkeletonDisplayText,
-} from '@shopify/polaris';
+import { Page, Layout, BlockStack, SkeletonPage, LegacyCard, SkeletonBodyText, TextContainer, SkeletonDisplayText } from '@shopify/polaris';
 import OfferTabModal from '../components/offer/OfferTabModal';
 import SetupAssistance from '../components/offer/SetupAssistance';
 import HelpBottonModal from '../components/common/HelpBottomModal';
@@ -84,63 +75,37 @@ export default function Index() {
                 </SkeletonPage>
               ) : mainPageModalState ? (
                 <>
-                  <SetupAssistance
-                    setupShowAssistanceCb={setupShowAssistanceCallback}
-                  />
-                  <OfferTabModal
-                    onShowOfferPage={navigateToCallback}
-                    openPage={openPage}
-                  />
+                  <SetupAssistance setupShowAssistanceCb={setupShowAssistanceCallback} />
+                  <OfferTabModal onShowOfferPage={navigateToCallback} openPage={openPage} />
                 </>
               ) : (
-                <OfferTabModal
-                  onShowOfferPage={navigateToCallback}
-                  openPage={openPage}
-                />
+                <OfferTabModal onShowOfferPage={navigateToCallback} openPage={openPage} />
               )}
               <HelpBottonModal />
             </>
           );
 
         case NavigationPage.OFFER_PAGE_DASHBOARD:
-          return wrapBottom(
-            <FrequentlyBoughtTogether
-              navigateTo={navigateToCallback}
-              offer={offer}
-            />
-          );
+          return wrapBottom(<FrequentlyBoughtTogether navigateTo={navigateToCallback} offer={offer} />);
         // return wrapBottom(<OfferOnPageDashboard navigateTo={navigateToCallback}/>);
 
         case NavigationPage.FREQUENTLY_BOUGHT_TOGETHER:
-          return wrapBottom(
-            <FrequentlyBoughtTogether
-              navigateTo={navigateToCallback}
-              offer={offer}
-            />
-          );
+          return wrapBottom(<FrequentlyBoughtTogether navigateTo={navigateToCallback} offer={offer} />);
 
         case NavigationPage.PRODUCTS_ADDON:
-          return wrapBottom(
-            <ProductsAddOnPage navigateTo={navigateToCallback} />
-          );
+          return wrapBottom(<ProductsAddOnPage navigateTo={navigateToCallback} />);
 
         case NavigationPage.CART_UPSELL_DOWNSELL:
-          return wrapBottom(
-            <CartUpsellDownsellPage navigateTo={navigateToCallback} />
-          );
+          return wrapBottom(<CartUpsellDownsellPage navigateTo={navigateToCallback} />);
 
         case NavigationPage.CART_ADDON:
           return wrapBottom(<CartsAddOnPage navigateTo={navigateToCallback} />);
 
         case NavigationPage.POST_PURCHASE_UPSELL:
-          return wrapBottom(
-            <PostPurchaseUpsellPage navigateTo={navigateToCallback} />
-          );
+          return wrapBottom(<PostPurchaseUpsellPage navigateTo={navigateToCallback} />);
 
         case NavigationPage.THANK_YOU_ADD_ON:
-          return wrapBottom(
-            <ThankyouAddOnPage navigateTo={navigateToCallback} />
-          );
+          return wrapBottom(<ThankyouAddOnPage navigateTo={navigateToCallback} />);
       }
     };
 

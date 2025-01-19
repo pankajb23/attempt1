@@ -12,10 +12,8 @@ enum DesktopPoistion {
 export default function PositionModal() {
   const { watch, control } = useFormContext();
 
-  const desktopPosition =
-    watch('position.desktop') ?? DesktopPoistion.AboveProductFormCartButton;
-  const mobilePosition =
-    watch('position.mobile') ?? DesktopPoistion.AboveProductFormCartButton;
+  const desktopPosition = watch('position.desktop') ?? DesktopPoistion.AboveProductFormCartButton;
+  const mobilePosition = watch('position.mobile') ?? DesktopPoistion.AboveProductFormCartButton;
 
   const desktopPositionOptions = [
     {

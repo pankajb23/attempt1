@@ -2,10 +2,7 @@ import { BlockStack, Card, TextField, Text } from '@shopify/polaris';
 import { useTranslation } from 'react-i18next';
 import { useFormContext, Controller } from 'react-hook-form';
 
-export default function OtherDetailsModal({
-  widgetTitleArg = undefined,
-  widgetPlaceHolder = undefined,
-}) {
+export default function OtherDetailsModal({ widgetTitleArg = undefined, widgetPlaceHolder = undefined }) {
   const { t } = useTranslation();
 
   const { control, watch } = useFormContext();
@@ -28,8 +25,7 @@ export default function OtherDetailsModal({
     </Text>
   );
 
-  const widgetTitle =
-    watch('otherPriorities.defaultWidgetTitle') ?? widgetTitleArg;
+  const widgetTitle = watch('otherPriorities.defaultWidgetTitle') ?? widgetTitleArg;
   const offerPriority = watch('otherPriorities.offerPriority');
 
   return (
@@ -47,9 +43,7 @@ export default function OtherDetailsModal({
                 value={value}
                 onChange={onChange}
                 autoComplete="off"
-                placeholder={
-                  widgetPlaceHolder || t('pages.other.override.placeholder')
-                }
+                placeholder={widgetPlaceHolder || t('pages.other.override.placeholder')}
               />
             )}
           />
@@ -59,14 +53,7 @@ export default function OtherDetailsModal({
             control={control}
             defaultValue={offerPriority}
             render={({ field: { onChange, value } }) => (
-              <TextField
-                label={offerPriorityLabel}
-                value={value}
-                type="number"
-                onChange={onChange}
-                autoComplete="off"
-                placeholder={t('pages.other.offer_priority.placeholder')}
-              />
+              <TextField label={offerPriorityLabel} value={value} type="number" onChange={onChange} autoComplete="off" placeholder={t('pages.other.offer_priority.placeholder')} />
             )}
           />
           <Text as="p" variant="bodySm">

@@ -1,29 +1,19 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { prismaClient, unauthenticated } from 'app/shopify.server';
 import { json } from '@remix-run/node';
-import {
-  FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS,
-  FETCH_STOREFRONT_CART_DETAILS,
-  FETCH_ADMIN_PRODUCT_URL,
-  FETCH_STOREFRONT_SHOP_NAME
-} from 'app/routes/store/graphql/queries';
+import { FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS, FETCH_STOREFRONT_CART_DETAILS, FETCH_ADMIN_PRODUCT_URL, FETCH_STOREFRONT_SHOP_NAME } from 'app/routes/store/graphql/queries';
 /**
  * storefront request where we get the products related information
  */
 
 const GetProductUrl = async (admin, productId) => {
-  const response = await admin.graphql(
-    FETCH_ADMIN_PRODUCT_URL,
-    {
-      variables: {
-        productId: productId
-      }
-    }
-  );
+  const response = await admin.graphql(FETCH_ADMIN_PRODUCT_URL, {
+    variables: {
+      productId: productId,
+    },
+  });
   const data = await response.json();
-  return data.data.product.onlineStorePreviewUrl
-    ? data.data.product.onlineStorePreviewUrl
-    : data.data.product.onlineStoreUrl;
+  return data.data.product.onlineStorePreviewUrl ? data.data.product.onlineStorePreviewUrl : data.data.product.onlineStoreUrl;
 };
 
 const GetProductDetails = async (pids, productId, shop) => {
@@ -37,14 +27,11 @@ const GetProductDetails = async (pids, productId, shop) => {
     updatedPids.map(async (pid) => {
       console.log('pid', pid);
       try {
-        const response = await storefront.graphql(
-          FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS,
-          {
-            variables: {
-              id: pid
-            }
-          }
-        );
+        const response = await storefront.graphql(FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS, {
+          variables: {
+            id: pid,
+          },
+        });
         const data = await response.json();
         if (response.ok) {
           // console.log("data", JSON.stringify(data), data);
@@ -73,14 +60,11 @@ const GetProductDetails = async (pids, productId, shop) => {
 
 const CartLevelDetails = async (cartToken, storefront) => {
   const cartId = `gid://shopify/Cart/${cartToken}`;
-  const response = await storefront.graphql(
-    FETCH_STOREFRONT_CART_DETAILS,
-    {
-      variables: {
-        cartId: cartId
-      }
-    }
-  );
+  const response = await storefront.graphql(FETCH_STOREFRONT_CART_DETAILS, {
+    variables: {
+      cartId: cartId,
+    },
+  });
   const cartData = await response.json();
   console.log('cartData', JSON.stringify(cartData));
   return cartData;
@@ -101,12 +85,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cartToken = url.searchParams.get('cartToken');
   const { storefront } = await unauthenticated.storefront(shop);
 
-  const [shopQueryPromise, cartDataJsonResponse] = await Promise.all([
-    storefront.graphql(
-      FETCH_STOREFRONT_SHOP_NAME
-    ),
-    CartLevelDetails(cartToken, storefront),
-  ]);
+  const [shopQueryPromise, cartDataJsonResponse] = await Promise.all([storefront.graphql(FETCH_STOREFRONT_SHOP_NAME), CartLevelDetails(cartToken, storefront)]);
 
   const response = await shopQueryPromise.json();
   console.log('response', response);
@@ -146,9 +125,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .filter((offer) => {
       const offerContent = JSON.parse(offer.offerContent);
       console.log('offerContent', offerContent.trigger);
-      const pids: string[] = offerContent.trigger.products?.map(
-        (product) => product.pid
-      );
+      const pids: string[] = offerContent.trigger.products?.map((product) => product.pid);
       console.log('pids', pids);
       // let fbtProducts;
       if (pids?.includes(pid) || offerContent.trigger.type === 'all_products') {
@@ -164,13 +141,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         const v = a.otherPriorities?.offerPriority;
         return v === undefined || v === null ? 0 : Number(v);
       };
-      return a == null
-        ? b
-        : b == null
-          ? a
-          : Priority(a.offerContent) > Priority(b.offerContent)
-            ? a
-            : b;
+      return a == null ? b : b == null ? a : Priority(a.offerContent) > Priority(b.offerContent) ? a : b;
     }, null); // Initialize with `null` in case no offers match
 
   let variantsList = null;
@@ -181,18 +152,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   let discountTitle = null;
   if (highestValueOffer !== null) {
     const offerContent = JSON.parse(highestValueOffer.offerContent);
-    const productList = offerContent.offerProducts?.assets?.products.map(
-      (product) => product.pid
-    );
+    const productList = offerContent.offerProducts?.assets?.products.map((product) => product.pid);
     variantsList = await GetProductDetails(productList, pid, shop);
     defaultWidgetTitle = offerContent.otherPriorities?.defaultWidgetTitle;
     const discountState = offerContent?.discountState;
 
     console.log('discountState', discountState, offerContent);
 
-    discountText = discountState?.isEnabled
-      ? discountState?.discountText
-      : null;
+    discountText = discountState?.isEnabled ? discountState?.discountText : null;
     if (discountState?.isEnabled) {
       if (discountState?.selectedType === 'percentOrFixed') {
         discountAmount = discountState?.discountValue;

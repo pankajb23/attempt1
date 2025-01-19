@@ -28,33 +28,17 @@ export default function TriggerCheckbox({ offerType }) {
       case 'specific_products':
         return (
           <>
-            <SpecificProducts
-              selectedProducts={selectedProducts}
-              property={'trigger.products'}
-              showButton={true}
-            />
-            {isSubmitted &&
-              triggerType === 'specific_products' &&
-              selectedProducts.length === 0 && (
-                <InlineError
-                  message="Please select at least one product"
-                  fieldID="trigger-type"
-                />
-              )}
+            <SpecificProducts selectedProducts={selectedProducts} property={'trigger.products'} showButton={true} />
+            {isSubmitted && triggerType === 'specific_products' && selectedProducts.length === 0 && (
+              <InlineError message="Please select at least one product" fieldID="trigger-type" />
+            )}
           </>
         );
       case 'tags':
         return (
           <>
             <SelectTags tags={selectedTags} />
-            {isSubmitted &&
-              triggerType === 'tags' &&
-              selectedTags.length === 0 && (
-                <InlineError
-                  message="Please select at least one tag"
-                  fieldID="trigger-type"
-                />
-              )}
+            {isSubmitted && triggerType === 'tags' && selectedTags.length === 0 && <InlineError message="Please select at least one tag" fieldID="trigger-type" />}
           </>
         );
       case 'all_products':

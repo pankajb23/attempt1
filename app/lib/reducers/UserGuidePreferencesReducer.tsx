@@ -4,39 +4,27 @@ import { type UserGuidePreferences } from 'app/types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const userGuidePreferences: UserGuidePreferencesService =
-  new UserGuidePreferencesService();
+const userGuidePreferences: UserGuidePreferencesService = new UserGuidePreferencesService();
 
 // Create async thunks for API calls
-export const updateAssistanceOnMainPageThunk = createAsyncThunk(
-  'userPreferences/updateAssistance',
-  async (isEnabled: boolean, thunkAPI) => {
-    try {
-      console.log('userPreferences pressed ' + isEnabled);
-      const response =
-        await userGuidePreferences.updateShowAssistanceOnMainPageEnabled(
-          isEnabled
-        );
-      console.log(
-        'userPreferences post ' + isEnabled + ' response ' + response
-      );
-      return isEnabled;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error('Update failed:', err);
-        return thunkAPI.rejectWithValue(err.message);
-      }
+export const updateAssistanceOnMainPageThunk = createAsyncThunk('userPreferences/updateAssistance', async (isEnabled: boolean, thunkAPI) => {
+  try {
+    console.log('userPreferences pressed ' + isEnabled);
+    const response = await userGuidePreferences.updateShowAssistanceOnMainPageEnabled(isEnabled);
+    console.log('userPreferences post ' + isEnabled + ' response ' + response);
+    return isEnabled;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error('Update failed:', err);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
-);
+});
 
-export const updateWarningOnOfferPageThunk = createAsyncThunk(
-  'userPreferences/updateWarning',
-  async (isEnabled: boolean) => {
-    await userGuidePreferences.updateShowWarningOnOfferPageEnabled(isEnabled);
-    return isEnabled;
-  }
-);
+export const updateWarningOnOfferPageThunk = createAsyncThunk('userPreferences/updateWarning', async (isEnabled: boolean) => {
+  await userGuidePreferences.updateShowWarningOnOfferPageEnabled(isEnabled);
+  return isEnabled;
+});
 
 const userOnboardingStatesSlicer = createSlice({
   name: 'userAccessibilityReducer',
@@ -71,28 +59,18 @@ export const { setInitialState } = userOnboardingStatesSlicer.actions;
 
 //Selectors
 // Get the full user accessibility state
-export const selectUserAccessibility = (state) =>
-  state.userGuidePreferencesReducer;
+export const selectUserAccessibility = (state) => state.userGuidePreferencesReducer;
 
-export const selectShowAssistanceOnMainPage = (state) =>
-  state.userGuidePreferencesReducer.preferences
-    ?.isShowAssistanceOnMainPageEnabled;
+export const selectShowAssistanceOnMainPage = (state) => state.userGuidePreferencesReducer.preferences?.isShowAssistanceOnMainPageEnabled;
 
-export const selectShowWarningOnOfferPage = (state) =>
-  state.userGuidePreferencesReducer.preferences
-    ?.isShowWarningOnOfferPageEnabled;
+export const selectShowWarningOnOfferPage = (state) => state.userGuidePreferencesReducer.preferences?.isShowWarningOnOfferPageEnabled;
 
-export const selectIsLoading = (state) =>
-  state.userGuidePreferencesReducer.loading;
+export const selectIsLoading = (state) => state.userGuidePreferencesReducer.loading;
 
 // export
 export default userOnboardingStatesSlicer.reducer;
 
-export const UserGuidePreferencesInitializer = ({
-  userId,
-}: {
-  userId: string;
-}) => {
+export const UserGuidePreferencesInitializer = ({ userId }: { userId: string }) => {
   const dispatch = useDispatch();
   const isLoadingDone = useSelector((state) => selectIsLoading(state));
   useEffect(() => {

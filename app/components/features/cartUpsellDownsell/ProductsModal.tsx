@@ -1,16 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import {
-  Thumbnail,
-  Button,
-  Text,
-  LegacyCard,
-  ResourceItem,
-  ResourceList,
-  Avatar,
-  Icon,
-  InlineGrid,
-  InlineStack,
-} from '@shopify/polaris';
+import { Thumbnail, Button, Text, LegacyCard, ResourceItem, ResourceList, Avatar, Icon, InlineGrid, InlineStack } from '@shopify/polaris';
 import { ViewIcon, XSmallIcon } from '@shopify/polaris-icons';
 import AddProductsModal from '../common/AddProductsModal';
 import { useFormContext } from 'react-hook-form';
@@ -28,17 +17,9 @@ function SelectedProducts(selectedPids, all, handleProductChange) {
           items={pids}
           renderItem={(item) => {
             const { pid, label, img } = item;
-            const media = (
-              <Avatar customer size="md" name={label} source={img} />
-            );
+            const media = <Avatar customer size="md" name={label} source={img} />;
             return (
-              <ResourceItem
-                id={pid}
-                name={label}
-                media={media}
-                url={''}
-                accessibilityLabel={`View details for ${label}`}
-              >
+              <ResourceItem id={pid} name={label} media={media} url={''} accessibilityLabel={`View details for ${label}`}>
                 <InlineGrid columns={['twoThirds', 'oneThird']}>
                   <InlineStack>
                     <div style={{ width: '90%' }}>
@@ -75,34 +56,16 @@ function SelectedProducts(selectedPids, all, handleProductChange) {
   );
 }
 
-function AddProductModalComponent({
-  allProducts,
-  selectedIds,
-  handleProductChange,
-  modalId,
-}) {
+function AddProductModalComponent({ allProducts, selectedIds, handleProductChange, modalId }) {
   return (
     <div>
-      <AddProductsModal
-        allProducts={allProducts}
-        selectedProducts={selectedIds}
-        addSelectedProducts={handleProductChange}
-        modalId={modalId}
-        render={renderItem}
-      />
+      <AddProductsModal allProducts={allProducts} selectedProducts={selectedIds} addSelectedProducts={handleProductChange} modalId={modalId} render={renderItem} />
     </div>
   );
 }
 
-export default function ProductsModal({
-  allProducts,
-  selectedProducts,
-  property,
-  modalId,
-}) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(
-    new Set(selectedProducts)
-  );
+export default function ProductsModal({ allProducts, selectedProducts, property, modalId }) {
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set(selectedProducts));
 
   const { setValue } = useFormContext();
 
@@ -135,12 +98,7 @@ export default function ProductsModal({
   return (
     <div>
       {SelectedProducts(selectedIds, allProducts, handleProductChange)}
-      <AddProductModalComponent
-        allProducts={allProducts}
-        selectedIds={selectedIds}
-        handleProductChange={handleProductChange}
-        modalId={modalId}
-      />
+      <AddProductModalComponent allProducts={allProducts} selectedIds={selectedIds} handleProductChange={handleProductChange} modalId={modalId} />
     </div>
   );
 }

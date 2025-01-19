@@ -1,10 +1,5 @@
 import '@shopify/shopify-app-remix/adapters/node';
-import {
-  ApiVersion,
-  AppDistribution,
-  DeliveryMethod,
-  shopifyApp,
-} from '@shopify/shopify-app-remix/server';
+import { ApiVersion, AppDistribution, DeliveryMethod, shopifyApp } from '@shopify/shopify-app-remix/server';
 import { PrismaSessionStorage } from '@shopify/shopify-app-session-storage-prisma';
 import { restResources } from '@shopify/shopify-api/rest/admin/2024-10';
 import { PrismaClient } from '@prisma/client';
@@ -35,9 +30,7 @@ const shopify = shopifyApp({
   future: {
     unstable_newEmbeddedAuthStrategy: true,
   },
-  ...(process.env.SHOP_CUSTOM_DOMAIN
-    ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
-    : {}),
+  ...(process.env.SHOP_CUSTOM_DOMAIN ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] } : {}),
 });
 
 export const prismaClient = new PrismaClient();

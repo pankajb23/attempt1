@@ -75,9 +75,7 @@ export class ProductContainer extends HTMLElement {
 
   price() {
     const variantId = this.getSelectedVariantId();
-    const selectedVariant = this.product.variants?.nodes?.find(
-      (v) => v.id === variantId
-    );
+    const selectedVariant = this.product.variants?.nodes?.find((v) => v.id === variantId);
     return selectedVariant?.price?.amount ?? 0;
   }
 
@@ -128,14 +126,9 @@ export class ProductContainer extends HTMLElement {
     // If there is at least one variant, show its price by default
     const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
 
-    if (firstVariantPrice)
-      this.priceSpan.textContent = this.currencyFormat.replace(
-        this.regex,
-        firstVariantPrice
-      );
+    if (firstVariantPrice) this.priceSpan.textContent = this.currencyFormat.replace(this.regex, firstVariantPrice);
 
-    this.priceSpan.style.color =
-      this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
+    this.priceSpan.style.color = this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
     // TODO adding footer earlier than this.
     // Attach event listeners
     // const footer = document.querySelector("cross-footer");
@@ -154,14 +147,9 @@ export class ProductContainer extends HTMLElement {
     this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
 
     this.variantSelect.addEventListener('change', (e) => {
-      const selectedVariant = this.product.variants?.nodes?.find(
-        (v) => v.id === e.target.value
-      );
+      const selectedVariant = this.product.variants?.nodes?.find((v) => v.id === e.target.value);
       const newPrice = selectedVariant?.price?.amount ?? 0;
-      this.priceSpan.textContent = this.currencyFormat.replace(
-        this.regex,
-        newPrice
-      );
+      this.priceSpan.textContent = this.currencyFormat.replace(this.regex, newPrice);
 
       this.footer.updatePrice(this.product.id, newPrice, this.isChecked());
     });
@@ -169,9 +157,7 @@ export class ProductContainer extends HTMLElement {
     this.checkbox.addEventListener('change', (e) => {
       // console.log("checkbox changed", e);
       const variantId = this.getSelectedVariantId();
-      const selectedVariant = this.product.variants?.nodes?.find(
-        (v) => v.id === variantId
-      );
+      const selectedVariant = this.product.variants?.nodes?.find((v) => v.id === variantId);
       const newPrice = selectedVariant?.price?.amount ?? 0;
       this.footer.updatePrice(this.product.id, newPrice, this.isChecked());
       // console.log(" changing opacity to ", this.isChecked());

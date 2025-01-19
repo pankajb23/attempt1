@@ -2,10 +2,7 @@ import { Layout, BlockStack, Card, Text, InlineGrid } from '@shopify/polaris';
 import { FormProvider, useForm } from 'react-hook-form';
 import HelpBottonModal from '../../common/HelpBottomModal';
 import TopHeadingBanner from '../../common/TopHeaderBanner';
-import {
-  CustomizePageType,
-  type TranslationComponent,
-} from '../../types/CustomizeTypes';
+import { CustomizePageType, type TranslationComponent } from '../../types/CustomizeTypes';
 import SettingsModal from './SettingsModal';
 import { Component } from '../frequentlyBoughtTogether/TextAndTranslations';
 import { TimerBlock } from '../cartAddOns/CartAddOnsPage';
@@ -55,18 +52,8 @@ function TranslationComponents() {
           <Component key={index} component={component} />
         ))}
         <InlineGrid columns={2} gap="200">
-          <TimerBlock
-            property={'upsell.translations.timer.minutes'}
-            heading={'Countdown timer'}
-            defaultValue={5}
-            suffix={'minutes'}
-          />
-          <TimerBlock
-            property={'upsell.translations.timer.seconds'}
-            heading={null}
-            defaultValue={0}
-            suffix={'seconds'}
-          />
+          <TimerBlock property={'upsell.translations.timer.minutes'} heading={'Countdown timer'} defaultValue={5} suffix={'minutes'} />
+          <TimerBlock property={'upsell.translations.timer.seconds'} heading={null} defaultValue={0} suffix={'seconds'} />
         </InlineGrid>
         <Text as="p" variant="bodySm">
           The countdown time will be displayed only when there is a discount.

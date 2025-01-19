@@ -4,12 +4,8 @@ export interface UseGuidePreferencesDAO {
   // this is an assumption for the time being.
   find(userId: string): Promise<UserGuidePreferences>;
   update(data: UserGuidePreferences): Promise<void>;
-  updateShowAssistanceOnMainPageEnabled(
-    isShowAssistanceOnMainPageEnabled: boolean
-  ): Promise<void>;
-  updateShowWarningOnOfferPageEnabled(
-    isShowWarningOnOfferPageEnabled: boolean
-  ): Promise<void>;
+  updateShowAssistanceOnMainPageEnabled(isShowAssistanceOnMainPageEnabled: boolean): Promise<void>;
+  updateShowWarningOnOfferPageEnabled(isShowWarningOnOfferPageEnabled: boolean): Promise<void>;
 }
 
 export class UserGuidePreferencesService {
@@ -28,20 +24,12 @@ export class UserGuidePreferencesService {
     return this.dao.update(data);
   }
 
-  updateShowAssistanceOnMainPageEnabled(
-    isShowAssistanceOnMainPageEnabled: boolean
-  ): Promise<void> {
-    return this.dao.updateShowAssistanceOnMainPageEnabled(
-      isShowAssistanceOnMainPageEnabled
-    );
+  updateShowAssistanceOnMainPageEnabled(isShowAssistanceOnMainPageEnabled: boolean): Promise<void> {
+    return this.dao.updateShowAssistanceOnMainPageEnabled(isShowAssistanceOnMainPageEnabled);
   }
 
-  updateShowWarningOnOfferPageEnabled(
-    isShowWarningOnOfferPageEnabled: boolean
-  ): Promise<void> {
-    return this.dao.updateShowWarningOnOfferPageEnabled(
-      isShowWarningOnOfferPageEnabled
-    );
+  updateShowWarningOnOfferPageEnabled(isShowWarningOnOfferPageEnabled: boolean): Promise<void> {
+    return this.dao.updateShowWarningOnOfferPageEnabled(isShowWarningOnOfferPageEnabled);
   }
 }
 
@@ -61,9 +49,7 @@ export class MockUserGuidePreferencesDAO implements UseGuidePreferencesDAO {
     return Promise.resolve();
   }
 
-  updateShowAssistanceOnMainPageEnabled(
-    isShowAssistanceOnMainPageEnabled: boolean
-  ): Promise<void> {
+  updateShowAssistanceOnMainPageEnabled(isShowAssistanceOnMainPageEnabled: boolean): Promise<void> {
     this.mockData = {
       ...this.mockData,
       isShowAssistanceOnMainPageEnabled,
@@ -72,9 +58,7 @@ export class MockUserGuidePreferencesDAO implements UseGuidePreferencesDAO {
     return Promise.resolve();
   }
 
-  updateShowWarningOnOfferPageEnabled(
-    isShowWarningOnOfferPageEnabled: boolean
-  ): Promise<void> {
+  updateShowWarningOnOfferPageEnabled(isShowWarningOnOfferPageEnabled: boolean): Promise<void> {
     this.mockData = {
       ...this.mockData,
       isShowWarningOnOfferPageEnabled,

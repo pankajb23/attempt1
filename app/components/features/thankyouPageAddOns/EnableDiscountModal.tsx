@@ -1,12 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import {
-  BlockStack,
-  Card,
-  Checkbox,
-  Text,
-  TextField,
-  Select,
-} from '@shopify/polaris';
+import { BlockStack, Card, Checkbox, Text, TextField, Select } from '@shopify/polaris';
 
 export default function EnableDiscountModal() {
   const { watch, control } = useFormContext();
@@ -63,15 +56,7 @@ export default function EnableDiscountModal() {
                       control={control}
                       name="discountState.discountUnit"
                       defaultValue={discountedUnit}
-                      render={({ field: { onChange, value } }) => (
-                        <Select
-                          value={value}
-                          label="Weight unit"
-                          onChange={onChange}
-                          labelHidden
-                          options={['%', 'Inr']}
-                        />
-                      )}
+                      render={({ field: { onChange, value } }) => <Select value={value} label="Weight unit" onChange={onChange} labelHidden options={['%', 'Inr']} />}
                     />
                   }
                 />

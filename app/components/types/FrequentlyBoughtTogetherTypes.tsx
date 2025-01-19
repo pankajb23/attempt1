@@ -4,10 +4,7 @@ export interface OtherPriorities {
 }
 
 // Enum for discount types (radio button options)
-export type DiscountTypeEnum =
-  | 'percentOrFixed'
-  | 'cheapestItemFree'
-  | 'freeShipping';
+export type DiscountTypeEnum = 'percentOrFixed' | 'cheapestItemFree' | 'freeShipping';
 
 // Common combination type
 export interface DiscountCombination {

@@ -1,21 +1,7 @@
-import {
-  InlineStack,
-  Button,
-  Text,
-  BlockStack,
-  Card,
-  Badge,
-} from '@shopify/polaris';
+import { InlineStack, Button, Text, BlockStack, Card, Badge } from '@shopify/polaris';
 import { useTranslation } from 'react-i18next';
 
-export default function OfferWidget({
-  header,
-  message,
-  img,
-  navigateTo,
-  offerType,
-  badge,
-}) {
+export default function OfferWidget({ header, message, img, navigateTo, offerType, badge }) {
   const { t } = useTranslation();
 
   const badgeLabel =
@@ -51,11 +37,7 @@ export default function OfferWidget({
             </Text>
           </BlockStack>
           <InlineStack align="end" blockAlign="end" gap="1000">
-            <Button
-              textAlign="end"
-              variant="primary"
-              onClick={() => navigateTo(offerType)}
-            >
+            <Button textAlign="end" variant="primary" onClick={() => navigateTo(offerType)}>
               {t('offer.widget.create')}
             </Button>
           </InlineStack>

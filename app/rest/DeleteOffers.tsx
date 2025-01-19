@@ -1,9 +1,4 @@
-export default async function DeleteOffers(
-  selectedResources: string[],
-  storeId,
-  setModalsAndStoreId,
-  handleSelectionChange
-) {
+export default async function DeleteOffers(selectedResources: string[], storeId, setModalsAndStoreId, handleSelectionChange) {
   await fetch(`api/offers/delete`, {
     method: 'POST',
     headers: {

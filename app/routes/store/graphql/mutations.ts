@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING = 
-`#graphql
+export const CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING = `#graphql
     mutation discountCodeFreeShippingCreate($freeShippingCodeDiscount: DiscountCodeFreeShippingInput!) {
         discountCodeFreeShippingCreate(freeShippingCodeDiscount: $freeShippingCodeDiscount) {
         codeDiscountNode {
@@ -47,8 +46,7 @@ export const CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING =
         }
     }`;
 
-export const CREATE_DISCOUNTCODE_FOR_BX_GY_OFFER = 
-`#graphql
+export const CREATE_DISCOUNTCODE_FOR_BX_GY_OFFER = `#graphql
 mutation discountCodeBxgyCreate($bxgyCodeDiscount: DiscountCodeBxgyInput!) {
     discountCodeBxgyCreate(bxgyCodeDiscount: $bxgyCodeDiscount) {
       codeDiscountNode {
@@ -99,8 +97,7 @@ mutation discountCodeBxgyCreate($bxgyCodeDiscount: DiscountCodeBxgyInput!) {
     }
   }}`;
 
-export const CREATE_BASIC_DISCOUNT_CODE = 
-`#graphql
+export const CREATE_BASIC_DISCOUNT_CODE = `#graphql
   mutation discountCodeBasicCreate($basicCodeDiscount: DiscountCodeBasicInput!) {
     discountCodeBasicCreate(basicCodeDiscount: $basicCodeDiscount) {
       codeDiscountNode {
@@ -144,8 +141,7 @@ export const CREATE_BASIC_DISCOUNT_CODE =
     }
   }`;
 
-export const CART_LINES_ADD =
-  `#graphql
+export const CART_LINES_ADD = `#graphql
   mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
   cartLinesAdd(cartId: $cartId, lines: $lines) {
     cart {
@@ -185,10 +181,9 @@ export const CART_LINES_ADD =
       message
     }
   }
-}`
+}`;
 
-export const CART_LINES_UPDATE = 
-`#graphql
+export const CART_LINES_UPDATE = `#graphql
         mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
         cart {
@@ -227,10 +222,9 @@ export const CART_LINES_UPDATE =
         message
         }
     }
-}`
+}`;
 
-export const CART_DISCOUNT_CODES_UPDATE = 
-  `#graphql
+export const CART_DISCOUNT_CODES_UPDATE = `#graphql
   mutation cartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
   cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
     cart {
@@ -245,10 +239,9 @@ export const CART_DISCOUNT_CODES_UPDATE =
       message
     }
   }
-}`
+}`;
 
-export const VARIANT_PRICES = 
-`#graphql
+export const VARIANT_PRICES = `#graphql
                 query GetVariantPrices($pid: ID!){
                   product(id: $pid) {
                     id
@@ -261,5 +254,4 @@ export const VARIANT_PRICES =
                       }
                     }
                   }
-                }`
-              
+                }`;

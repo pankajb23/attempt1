@@ -32,10 +32,7 @@ export default function IndexFiltersWithNoFiltersExample({ onShowOfferPage }) {
 
   const [queryValue, setQueryValue] = useState('');
 
-  const handleFiltersQueryChange = useCallback(
-    (value: string) => setQueryValue(value),
-    []
-  );
+  const handleFiltersQueryChange = useCallback((value: string) => setQueryValue(value), []);
 
   // const styledTabs = tabs.map(tab => ({
   //     ...tab,

@@ -31,8 +31,7 @@ function CheckboxModal({ property, heading, helpText, dependsOn }) {
   const { control, watch } = useFormContext();
 
   const propertyValue = watch(property) ?? false;
-  const dependsOnValue =
-    dependsOn !== null ? (watch(dependsOn) ?? false) : false;
+  const dependsOnValue = dependsOn !== null ? (watch(dependsOn) ?? false) : false;
 
   return (
     <Controller
@@ -92,9 +91,7 @@ export default function SettingsModal() {
         <CheckboxModal
           property={'addingMultipleVariants'}
           heading={'Allow adding multiple variants'}
-          helpText={
-            'If enabled multiple variants of the same product can be added to cart.'
-          }
+          helpText={'If enabled multiple variants of the same product can be added to cart.'}
           dependsOn={null}
         />
         <CheckboxModal
@@ -109,12 +106,7 @@ export default function SettingsModal() {
           helpText={'Set free shipping for thank you page add-ons order.'}
           dependsOn={null}
         />
-        <CheckboxModal
-          property={'disableThankYouPageAddOnsWidget'}
-          heading={'Disable Thank you page add-ons widget'}
-          helpText={null}
-          dependsOn={null}
-        />
+        <CheckboxModal property={'disableThankYouPageAddOnsWidget'} heading={'Disable Thank you page add-ons widget'} helpText={null} dependsOn={null} />
       </BlockStack>
     </Card>
   );

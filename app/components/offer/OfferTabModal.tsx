@@ -37,10 +37,7 @@ function RowData({ allOffers, openPage }) {
   const pageSize = 10;
   const totalItems = allOffers.length;
   const totalPages = Math.ceil(totalItems / pageSize);
-  const currentPageOffers = allOffers.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
+  const currentPageOffers = allOffers.slice((page - 1) * pageSize, page * pageSize);
 
   const ordersWithId = currentPageOffers.map((offer, index) => {
     // index here is 0-based for the current page, so for uniqueness you can offset by page
@@ -48,32 +45,15 @@ function RowData({ allOffers, openPage }) {
     return { ...offer, id: globalIndex };
   });
 
-  const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(ordersWithId);
+  const { selectedResources, allResourcesSelected, handleSelectionChange } = useIndexResourceState(ordersWithId);
 
   const areAllSelectedOnesActive =
-    selectedResources.length === 0
-      ? false
-      : selectedResources
-          .map(Number)
-          .every(
-            (idx) =>
-              ordersWithId[idx - (page - 1) * pageSize].status === 'active'
-          );
+    selectedResources.length === 0 ? false : selectedResources.map(Number).every((idx) => ordersWithId[idx - (page - 1) * pageSize].status === 'active');
 
   const areAllSelectedOnesDraft =
-    selectedResources.length === 0
-      ? false
-      : selectedResources
-          .map(Number)
-          .every(
-            (idx) =>
-              ordersWithId[idx - (page - 1) * pageSize].status === 'draft'
-          );
+    selectedResources.length === 0 ? false : selectedResources.map(Number).every((idx) => ordersWithId[idx - (page - 1) * pageSize].status === 'draft');
 
-  const selectedOfferIds = selectedResources
-    .map(Number)
-    .map((idx) => ordersWithId[idx - (page - 1) * pageSize].offerId);
+  const selectedOfferIds = selectedResources.map(Number).map((idx) => ordersWithId[idx - (page - 1) * pageSize].offerId);
 
   const resourceName = {
     singular: 'order',
@@ -85,38 +65,19 @@ function RowData({ allOffers, openPage }) {
   const promotedBulkOptions = [
     {
       content: 'Enable',
-      onAction: async () =>
-        await ToggleOffers(
-          selectedOfferIds,
-          'active',
-          modalsAndStoreId.storeId,
-          setModalsAndStoreId,
-          handleSelectionChange
-        ),
+      onAction: async () => await ToggleOffers(selectedOfferIds, 'active', modalsAndStoreId.storeId, setModalsAndStoreId, handleSelectionChange),
       disabled: areAllSelectedOnesActive,
     },
     {
       content: 'Disable',
-      onAction: async () =>
-        await ToggleOffers(
-          selectedOfferIds,
-          'draft',
-          modalsAndStoreId.storeId,
-          setModalsAndStoreId,
-          handleSelectionChange
-        ),
+      onAction: async () => await ToggleOffers(selectedOfferIds, 'draft', modalsAndStoreId.storeId, setModalsAndStoreId, handleSelectionChange),
       disabled: areAllSelectedOnesDraft,
     },
     {
       content: 'Delete',
       onAction: async () => {
         console.log('Deleteing ids', [selectedOfferIds]);
-        await DeleteOffers(
-          selectedOfferIds,
-          modalsAndStoreId.storeId,
-          setModalsAndStoreId,
-          handleSelectionChange
-        );
+        await DeleteOffers(selectedOfferIds, modalsAndStoreId.storeId, setModalsAndStoreId, handleSelectionChange);
       },
       disabled: false,
     },
@@ -145,14 +106,7 @@ function RowData({ allOffers, openPage }) {
           <BlockStack gap="100">
             {
               <div style={{ width: '30px' }}>
-                <Button
-                  dataPrimaryLink={true}
-                  removeUnderline={false}
-                  variant="monochromePlain"
-                  fullWidth={false}
-                  size="micro"
-                  textAlign="left"
-                >
+                <Button dataPrimaryLink={true} removeUnderline={false} variant="monochromePlain" fullWidth={false} size="micro" textAlign="left">
                   {wrap(offer.offerName)}
                 </Button>
               </div>
@@ -168,9 +122,7 @@ function RowData({ allOffers, openPage }) {
           </BlockStack>
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <Badge tone={offer.status === 'active' ? 'success' : 'info'}>
-            {offer.status}
-          </Badge>
+          <Badge tone={offer.status === 'active' ? 'success' : 'info'}>{offer.status}</Badge>
         </IndexTable.Cell>
         {/* <IndexTable.Cell><Badge tone="info">{offer.offerType}</Badge></IndexTable.Cell> */}
         <IndexTable.Cell>{formatDate(offer.createdAt)}</IndexTable.Cell>
@@ -186,9 +138,7 @@ function RowData({ allOffers, openPage }) {
       condensed={useBreakpoints().smDown}
       resourceName={resourceName}
       itemCount={allOffers.length}
-      selectedItemsCount={
-        allResourcesSelected ? 'All' : selectedResources.length
-      }
+      selectedItemsCount={allResourcesSelected ? 'All' : selectedResources.length}
       onSelectionChange={handleSelectionChange}
       promotedBulkActions={promotedBulkOptions}
       headings={[
@@ -237,10 +187,7 @@ export default function OfferTabModal({ onShowOfferPage, openPage }) {
 
   const [queryValue, setQueryValue] = useState('');
 
-  const handleFiltersQueryChange = useCallback(
-    (value: string) => setQueryValue(value),
-    []
-  );
+  const handleFiltersQueryChange = useCallback((value: string) => setQueryValue(value), []);
 
   // const styledTabs = tabs.map(tab => ({
   //     ...tab,
@@ -260,9 +207,7 @@ export default function OfferTabModal({ onShowOfferPage, openPage }) {
         <Card padding="100">
           <IndexFilters
             queryValue={queryValue}
-            queryPlaceholder={
-              'Search buy product name, trigger product or trigger tag'
-            }
+            queryPlaceholder={'Search buy product name, trigger product or trigger tag'}
             onQueryChange={handleFiltersQueryChange}
             onQueryClear={() => setQueryValue('')}
             cancelAction={{
@@ -281,9 +226,7 @@ export default function OfferTabModal({ onShowOfferPage, openPage }) {
             mode={mode}
             setMode={setMode}
             hideFilters
-            filteringAccessibilityTooltip={t(
-              'offer.dashboard.placeholder.accessiblity_tool_tip'
-            )}
+            filteringAccessibilityTooltip={t('offer.dashboard.placeholder.accessiblity_tool_tip')}
           />
           {allOffers.length > 0 ? (
             <RowData allOffers={allOffers} openPage={openPage} />

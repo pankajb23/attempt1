@@ -1,20 +1,11 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  Select,
-  TextField,
-  InlineGrid,
-  Checkbox,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, Select, TextField, InlineGrid, Checkbox } from '@shopify/polaris';
 import ButtonWithColorAndPopup from '../common/ButtonWithColorAndPopup';
 import NumberTextField from '../common/NumberTextFieldModal';
 import { useFormContext, Controller } from 'react-hook-form';
 
 export function TitleFontWeight({ property, options }) {
   const { watch, control } = useFormContext();
-  const titleFontWeight =
-    watch('stylingModal.titleFontWeight') ?? 'Auto-detect';
+  const titleFontWeight = watch('stylingModal.titleFontWeight') ?? 'Auto-detect';
   return (
     <Controller
       control={control}
@@ -72,18 +63,9 @@ export function Padding({ heading, property }) {
       </Text>
       <InlineGrid columns="4" gap="200">
         <NumberField property={`stylingModal.${property}.top`} heading="Top" />
-        <NumberField
-          property={`stylingModal.${property}.bottom`}
-          heading="Bottom"
-        />
-        <NumberField
-          property={`stylingModal.${property}.left`}
-          heading="Left"
-        />
-        <NumberField
-          property={`stylingModal.${property}.right`}
-          heading="Right"
-        />
+        <NumberField property={`stylingModal.${property}.bottom`} heading="Bottom" />
+        <NumberField property={`stylingModal.${property}.left`} heading="Left" />
+        <NumberField property={`stylingModal.${property}.right`} heading="Right" />
       </InlineGrid>
     </BlockStack>
   );
@@ -91,8 +73,7 @@ export function Padding({ heading, property }) {
 
 function FullWidthWidgetCheckbox() {
   const { control, watch } = useFormContext();
-  const fullWidthWidget =
-    watch('stylingModal.isEnabledFullWidthWidget') ?? false;
+  const fullWidthWidget = watch('stylingModal.isEnabledFullWidthWidget') ?? false;
   return (
     <Controller
       control={control}
@@ -136,19 +117,9 @@ export default function StylingModal() {
           {' '}
           Styling
         </Text>
-        <ButtonWithColorAndPopup
-          header={'Background color'}
-          property={'stylingModal.bgcolor'}
-        />
-        <NumberTextField
-          property={'stylingModal.titleFontSize'}
-          placeholder={'Auto-detect'}
-          heading={'Title font size'}
-        />
-        <TitleFontWeight
-          property={'stylingModal.titleFontWeight'}
-          options={titleFontWeightOptions}
-        />
+        <ButtonWithColorAndPopup header={'Background color'} property={'stylingModal.bgcolor'} />
+        <NumberTextField property={'stylingModal.titleFontSize'} placeholder={'Auto-detect'} heading={'Title font size'} />
+        <TitleFontWeight property={'stylingModal.titleFontWeight'} options={titleFontWeightOptions} />
         <Padding heading="Padding" property="padding" />
         <Padding heading="Margin" property="margin" />
         <FullWidthWidgetCheckbox />

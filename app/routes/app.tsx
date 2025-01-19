@@ -1,8 +1,4 @@
-import type {
-  HeadersFunction,
-  LoaderFunctionArgs,
-  ActionFunctionArgs,
-} from '@remix-run/node';
+import type { HeadersFunction, LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, Outlet, useLoaderData, useRouteError } from '@remix-run/react';
 import { boundary } from '@shopify/shopify-app-remix/server';

@@ -28,16 +28,7 @@ export default function CustomCssModal() {
           control={control}
           defaultValue={textFieldValue}
           name="customCss"
-          render={({ field: { value, onChange } }) => (
-            <TextField
-              label=""
-              value={value}
-              multiline={15}
-              onChange={onChange}
-              autoComplete="off"
-              placeholder={placeholder}
-            />
-          )}
+          render={({ field: { value, onChange } }) => <TextField label="" value={value} multiline={15} onChange={onChange} autoComplete="off" placeholder={placeholder} />}
         />
       </BlockStack>
     </Card>

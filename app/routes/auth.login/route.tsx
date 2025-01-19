@@ -2,15 +2,7 @@ import { useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
-import {
-  AppProvider as PolarisAppProvider,
-  Button,
-  Card,
-  FormLayout,
-  Page,
-  Text,
-  TextField,
-} from '@shopify/polaris';
+import { AppProvider as PolarisAppProvider, Button, Card, FormLayout, Page, Text, TextField } from '@shopify/polaris';
 import polarisTranslations from '@shopify/polaris/locales/en.json';
 import polarisStyles from '@shopify/polaris/build/esm/styles.css?url';
 
@@ -49,16 +41,7 @@ export default function Auth() {
               <Text variant="headingMd" as="h2">
                 Log in
               </Text>
-              <TextField
-                type="text"
-                name="shop"
-                label="Shop domain"
-                helpText="example.myshopify.com"
-                value={shop}
-                onChange={setShop}
-                autoComplete="on"
-                error={errors.shop}
-              />
+              <TextField type="text" name="shop" label="Shop domain" helpText="example.myshopify.com" value={shop} onChange={setShop} autoComplete="on" error={errors.shop} />
               <Button submit>Log in</Button>
             </FormLayout>
           </Form>

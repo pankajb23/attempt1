@@ -1,21 +1,8 @@
-import {
-  AppType,
-  Provider as GadgetProvider,
-  useGadget,
-} from '@gadgetinc/react-shopify-app-bridge';
+import { AppType, Provider as GadgetProvider, useGadget } from '@gadgetinc/react-shopify-app-bridge';
 import { NavMenu } from '@shopify/app-bridge-react';
 import { Box, Card, Page, Spinner, Text } from '@shopify/polaris';
 import { useEffect } from 'react';
-import {
-  Link,
-  Outlet,
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-  useLocation,
-  useNavigate,
-} from 'react-router';
+import { Link, Outlet, Route, RouterProvider, createBrowserRouter, createRoutesFromElements, useLocation, useNavigate } from 'react-router';
 import { api } from '../api';
 import AboutPage from '../routes/about';
 import Index from '../routes/index';
@@ -56,11 +43,7 @@ function App() {
 
 function Layout() {
   return (
-    <GadgetProvider
-      type={AppType.Embedded}
-      shopifyApiKey={window.gadgetConfig.apiKeys.shopify}
-      api={api}
-    >
+    <GadgetProvider type={AppType.Embedded} shopifyApiKey={window.gadgetConfig.apiKeys.shopify} api={api}>
       <AuthenticatedApp />
     </GadgetProvider>
   );
@@ -111,12 +94,7 @@ function UnauthenticatedApp() {
           </Text>
           <Box paddingBlockStart="200">
             <Text variant="bodyLg" as="p">
-              Edit this page:{' '}
-              <a
-                href={`/edit/${process.env.GADGET_PUBLIC_APP_ENV}/files/web/components/App.tsx`}
-              >
-                web/components/App.tsx
-              </a>
+              Edit this page: <a href={`/edit/${process.env.GADGET_PUBLIC_APP_ENV}/files/web/components/App.tsx`}>web/components/App.tsx</a>
             </Text>
           </Box>
         </Card>

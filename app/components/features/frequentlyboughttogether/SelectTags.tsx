@@ -7,14 +7,7 @@ import { useStoreContext } from 'app/lib/context/StoreContext';
 function TagsUI(selectedTags, allTags, handleTagsChange) {
   const tags = allTags.filter((tag) => selectedTags.has(tag.id));
 
-  console.log(
-    'tags ',
-    tags,
-    'selectedTags ',
-    selectedTags,
-    'allTags ',
-    allTags
-  );
+  console.log('tags ', tags, 'selectedTags ', selectedTags, 'allTags ', allTags);
   return Array.from(tags).map((tag) => (
     <Tag
       key={tag.id}
@@ -40,19 +33,13 @@ export default function SelectTags({ tags }) {
   });
 
   const findTagsForIds = (ids: string[]) => {
-    return allTags
-      .filter((tag) => ids.includes(tag.id))
-      .map((tag) => tag.label);
+    return allTags.filter((tag) => ids.includes(tag.id)).map((tag) => tag.label);
   };
 
   const findIdsForTags = (tags: string[]) => {
-    return allTags
-      .filter((tag) => tags.includes(tag.label))
-      .map((tag) => tag.id);
+    return allTags.filter((tag) => tags.includes(tag.label)).map((tag) => tag.id);
   };
-  const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(
-    new Set(findIdsForTags(tags))
-  );
+  const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(new Set(findIdsForTags(tags)));
 
   useEffect(() => {
     setSelectedTagIds(new Set(findIdsForTags(tags)));
@@ -96,12 +83,7 @@ export default function SelectTags({ tags }) {
           });
           const selected = await picker.selected;
           handleTagsChange(selected);
-          console.log(
-            'Selected tags',
-            selected,
-            'tags ',
-            findTagsForIds(selected)
-          );
+          console.log('Selected tags', selected, 'tags ', findTagsForIds(selected));
         }}
       >
         <Text as="h6" fontWeight="bold" variant="bodySm">

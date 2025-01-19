@@ -1,42 +1,14 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  TextField,
-  InlineGrid,
-  Button,
-  Select,
-  InlineError,
-  Divider,
-  Tabs,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, TextField, InlineGrid, Button, Select, InlineError, Divider, Tabs } from '@shopify/polaris';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import ProductsModal from './ProductsModal';
 import { DeleteIcon } from '@shopify/polaris-icons';
 
-function TextFieldModal({
-  property,
-  heading,
-  defaultValue,
-  helpText,
-  placeholder,
-}) {
+function TextFieldModal({ property, heading, defaultValue, helpText, placeholder }) {
   const { watch, control } = useFormContext();
   const propertyValue = watch(property) ?? defaultValue;
 
-  console.log(
-    'TextFieldModal property ',
-    property,
-    ' propertyValue ',
-    propertyValue,
-    'helpText ',
-    helpText,
-    'defaultValue ',
-    defaultValue,
-    'placeholder ',
-    placeholder
-  );
+  console.log('TextFieldModal property ', property, ' propertyValue ', propertyValue, 'helpText ', helpText, 'defaultValue ', defaultValue, 'placeholder ', placeholder);
   return (
     <Controller
       control={control}
@@ -64,20 +36,12 @@ function CommonTextFieldModal({ index, discountDefaultValue }) {
   // console.log("CommonTextFieldModal index ", index, " discountDefaultValue ", discountDefaultValue);
   return (
     <BlockStack gap="300">
-      <TextFieldModal
-        property={`cart.offerTitle.${index}`}
-        heading="Offer title"
-        defaultValue="You might also like this."
-        helpText={null}
-        placeholder={null}
-      />
+      <TextFieldModal property={`cart.offerTitle.${index}`} heading="Offer title" defaultValue="You might also like this." helpText={null} placeholder={null} />
       <TextFieldModal
         property={`cart.offerDiscountTitle.${index}`}
         heading="Offer discount title"
         defaultValue={discountDefaultValue}
-        helpText={
-          'This will override the offer title when there is a discount.'
-        }
+        helpText={'This will override the offer title when there is a discount.'}
         placeholder={null}
       />
       <TextFieldModal
@@ -103,25 +67,12 @@ function ProductSelection({ allProducts, index, modalId }) {
     // { label: 'by Variants', value: 'tags' },
   ];
   const triggerType = watch(`offerProducts.assets.type.${index}`) ?? 'products';
-  const selectedProducts =
-    watch(`offerProducts.assets.products.${index}`) || [];
+  const selectedProducts = watch(`offerProducts.assets.products.${index}`) || [];
   return (
     <>
       <BlockStack gap="100">
-        <ProductsModal
-          allProducts={allProducts}
-          selectedProducts={selectedProducts}
-          property={`offerProducts.assets.products.${index}`}
-          modalId={modalId}
-        />
-        {isSubmitted &&
-          triggerType === 'products' &&
-          selectedProducts.length === 0 && (
-            <InlineError
-              message="Upsell product is required."
-              fieldID="trigger-type"
-            />
-          )}
+        <ProductsModal allProducts={allProducts} selectedProducts={selectedProducts} property={`offerProducts.assets.products.${index}`} modalId={modalId} />
+        {isSubmitted && triggerType === 'products' && selectedProducts.length === 0 && <InlineError message="Upsell product is required." fieldID="trigger-type" />}
         <InlineGrid columns={4} gap="200">
           {/** @ts-ignore */}
           <Button
@@ -143,14 +94,7 @@ function ProductSelection({ allProducts, index, modalId }) {
             <Controller
               name={`offerProducts.assets.type.${index}`}
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <Select
-                  label={null}
-                  options={selectOption}
-                  onChange={onChange}
-                  value={value}
-                />
-              )}
+              render={({ field: { onChange, value } }) => <Select label={null} options={selectOption} onChange={onChange} value={value} />}
             />
           )}
         </InlineGrid>
@@ -162,29 +106,16 @@ function ProductSelection({ allProducts, index, modalId }) {
 function OfferBlock({ index, allProducts }) {
   const { watch, setValue } = useFormContext();
   const isOffserSet = watch(`offerProducts.${index}`);
-  const isOfferAcceptedOrDeclined =
-    watch(`offerProducts.${index}.isAcceptedOrDeclined`) ?? 'accepted';
+  const isOfferAcceptedOrDeclined = watch(`offerProducts.${index}.isAcceptedOrDeclined`) ?? 'accepted';
 
   const tabs = [
     {
       id: 'accepted',
-      content: (
-        <Text
-          as="p"
-          variant="bodySm"
-          fontWeight="bold"
-        >{`If offer #${index} is accepted`}</Text>
-      ),
+      content: <Text as="p" variant="bodySm" fontWeight="bold">{`If offer #${index} is accepted`}</Text>,
     },
     {
       id: 'denied',
-      content: (
-        <Text
-          as="p"
-          variant="bodySm"
-          fontWeight="bold"
-        >{`If offer #${index} is declined`}</Text>
-      ),
+      content: <Text as="p" variant="bodySm" fontWeight="bold">{`If offer #${index} is declined`}</Text>,
     },
   ];
   return (
@@ -207,8 +138,7 @@ function OfferBlock({ index, allProducts }) {
           </InlineGrid>
           <Text as="legend" variant="bodyMd">
             {' '}
-            Show another upsell or downsell when offer #{index} is accepted or
-            declined.{' '}
+            Show another upsell or downsell when offer #{index} is accepted or declined.{' '}
           </Text>
         </>
       )}
@@ -240,17 +170,8 @@ function OfferBlock({ index, allProducts }) {
           >
             {' '}
           </Tabs>
-          <ProductSelection
-            allProducts={allProducts}
-            index={index}
-            modalId={`my-modal-${index}`}
-          />
-          <CommonTextFieldModal
-            discountDefaultValue={
-              'Offer unlocked, buy this for {{discount}} off!'
-            }
-            index={1}
-          />
+          <ProductSelection allProducts={allProducts} index={index} modalId={`my-modal-${index}`} />
+          <CommonTextFieldModal discountDefaultValue={'Offer unlocked, buy this for {{discount}} off!'} index={1} />
         </>
       )}
 
@@ -280,15 +201,8 @@ export default function OfferProductModal({ allProducts }) {
           {' '}
           Offer product{' '}
         </Text>
-        <ProductSelection
-          allProducts={allProducts}
-          index={0}
-          modalId={'my-modal-0'}
-        />
-        <CommonTextFieldModal
-          index={0}
-          discountDefaultValue="You might also like this."
-        />
+        <ProductSelection allProducts={allProducts} index={0} modalId={'my-modal-0'} />
+        <CommonTextFieldModal index={0} discountDefaultValue="You might also like this." />
         <Divider />
         <OfferBlock index={1} allProducts={allProducts} />
       </BlockStack>

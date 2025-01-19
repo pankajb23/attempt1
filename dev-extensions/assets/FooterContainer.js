@@ -3,15 +3,7 @@ import { getHost } from './Host';
 import { log, error } from './Logging';
 
 export class Footer extends HTMLElement {
-  constructor(
-    UIConfigs,
-    currencyFormat,
-    offerId,
-    discountAmount,
-    discountMode,
-    variantsLength,
-    discountTitle
-  ) {
+  constructor(UIConfigs, currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle) {
     super();
     this.UIConfigs = UIConfigs;
     this.currencyFormat = currencyFormat;
@@ -55,23 +47,15 @@ export class Footer extends HTMLElement {
     // Apply styles from UIConfigs
     // Cache important elements
 
-    this.salePrice.style.color =
-      this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
-    this.crossedPrice.style.color =
-      this.UIConfigs[ConfigNames.TotalPriceCrossedOutTextColor];
+    this.salePrice.style.color = this.UIConfigs[ConfigNames.TotalPriceComponentTextColor];
+    this.crossedPrice.style.color = this.UIConfigs[ConfigNames.TotalPriceCrossedOutTextColor];
 
-    this.addToCartBtn.style.backgroundColor =
-      this.UIConfigs[ConfigNames.ButtonBackgroundColor];
-    this.addToCartBtn.style.borderRadius =
-      this.UIConfigs[ConfigNames.ButtonBorderRadius];
-    this.addToCartBtn.style.borderColor =
-      this.UIConfigs[ConfigNames.ButtonBorderColor];
-    this.addToCartBtn.style.textFamily =
-      this.UIConfigs[ConfigNames.ButtonTextFamily];
-    this.addToCartBtn.style.textColor =
-      this.UIConfigs[ConfigNames.ButtonTextColor];
-    this.addToCartBtn.style.borderWidth =
-      this.UIConfigs[ConfigNames.ButtonBorderWidth];
+    this.addToCartBtn.style.backgroundColor = this.UIConfigs[ConfigNames.ButtonBackgroundColor];
+    this.addToCartBtn.style.borderRadius = this.UIConfigs[ConfigNames.ButtonBorderRadius];
+    this.addToCartBtn.style.borderColor = this.UIConfigs[ConfigNames.ButtonBorderColor];
+    this.addToCartBtn.style.textFamily = this.UIConfigs[ConfigNames.ButtonTextFamily];
+    this.addToCartBtn.style.textColor = this.UIConfigs[ConfigNames.ButtonTextColor];
+    this.addToCartBtn.style.borderWidth = this.UIConfigs[ConfigNames.ButtonBorderWidth];
 
     this.addToCartBtn.addEventListener('click', () => {
       this.handleClick();
@@ -82,14 +66,12 @@ export class Footer extends HTMLElement {
 
   async handleClick() {
     // const productContainers = document.querySelectorAll("product-container");
-    const selectedProducts = Array.from(this.productContainers).map(
-      (container) => ({
-        productId: container.getProductId(),
-        variantId: container.getSelectedVariantId(),
-        isChecked: container.isChecked(),
-        price: container.getPrice(),
-      })
-    );
+    const selectedProducts = Array.from(this.productContainers).map((container) => ({
+      productId: container.getProductId(),
+      variantId: container.getSelectedVariantId(),
+      isChecked: container.isChecked(),
+      price: container.getPrice(),
+    }));
 
     // Request cart token
 
@@ -127,69 +109,33 @@ export class Footer extends HTMLElement {
 
     if (this.prices.size > 0) {
       this.addToCartBtn.disabled = false;
-      const totalPrice = Array.from(this.prices.values()).reduce(
-        (sum, p) => sum + p,
-        0
-      );
-      log(
-        'totalPrice',
-        totalPrice,
-        this.discountTitle,
-        this.discountMode,
-        this.discountAmount
-      );
+      const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
+      log('totalPrice', totalPrice, this.discountTitle, this.discountMode, this.discountAmount);
       if (this.discountTitle != null) {
         log('this.discountTitle', this.discountTitle);
-        if (
-          this.discountTitle === 'cheapestItemFree' &&
-          this.variantsLength == this.prices.size
-        ) {
+        if (this.discountTitle === 'cheapestItemFree' && this.variantsLength == this.prices.size) {
           log('cheapestItemFree');
           const cheapestPrice = Math.min(...Array.from(this.prices.values()));
           const newAmount = totalPrice - cheapestPrice;
-          this.salePrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(newAmount).toFixed(2)
-          );
-          this.crossedPrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(totalPrice).toFixed(2)
-          );
+          this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(newAmount).toFixed(2));
+          this.crossedPrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
         } else if (this.discountTitle === 'percentOrFixed') {
           log('percentOrFixed');
-          const discount =
-            this.discountMode === '%'
-              ? totalPrice * (parseFloat(this.discountAmount) / 100)
-              : parseFloat(this.discountAmount);
+          const discount = this.discountMode === '%' ? totalPrice * (parseFloat(this.discountAmount) / 100) : parseFloat(this.discountAmount);
           const newAmount = totalPrice - discount;
           log('newAmount', newAmount);
-          this.salePrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(newAmount).toFixed(2)
-          );
-          this.crossedPrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(totalPrice).toFixed(2)
-          );
+          this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(newAmount).toFixed(2));
+          this.crossedPrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
         } else {
-          this.salePrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(totalPrice).toFixed(2)
-          );
+          this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
           this.crossedPrice.textContent = null;
         }
       } else {
-        this.salePrice.textContent = this.currencyFormat.replace(
-          this.regex,
-          parseFloat(totalPrice).toFixed(2)
-        );
+        this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
         this.crossedPrice.textContent = null;
       }
     } else {
-      this.salePrice.textContent = this.currencyFormat.replace(
-        this.regex,
-        '0.00'
-      );
+      this.salePrice.textContent = this.currencyFormat.replace(this.regex, '0.00');
       this.crossedPrice.textContent = null;
       this.addToCartBtn.disabled = true;
     }

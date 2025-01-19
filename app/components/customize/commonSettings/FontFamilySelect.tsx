@@ -24,10 +24,7 @@ const fontFamilyOptions = [
   { label: 'Courier New', value: "'Courier New', Courier, monospace" },
 ];
 
-export default function FontFamilySelect({
-  property,
-  heading = 'Font family',
-}) {
+export default function FontFamilySelect({ property, heading = 'Font family' }) {
   const { control, watch } = useFormContext();
   const propertyValue = watch(property);
   return (

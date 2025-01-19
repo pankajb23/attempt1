@@ -5,8 +5,7 @@ function CheckboxModal({ property, heading, helpText, dependsOn }) {
   const { control, watch } = useFormContext();
 
   const propertyValue = watch(property) ?? false;
-  const dependsOnValue =
-    dependsOn !== null ? (watch(dependsOn) ?? false) : false;
+  const dependsOnValue = dependsOn !== null ? (watch(dependsOn) ?? false) : false;
 
   return (
     <Controller
@@ -49,12 +48,7 @@ export default function SettingsModal() {
           helpText="If enabled quantity picker will not be shown."
           dependsOn={'allowAddingMultiplevariants'}
         />
-        <CheckboxModal
-          property="disableCartAddOnsWidget"
-          heading="Disable Cart add-ons widget"
-          helpText={null}
-          dependsOn={null}
-        />
+        <CheckboxModal property="disableCartAddOnsWidget" heading="Disable Cart add-ons widget" helpText={null} dependsOn={null} />
       </BlockStack>
     </Card>
   );

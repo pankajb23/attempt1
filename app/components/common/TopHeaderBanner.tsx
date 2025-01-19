@@ -35,34 +35,20 @@ export default function TopHeadingBanner({
   const headingName = 'offerName';
   const offerName = watch(headingName);
 
-  const offerStatusBadge = statusTones[offerStatus] ? (
-    <Badge tone={statusTones[offerStatus].tone}>
-      {statusTones[offerStatus].label}
-    </Badge>
-  ) : null;
+  const offerStatusBadge = statusTones[offerStatus] ? <Badge tone={statusTones[offerStatus].tone}>{statusTones[offerStatus].label}</Badge> : null;
 
   return (
     <>
       <InlineStack gap="300" wrap={false}>
         <div style={{ marginTop: '1px' }}>
-          <Button
-            icon={ChevronLeftIcon}
-            variant="tertiary"
-            size="medium"
-            onClick={() => navigateTo(mainPage)}
-          />
+          <Button icon={ChevronLeftIcon} variant="tertiary" size="medium" onClick={() => navigateTo(mainPage)} />
         </div>
         {/* this width is to spread button to the right most.  */}
-        <div
-          style={{ width: '100%', paddingBottom: '4px', marginBottom: '4px' }}
-        >
+        <div style={{ width: '100%', paddingBottom: '4px', marginBottom: '4px' }}>
           <InlineGrid columns="1fr auto">
             <Text as="h5" variant="headingLg">
               {' '}
-              {offerName != null || offerName != undefined
-                ? offerName
-                : heading}{' '}
-              {offerStatusBadge}
+              {offerName != null || offerName != undefined ? offerName : heading} {offerStatusBadge}
             </Text>
             {saveOfferButton ? (
               <Button variant="primary" onClick={onSave}>

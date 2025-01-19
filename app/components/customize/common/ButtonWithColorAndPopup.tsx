@@ -3,17 +3,10 @@ import { useState, useCallback } from 'react';
 import ButtonPopup from '../common/ButtonPopup';
 import { Button, TextField, Text } from '@shopify/polaris';
 
-export default function ButtonWithColorAndPopup({
-  header,
-  property,
-  defaultValue,
-}) {
+export default function ButtonWithColorAndPopup({ header, property, defaultValue }) {
   const { watch, control } = useFormContext();
   const [popoverActive, setPopoverActive] = useState(false);
-  const togglePopoverActive = useCallback(
-    () => setPopoverActive((popoverActive) => !popoverActive),
-    []
-  );
+  const togglePopoverActive = useCallback(() => setPopoverActive((popoverActive) => !popoverActive), []);
   const backgroundColor = watch(property) ?? defaultValue;
   // console.log("property,  ", header, property, defaultValue, watch(property));
   const autoDetectColor = backgroundColor;
@@ -33,11 +26,7 @@ export default function ButtonWithColorAndPopup({
         overflow: 'hidden',
       }}
     >
-      <Button
-        variant="tertiary"
-        onClick={() => setPopoverActive(true)}
-        fullWidth={true}
-      >
+      <Button variant="tertiary" onClick={() => setPopoverActive(true)} fullWidth={true}>
         {buttonColor}
       </Button>
     </div>

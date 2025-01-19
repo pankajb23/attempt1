@@ -14,17 +14,12 @@ try {
 // Related: https://github.com/remix-run/remix/issues/2835#issuecomment-1144102176
 // Replace the HOST env var with SHOPIFY_APP_URL so that it doesn't break the remix server. The CLI will eventually
 // stop passing in HOST, so we can remove this workaround after the next major release.
-if (
-  process.env.HOST &&
-  (!process.env.SHOPIFY_APP_URL ||
-    process.env.SHOPIFY_APP_URL === process.env.HOST)
-) {
+if (process.env.HOST && (!process.env.SHOPIFY_APP_URL || process.env.SHOPIFY_APP_URL === process.env.HOST)) {
   process.env.SHOPIFY_APP_URL = process.env.HOST;
   delete process.env.HOST;
 }
 
-const host = new URL(process.env.SHOPIFY_APP_URL || 'http://localhost')
-  .hostname;
+const host = new URL(process.env.SHOPIFY_APP_URL || 'http://localhost').hostname;
 
 console.log('host pankaj host ', host);
 // console.log("process", JSON.stringify(process.env));
@@ -64,13 +59,7 @@ export default defineConfig({
       routes(defineRoutes) {
         return defineRoutes((route) => {
           // Manually define routes based on file system
-          const routesDir = path.resolve(
-            __dirname,
-            'app',
-            'routes',
-            'store',
-            'rest'
-          );
+          const routesDir = path.resolve(__dirname, 'app', 'routes', 'store', 'rest');
 
           function addRoutes(dir: string, basePath: string = '') {
             const files = fs.readdirSync(dir);
@@ -85,17 +74,11 @@ export default defineConfig({
               } else if (file.endsWith('.tsx') || file.endsWith('.ts')) {
                 // Convert filename to route path
                 const routeName = file.replace(/\.(tsx|ts)$/, '');
-                const routePath =
-                  routeName === 'index'
-                    ? basePath || '/'
-                    : path.join(basePath, routeName).replace(/\\/g, '/');
+                const routePath = routeName === 'index' ? basePath || '/' : path.join(basePath, routeName).replace(/\\/g, '/');
 
                 // Add route
                 console.log('routePath', routePath);
-                route(
-                  routePath,
-                  path.relative(path.resolve(__dirname, 'app'), fullPath)
-                );
+                route(routePath, path.relative(path.resolve(__dirname, 'app'), fullPath));
               }
             });
           }

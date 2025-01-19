@@ -43,53 +43,28 @@ export class SellCrossContainer extends HTMLElement {
 
     heading.textContent = content;
     heading.style.color = this.UIConfigs[ConfigNames.CanvasTextColor];
-    heading.style.fontSize = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasTextSize]
-    );
+    heading.style.fontSize = this.appendPx(this.UIConfigs[ConfigNames.CanvasTextSize]);
     // heading.style.fontWeight = this.UIConfigs[ConfigNames.CanvasTextWeight];
     heading.style.fontFamily = this.UIConfigs[ConfigNames.CanvasTextFamily];
 
-    container.style.backgroundColor =
-      this.UIConfigs[ConfigNames.CanvasBackgroundColor];
+    container.style.backgroundColor = this.UIConfigs[ConfigNames.CanvasBackgroundColor];
 
-    container.style.borderRadius = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasBorderRadius]
-    );
+    container.style.borderRadius = this.appendPx(this.UIConfigs[ConfigNames.CanvasBorderRadius]);
     container.style.borderColor = this.UIConfigs[ConfigNames.CanvasBorderColor];
-    container.style.borderWidth = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasBorderWidth]
-    );
+    container.style.borderWidth = this.appendPx(this.UIConfigs[ConfigNames.CanvasBorderWidth]);
 
-    container.style.paddingLeft = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasLeftPadding]
-    );
-    container.style.paddingRight = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasRightPadding]
-    );
-    container.style.paddingTop = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasTopPadding]
-    );
-    container.style.paddingBottom = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasBottomPadding]
-    );
+    container.style.paddingLeft = this.appendPx(this.UIConfigs[ConfigNames.CanvasLeftPadding]);
+    container.style.paddingRight = this.appendPx(this.UIConfigs[ConfigNames.CanvasRightPadding]);
+    container.style.paddingTop = this.appendPx(this.UIConfigs[ConfigNames.CanvasTopPadding]);
+    container.style.paddingBottom = this.appendPx(this.UIConfigs[ConfigNames.CanvasBottomPadding]);
 
-    container.style.marginLeft = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasLeftMargin]
-    );
-    container.style.marginRight = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasRightMargin]
-    );
-    container.style.marginTop = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasTopMargin]
-    );
-    container.style.marginBottom = this.appendPx(
-      this.UIConfigs[ConfigNames.CanvasBottomMargin]
-    );
+    container.style.marginLeft = this.appendPx(this.UIConfigs[ConfigNames.CanvasLeftMargin]);
+    container.style.marginRight = this.appendPx(this.UIConfigs[ConfigNames.CanvasRightMargin]);
+    container.style.marginTop = this.appendPx(this.UIConfigs[ConfigNames.CanvasTopMargin]);
+    container.style.marginBottom = this.appendPx(this.UIConfigs[ConfigNames.CanvasBottomMargin]);
 
     if (discountText) {
-      const discountTextSpan = this.querySelector(
-        '#cross-sell-discount-text-span'
-      );
+      const discountTextSpan = this.querySelector('#cross-sell-discount-text-span');
       discountTextSpan.textContent = discountText;
     } else {
       const discountText = this.querySelector('#cross-sell-discount-text');
@@ -102,12 +77,7 @@ export class SellCrossContainer extends HTMLElement {
 
     const productsListContainer = this.querySelector('#cross-sell-content');
     variants.forEach((variantItem, index) => {
-      const productContainer = new ProductContainer(
-        this.UIConfigs,
-        this.currencyFormat,
-        productsListContainer,
-        variantItem
-      );
+      const productContainer = new ProductContainer(this.UIConfigs, this.currencyFormat, productsListContainer, variantItem);
       this.productContainers.push(productContainer);
 
       productContainer.add(productsListContainer);
@@ -119,29 +89,13 @@ export class SellCrossContainer extends HTMLElement {
     });
   }
 
-  addFooter(
-    offerId,
-    discountAmount,
-    discountMode,
-    variantsLength,
-    discountTitle
-  ) {
+  addFooter(offerId, discountAmount, discountMode, variantsLength, discountTitle) {
     log('discountTitle in containers', discountTitle);
-    this.footer = new Footer(
-      this.UIConfigs,
-      this.currencyFormat,
-      offerId,
-      discountAmount,
-      discountMode,
-      variantsLength,
-      discountTitle
-    );
+    this.footer = new Footer(this.UIConfigs, this.currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle);
   }
 
   resize() {
-    const componentHeight = document.querySelector(
-      '.cross-sell-product-image'
-    )?.height;
+    const componentHeight = document.querySelector('.cross-sell-product-image')?.height;
 
     document.querySelectorAll('.cross-sell-plus-symbol').forEach((plusSign) => {
       plusSign.style.paddingTop = `${componentHeight / 2}px`;
@@ -170,16 +124,15 @@ export class SellCrossContainer extends HTMLElement {
         crossSellContainer.appendChild(footer);
         footer.classList.add('cross-sell-footer-mobile');
         footer.classList.add('right-padding-5');
+        crossSellContent.classList.add('justify-content-center');
         // footer.classList.remove("cross-sell-footer");
-      } else if (
-        window.innerWidth > 768 &&
-        footer.parentNode !== crossSellContent
-      ) {
+      } else if (window.innerWidth > 768 && footer.parentNode !== crossSellContent) {
         // move footer inside.
         crossSellContent.appendChild(footer);
         // footer.classList.add("cross-sell-footer");
         footer.classList.remove('cross-sell-footer-mobile');
         footer.classList.remove('right-padding-5');
+        crossSellContent.classList.remove('justify-content-center');
       }
     });
 

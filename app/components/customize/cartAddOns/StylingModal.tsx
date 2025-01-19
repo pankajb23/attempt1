@@ -1,9 +1,6 @@
 import { BlockStack, Card, Text } from '@shopify/polaris';
 import ButtonWithColorAndPopup from '../common/ButtonWithColorAndPopup';
-import {
-  NumberField,
-  TitleFontWeight,
-} from '../frequentlyBoughtTogether/StylingModal';
+import { NumberField, TitleFontWeight } from '../frequentlyBoughtTogether/StylingModal';
 
 export default function StylingModal() {
   const titleFontWeightOptions = [
@@ -30,38 +27,14 @@ export default function StylingModal() {
           {' '}
           Styling
         </Text>
-        <ButtonWithColorAndPopup
-          header={'Background color'}
-          property={'stylingModal.bgcolor'}
-        />
-        <ButtonWithColorAndPopup
-          header={'Border color'}
-          property={'stylingModal.borderColor'}
-        />
-        <NumberField
-          property={'stylingModal.titleFontSize'}
-          heading="Title font size"
-        />
-        <TitleFontWeight
-          property={'stylingModal.titleFontWeight'}
-          options={titleFontWeightOptions}
-        />
-        <ButtonWithColorAndPopup
-          header={'Continue button background color'}
-          property={'stylingModal.buttonBgColor'}
-        />
-        <ButtonWithColorAndPopup
-          header={'Continue button text color'}
-          property={'stylingModal.buttonTextColor'}
-        />
-        <ButtonWithColorAndPopup
-          header={'Continue button border color'}
-          property={'stylingModal.buttonBorderColor'}
-        />
-        <NumberField
-          heading="Continue button border width"
-          property={'stylingModal.buttonBorderWidth'}
-        />
+        <ButtonWithColorAndPopup header={'Background color'} property={'stylingModal.bgcolor'} />
+        <ButtonWithColorAndPopup header={'Border color'} property={'stylingModal.borderColor'} />
+        <NumberField property={'stylingModal.titleFontSize'} heading="Title font size" />
+        <TitleFontWeight property={'stylingModal.titleFontWeight'} options={titleFontWeightOptions} />
+        <ButtonWithColorAndPopup header={'Continue button background color'} property={'stylingModal.buttonBgColor'} />
+        <ButtonWithColorAndPopup header={'Continue button text color'} property={'stylingModal.buttonTextColor'} />
+        <ButtonWithColorAndPopup header={'Continue button border color'} property={'stylingModal.buttonBorderColor'} />
+        <NumberField heading="Continue button border width" property={'stylingModal.buttonBorderWidth'} />
       </BlockStack>
     </Card>
   );

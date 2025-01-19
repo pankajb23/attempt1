@@ -1,11 +1,4 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  Divider,
-  Image,
-  Button,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, Divider, Image, Button } from '@shopify/polaris';
 import { ExternalSmallIcon } from '@shopify/polaris-icons';
 
 export default function SideModal({ heading, explanation, img }) {

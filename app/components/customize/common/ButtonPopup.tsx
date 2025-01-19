@@ -1,24 +1,9 @@
-import {
-  Popover,
-  Button,
-  Card,
-  Text,
-  ColorPicker,
-  type HSBAColor,
-  BlockStack,
-} from '@shopify/polaris';
+import { Popover, Button, Card, Text, ColorPicker, type HSBAColor, BlockStack } from '@shopify/polaris';
 import { useState, useEffect } from 'react';
 import chroma from 'chroma-js';
 import { useFormContext } from 'react-hook-form';
 
-export default function ButtonPopup({
-  popoverActive,
-  setPopoverActive,
-  togglePopoverActive,
-  activator,
-  property,
-  setButtonColor,
-}) {
+export default function ButtonPopup({ popoverActive, setPopoverActive, togglePopoverActive, activator, property, setButtonColor }) {
   const { setValue } = useFormContext();
 
   useEffect(() => {
@@ -35,10 +20,7 @@ export default function ButtonPopup({
   const [color, setColor] = useState<string>('#ff0000');
 
   const hslToHexConverter = (hsl: HSBAColor) => {
-    return chroma
-      .hsl(hsl.hue, hsl.saturation, hsl.brightness)
-      .alpha(hsl.alpha)
-      .hex('rgba');
+    return chroma.hsl(hsl.hue, hsl.saturation, hsl.brightness).alpha(hsl.alpha).hex('rgba');
   };
 
   const hexToHslConverter = (hex: string) => {
@@ -55,11 +37,7 @@ export default function ButtonPopup({
   };
 
   return (
-    <Popover
-      active={popoverActive}
-      activator={activator}
-      onClose={togglePopoverActive}
-    >
+    <Popover active={popoverActive} activator={activator} onClose={togglePopoverActive}>
       <Card roundedAbove="xs">
         <BlockStack gap="100">
           <Text as="p" variant="bodySm" fontWeight="bold">

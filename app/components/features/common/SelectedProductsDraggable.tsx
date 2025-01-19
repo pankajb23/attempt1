@@ -1,29 +1,9 @@
-import {
-  Tooltip,
-  Text,
-  Icon,
-  InlineStack,
-  Button,
-  LegacyCard,
-  ResourceItem,
-  InlineGrid,
-  Avatar,
-  BlockStack,
-  Tag,
-} from '@shopify/polaris';
+import { Tooltip, Text, Icon, InlineStack, Button, LegacyCard, ResourceItem, InlineGrid, Avatar, BlockStack, Tag } from '@shopify/polaris';
 import { XSmallIcon, ViewIcon, DragHandleIcon } from '@shopify/polaris-icons';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { type ProductArray } from './OfferProductRadioButtonModal';
 
-function ListItem(props: {
-  id: string;
-  index: number;
-  pid: string;
-  title: string;
-  img: string;
-  variants: ProductArray[];
-  handleProductChange: (pid: string) => void;
-}) {
+function ListItem(props: { id: string; index: number; pid: string; title: string; img: string; variants: ProductArray[]; handleProductChange: (pid: string) => void }) {
   const { id, index, pid, title, img, variants, handleProductChange } = props;
   return (
     <Draggable draggableId={id} index={index}>
@@ -83,16 +63,8 @@ function ListItem(props: {
   );
 }
 
-export default function SelectedProducts({
-  selectedPids,
-  handleDragEnd,
-  handleProductChange,
-}) {
-  if (
-    selectedPids === undefined ||
-    selectedPids.length === 0 ||
-    (selectedPids.length === 1 && selectedPids[0] === undefined)
-  ) {
+export default function SelectedProducts({ selectedPids, handleDragEnd, handleProductChange }) {
+  if (selectedPids === undefined || selectedPids.length === 0 || (selectedPids.length === 1 && selectedPids[0] === undefined)) {
     return null;
   }
 

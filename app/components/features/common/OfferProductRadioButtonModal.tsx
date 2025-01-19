@@ -1,14 +1,4 @@
-import {
-  Card,
-  Text,
-  ChoiceList,
-  Icon,
-  InlineStack,
-  Tooltip,
-  Button,
-  Select,
-  InlineError,
-} from '@shopify/polaris';
+import { Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select, InlineError } from '@shopify/polaris';
 import { useCallback } from 'react';
 import { AlertCircleIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from '@shopify/app-bridge-react';
@@ -31,9 +21,7 @@ const OfferAssetsProducts = 'offerProducts.assets.products';
 const OfferAssetsVariants = 'offerProducts.assets.variants';
 const OfferAssetsType = 'offerProducts.assets.type';
 
-export default function OfferProductRadioButtonModal({
-  toolTipContent = 'Shopify recommended products are based on the products that are frequently bought together.',
-}) {
+export default function OfferProductRadioButtonModal({ toolTipContent = 'Shopify recommended products are based on the products that are frequently bought together.' }) {
   const { control, setValue, watch, formState } = useFormContext();
   const shopify = useAppBridge();
 
@@ -44,16 +32,12 @@ export default function OfferProductRadioButtonModal({
   const offerType = offerTemp ?? 'automatic';
   const manualOfferType = manualOfferTypeTemp ?? 'products';
 
-  const property =
-    manualOfferType === 'products' ? OfferAssetsProducts : OfferAssetsVariants;
+  const property = manualOfferType === 'products' ? OfferAssetsProducts : OfferAssetsVariants;
 
-  const selectedPidsArray: ProductArray[] = (watch(OfferAssetsProducts) ??
-    []) as ProductArray[];
-  const selectedVariantsArray: VariantsArray[] = (watch(OfferAssetsVariants) ??
-    []) as VariantsArray[];
+  const selectedPidsArray: ProductArray[] = (watch(OfferAssetsProducts) ?? []) as ProductArray[];
+  const selectedVariantsArray: VariantsArray[] = (watch(OfferAssetsVariants) ?? []) as VariantsArray[];
 
-  const pidsArray =
-    manualOfferType === 'products' ? selectedPidsArray : selectedVariantsArray;
+  const pidsArray = manualOfferType === 'products' ? selectedPidsArray : selectedVariantsArray;
 
   const handleProductChange = useCallback(
     (pid: string) => {
@@ -68,10 +52,7 @@ export default function OfferProductRadioButtonModal({
   const handleDragEnd = useCallback(
     ({ source, destination }) => {
       if (!destination) return;
-      const property =
-        (watch(OfferAssetsType) ?? 'products') === 'products'
-          ? OfferAssetsProducts
-          : OfferAssetsVariants;
+      const property = (watch(OfferAssetsType) ?? 'products') === 'products' ? OfferAssetsProducts : OfferAssetsVariants;
 
       const currentProducts = watch(property) ?? [];
 
@@ -140,13 +121,12 @@ export default function OfferProductRadioButtonModal({
                 variant="secondary"
                 onClick={async () => {
                   if (manualOfferType === 'variants') {
-                    let selectionIds: BaseResource[] =
-                      selectedVariantsArray.map((p) => {
-                        return {
-                          id: p.pid,
-                          variants: p.variants.map((v) => ({ id: v.pid })),
-                        };
-                      });
+                    let selectionIds: BaseResource[] = selectedVariantsArray.map((p) => {
+                      return {
+                        id: p.pid,
+                        variants: p.variants.map((v) => ({ id: v.pid })),
+                      };
+                    });
 
                     console.log('selected Ids --> ', selectionIds);
 
@@ -160,32 +140,29 @@ export default function OfferProductRadioButtonModal({
                       },
                     });
                     if (selectedPIds !== undefined) {
-                      const pidVariantsArray: VariantsArray[] =
-                        selectedPIds.map((p, index) => {
-                          return {
-                            title: p.title,
-                            pid: p.id,
-                            img: p.images[0]?.originalSrc ?? null,
-                            variants: p.variants.map((v, vIndex) => {
-                              return {
-                                title: v.title,
-                                pid: v.id,
-                                img: null,
-                              };
-                            }),
-                          };
-                        });
+                      const pidVariantsArray: VariantsArray[] = selectedPIds.map((p, index) => {
+                        return {
+                          title: p.title,
+                          pid: p.id,
+                          img: p.images[0]?.originalSrc ?? null,
+                          variants: p.variants.map((v, vIndex) => {
+                            return {
+                              title: v.title,
+                              pid: v.id,
+                              img: null,
+                            };
+                          }),
+                        };
+                      });
                       setValue(OfferAssetsVariants, pidVariantsArray);
                       setValue(OfferAssetsProducts, null);
                     }
                   } else {
-                    let selectionIds: BaseResource[] = selectedPidsArray.map(
-                      (p) => {
-                        return {
-                          id: p.pid,
-                        };
-                      }
-                    );
+                    let selectionIds: BaseResource[] = selectedPidsArray.map((p) => {
+                      return {
+                        id: p.pid,
+                      };
+                    });
                     const selectedIds = await shopify.resourcePicker({
                       type: 'product',
                       multiple: 3,
@@ -211,43 +188,25 @@ export default function OfferProductRadioButtonModal({
               >
                 <Text as="p" variant="bodySm" fontWeight="bold">
                   {' '}
-                  {manualOfferType === 'variants'
-                    ? 'Select products/variants'
-                    : 'Select products'}
+                  {manualOfferType === 'variants' ? 'Select products/variants' : 'Select products'}
                 </Text>
               </Button>
               <Controller
                 name={OfferAssetsType}
                 defaultValue={manualOfferType}
                 control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    label={null}
-                    options={selectOption}
-                    onChange={onChange}
-                    value={value}
-                  />
-                )}
+                render={({ field: { onChange, value } }) => <Select label={null} options={selectOption} onChange={onChange} value={value} />}
               />
             </InlineStack>
 
-            <SelectedProducts
-              selectedPids={pidsArray}
-              handleDragEnd={handleDragEnd}
-              handleProductChange={handleProductChange}
-            />
+            <SelectedProducts selectedPids={pidsArray} handleDragEnd={handleDragEnd} handleProductChange={handleProductChange} />
           </div>
         ) : (
           <>
             <AutomaticOfferProducts />
-            {formState.isSubmitted &&
-              (selectedPidsArray.length === 0 ||
-                selectedVariantsArray.length === 0) && (
-                <InlineError
-                  message="Please select at least one product/variant"
-                  fieldID="offerProducts.assets.products"
-                />
-              )}
+            {formState.isSubmitted && (selectedPidsArray.length === 0 || selectedVariantsArray.length === 0) && (
+              <InlineError message="Please select at least one product/variant" fieldID="offerProducts.assets.products" />
+            )}
           </>
         )}
 

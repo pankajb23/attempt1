@@ -96,26 +96,12 @@ const renderSellCross = async () => {
   };
   // Render UI
   const renderUI = async (data) => {
-    const {
-      variants,
-      layout,
-      offerId: fetchedOfferId,
-      currencyFormat,
-      defaultWidgetTitle,
-      discountText,
-      discountAmount,
-      discountMode,
-      discountTitle,
-    } = data.data;
+    const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText, discountAmount, discountMode, discountTitle } = data.data;
     const flattenedLayout = flattenObject(layout);
 
     log('discountTitle', discountTitle, data.data.discountTitle);
     log('flattenedLayout', flattenedLayout);
-    if (
-      fetchedOfferId === null ||
-      fetchedOfferId === undefined ||
-      layout == null
-    ) {
+    if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
       console.warn('Error: offerId/layout not found in the data.');
       return;
     } else {
@@ -138,25 +124,13 @@ const renderSellCross = async () => {
         return;
       }
 
-      const sellCrossContainer = new SellCrossContainer(
-        flattenedLayout,
-        currencyFormat
-      );
+      const sellCrossContainer = new SellCrossContainer(flattenedLayout, currencyFormat);
       sellCrossContainer.add(topLevelComponent);
       // add heading
-      sellCrossContainer.addHeading(
-        defaultWidgetTitle ? defaultWidgetTitle : 'Frequently Bought Together',
-        discountText
-      );
+      sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : 'Frequently Bought Together', discountText);
 
       // add footer
-      sellCrossContainer.addFooter(
-        fetchedOfferId,
-        discountAmount,
-        discountMode,
-        variants.length,
-        discountTitle
-      );
+      sellCrossContainer.addFooter(fetchedOfferId, discountAmount, discountMode, variants.length, discountTitle);
 
       // add products
       sellCrossContainer.addProducts(variants);

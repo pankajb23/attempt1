@@ -36,21 +36,13 @@ export const TotalPriceTextWeight = 'component.total.price.text.weight';
 export const TotalPriceTextFamily = 'component.total.price.text.family';
 
 /** Total Price Component */
-export const TotalPriceComponentTextColor =
-  'component.total.price.component.text.color';
-export const TotalPriceComponentTextSize =
-  'component.total.price.component.text.size';
-export const TotalPriceComponentTextWeight =
-  'component.total.price.component.text.weight';
-export const TotalPriceComponentTextFamily =
-  'component.total.price.component.text.family';
+export const TotalPriceComponentTextColor = 'component.total.price.component.text.color';
+export const TotalPriceComponentTextSize = 'component.total.price.component.text.size';
+export const TotalPriceComponentTextWeight = 'component.total.price.component.text.weight';
+export const TotalPriceComponentTextFamily = 'component.total.price.component.text.family';
 
 /** Total Price Crossed Out */
-export const TotalPriceCrossedOutTextColor =
-  'component.total.price.crossed.out.text.color';
-export const TotalPriceCrossedOutTextSize =
-  'component.total.price.crossed.out.text.size';
-export const TotalPriceCrossedOutTextWeight =
-  'component.total.price.crossed.out.text.weight';
-export const TotalPriceCrossedOutTextFamily =
-  'component.total.price.crossed.out.text.family';
+export const TotalPriceCrossedOutTextColor = 'component.total.price.crossed.out.text.color';
+export const TotalPriceCrossedOutTextSize = 'component.total.price.crossed.out.text.size';
+export const TotalPriceCrossedOutTextWeight = 'component.total.price.crossed.out.text.weight';
+export const TotalPriceCrossedOutTextFamily = 'component.total.price.crossed.out.text.family';

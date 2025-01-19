@@ -1,7 +1,4 @@
-import {
-  type CardModalProps,
-  CustomizePageType,
-} from '../types/CustomizeTypes';
+import { type CardModalProps, CustomizePageType } from '../types/CustomizeTypes';
 import { Layout, Text, Card, InlineGrid, Button } from '@shopify/polaris';
 
 function CardModal({ modal, navigateToPage }) {
@@ -40,8 +37,7 @@ function CardModal({ modal, navigateToPage }) {
 const CardModals: CardModalProps[] = [
   {
     heading: 'Common settings and customizations',
-    content:
-      'Apply common styling or CSS to all widgets. To customize individual widgets, check the widget settings below.',
+    content: 'Apply common styling or CSS to all widgets. To customize individual widgets, check the widget settings below.',
     buttonContent: 'Edit settings',
     link: '',
     modalType: CustomizePageType.CommonSettings,
@@ -76,16 +72,14 @@ const CardModals: CardModalProps[] = [
   },
   {
     heading: 'Post purchase upsell',
-    content:
-      'Appears after payment capture, before thank you page. This works only when the customer pays using Shopify payment gateway Credit Card or PayPal Express.',
+    content: 'Appears after payment capture, before thank you page. This works only when the customer pays using Shopify payment gateway Credit Card or PayPal Express.',
     buttonContent: 'Edit widget',
     link: '',
     modalType: CustomizePageType.PostPurchaseUpsell,
   },
   {
     heading: 'Thank you page add-ons',
-    content:
-      'Embedded widget on the thank you page. This works with the standard thank you page and when checkout extensibility is not used.',
+    content: 'Embedded widget on the thank you page. This works with the standard thank you page and when checkout extensibility is not used.',
     buttonContent: 'Edit widget',
     link: '',
     modalType: CustomizePageType.ThankYouPageAddOns,
@@ -100,26 +94,14 @@ export default function LandingPageModal({ navigateToPage }) {
           Customize
         </Text>
       </Layout.Section>
-      {
-        <CardModal
-          key={CardModals[0].modalType}
-          modal={CardModals[0]}
-          navigateToPage={navigateToPage}
-        />
-      }
+      {<CardModal key={CardModals[0].modalType} modal={CardModals[0]} navigateToPage={navigateToPage} />}
       <Layout.Section key={'beta'}>
         <Text variant="headingMd" fontWeight="bold" as="h6">
           Widgets
         </Text>
       </Layout.Section>
       {CardModals.slice(1).map((modal) => {
-        return (
-          <CardModal
-            key={modal.modalType}
-            modal={modal}
-            navigateToPage={navigateToPage}
-          />
-        );
+        return <CardModal key={modal.modalType} modal={modal} navigateToPage={navigateToPage} />;
       })}
     </Layout>
   );

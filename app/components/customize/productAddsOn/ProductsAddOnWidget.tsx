@@ -1,10 +1,7 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { Layout, BlockStack } from '@shopify/polaris';
 import TopHeadingBanner from '../../common/TopHeaderBanner';
-import {
-  CustomizePageType,
-  type TranslationComponent,
-} from '../../types/CustomizeTypes';
+import { CustomizePageType, type TranslationComponent } from '../../types/CustomizeTypes';
 import HelpBottonModal from '../../common/HelpBottomModal';
 import PositionModal from './PositionalModal';
 import StylingModal from '../frequentlyBoughtTogether/StylingModal';
@@ -64,9 +61,7 @@ export default function ProductsAddOnWidget({ navigateToPage }) {
             />
             <PositionModal />
             <SettingsModal />
-            <TextAndTranslations
-              translationComponents={translationComponents}
-            />
+            <TextAndTranslations translationComponents={translationComponents} />
             <StylingModal />
           </FormProvider>
         </BlockStack>

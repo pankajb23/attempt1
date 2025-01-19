@@ -1,30 +1,16 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  Checkbox,
-  ChoiceList,
-  TextField,
-  Select,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, Checkbox, ChoiceList, TextField, Select } from '@shopify/polaris';
 import { useFormContext, Controller } from 'react-hook-form';
 
 export default function UpsellFunnelDiscount() {
   const { watch, control } = useFormContext();
   const isEnabled = watch('upsellFunnelDiscount.isEnabled') ?? false;
-  const discountType =
-    watch('upsellFunnelDiscount.discountType') ?? 'percentageOrFixedValue';
+  const discountType = watch('upsellFunnelDiscount.discountType') ?? 'percentageOrFixedValue';
   const discountValue = watch('upsellFunnelDiscount.discountValue');
   const discountUnit = watch('upsellFunnelDiscount.discountUnit') ?? '%';
   const minCartValue = watch('upsellFunnelDiscount.minCartValue');
-  const isSelectedOtherProductDiscount =
-    watch('upsellFunnelDiscount.discountCombinations.otherProductDiscount') ??
-    false;
-  const isSelectedShippingDiscount =
-    watch('upsellFunnelDiscount.discountCombinations.shippingDiscount') ??
-    false;
-  const isSelectedOtherDiscount =
-    watch('upsellFunnelDiscount.discountCombinations.otherDiscount') ?? false;
+  const isSelectedOtherProductDiscount = watch('upsellFunnelDiscount.discountCombinations.otherProductDiscount') ?? false;
+  const isSelectedShippingDiscount = watch('upsellFunnelDiscount.discountCombinations.shippingDiscount') ?? false;
+  const isSelectedOtherDiscount = watch('upsellFunnelDiscount.discountCombinations.otherDiscount') ?? false;
 
   // console.log("discountType", discountType)
   return (
@@ -98,15 +84,7 @@ export default function UpsellFunnelDiscount() {
                     name="upsellFunnelDiscount.discountUnit"
                     control={control}
                     defaultValue={discountUnit}
-                    render={({ field: { onChange, value } }) => (
-                      <Select
-                        value={value}
-                        label="Weight unit"
-                        onChange={onChange}
-                        labelHidden
-                        options={['%', 'Inr']}
-                      />
-                    )}
+                    render={({ field: { onChange, value } }) => <Select value={value} label="Weight unit" onChange={onChange} labelHidden options={['%', 'Inr']} />}
                   />
                 }
               />
@@ -160,13 +138,7 @@ export default function UpsellFunnelDiscount() {
                   name="upsellFunnelDiscount.discountCombinations.otherProductDiscount"
                   control={control}
                   defaultValue={isSelectedOtherProductDiscount}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox
-                      label="Other product discount"
-                      checked={value}
-                      onChange={onChange}
-                    />
-                  )}
+                  render={({ field: { onChange, value } }) => <Checkbox label="Other product discount" checked={value} onChange={onChange} />}
                 />
               }
               {discountType === 'percentageOrFixedValue' && (
@@ -174,13 +146,7 @@ export default function UpsellFunnelDiscount() {
                   name="upsellFunnelDiscount.discountCombinations.shippingDiscount"
                   control={control}
                   defaultValue={isSelectedShippingDiscount}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox
-                      label="Shipping discount"
-                      checked={value}
-                      onChange={onChange}
-                    />
-                  )}
+                  render={({ field: { onChange, value } }) => <Checkbox label="Shipping discount" checked={value} onChange={onChange} />}
                 />
               )}
               {
@@ -188,13 +154,7 @@ export default function UpsellFunnelDiscount() {
                   name="upsellFunnelDiscount.discountCombinations.otherDiscount"
                   control={control}
                   defaultValue={isSelectedOtherDiscount}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox
-                      label="Other discount"
-                      checked={value}
-                      onChange={onChange}
-                    />
-                  )}
+                  render={({ field: { onChange, value } }) => <Checkbox label="Other discount" checked={value} onChange={onChange} />}
                 />
               }
             </>

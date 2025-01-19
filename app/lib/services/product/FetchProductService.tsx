@@ -32,9 +32,7 @@ export interface FetchTagsDao {
   findAllTags(userId: string, label?: string): Promise<ValueTags[]>;
 }
 
-export class MockFetchProductDAO
-  implements FetchProductDAO, FetchProductTagsDAO, FetchTagsDao
-{
+export class MockFetchProductDAO implements FetchProductDAO, FetchProductTagsDAO, FetchTagsDao {
   private mockData = [
     {
       pid: '0',

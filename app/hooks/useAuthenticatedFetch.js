@@ -30,16 +30,9 @@ export function useAuthenticatedFetch() {
 
 function checkHeadersForReauthorization(headers, app) {
   if (headers.get('X-Shopify-API-Request-Failure-Reauthorize') === '1') {
-    const authUrlHeader =
-      headers.get('X-Shopify-API-Request-Failure-Reauthorize-Url') ||
-      `/api/auth`;
+    const authUrlHeader = headers.get('X-Shopify-API-Request-Failure-Reauthorize-Url') || `/api/auth`;
 
     const redirect = Redirect.create(app);
-    redirect.dispatch(
-      Redirect.Action.REMOTE,
-      authUrlHeader.startsWith('/')
-        ? `https://${window.location.host}${authUrlHeader}`
-        : authUrlHeader
-    );
+    redirect.dispatch(Redirect.Action.REMOTE, authUrlHeader.startsWith('/') ? `https://${window.location.host}${authUrlHeader}` : authUrlHeader);
   }
 }

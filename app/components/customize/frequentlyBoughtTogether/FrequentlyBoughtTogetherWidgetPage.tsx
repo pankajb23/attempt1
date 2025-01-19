@@ -2,10 +2,7 @@ import { Layout, BlockStack } from '@shopify/polaris';
 import HelpBottonModal from '../../common/HelpBottomModal';
 import TopHeadingBanner from '../../common/TopHeaderBanner';
 import { FormProvider, useForm } from 'react-hook-form';
-import {
-  CustomizePageType,
-  type TranslationComponent,
-} from '../../types/CustomizeTypes';
+import { CustomizePageType, type TranslationComponent } from '../../types/CustomizeTypes';
 import PositionModal from './PositionModal';
 import TextAndTranslations from './TextAndTranslations';
 import StylingModal from './StylingModal';
@@ -69,9 +66,7 @@ export default function FrequentlyBoughtTogetherWidgetPage({ navigateToPage }) {
             />
             <PositionModal />
             <SettingsModal />
-            <TextAndTranslations
-              translationComponents={translationComponents}
-            />
+            <TextAndTranslations translationComponents={translationComponents} />
             <StylingModal />
           </FormProvider>
         </BlockStack>

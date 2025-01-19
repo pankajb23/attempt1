@@ -24,21 +24,8 @@ export default function OfferNameModal({ placeholder }) {
         rules={{ required: 'Store name is required' }}
         render={({ field: { value, onChange } }) => (
           <div>
-            <TextField
-              label=""
-              value={value}
-              id={property}
-              onChange={onChange}
-              placeholder={placeholder}
-              error={Boolean(errors.offerName)}
-              autoComplete="off"
-            />
-            {errors.offerName && (
-              <InlineError
-                message={errors.offerName.message}
-                fieldID="offerName"
-              />
-            )}
+            <TextField label="" value={value} id={property} onChange={onChange} placeholder={placeholder} error={Boolean(errors.offerName)} autoComplete="off" />
+            {errors.offerName && <InlineError message={errors.offerName.message} fieldID="offerName" />}
           </div>
         )}
       />

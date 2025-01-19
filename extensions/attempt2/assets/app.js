@@ -29,12 +29,10 @@ const CanvasTextSize = 'component.canvas.text.size';
 const CanvasTextFamily = 'component.canvas.text.family';
 
 /** Total Price Component */
-const TotalPriceComponentTextColor =
-  'component.total.price.component.text.color';
+const TotalPriceComponentTextColor = 'component.total.price.component.text.color';
 
 /** Total Price Crossed Out */
-const TotalPriceCrossedOutTextColor =
-  'component.total.price.crossed.out.text.color';
+const TotalPriceCrossedOutTextColor = 'component.total.price.crossed.out.text.color';
 
 function getHost() {
   // return "https://sellcross-bc95eb582641.herokuapp.com";
@@ -49,15 +47,7 @@ const log = (...message) => {
 };
 
 class Footer extends HTMLElement {
-  constructor(
-    UIConfigs,
-    currencyFormat,
-    offerId,
-    discountAmount,
-    discountMode,
-    variantsLength,
-    discountTitle
-  ) {
+  constructor(UIConfigs, currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle) {
     super();
     this.UIConfigs = UIConfigs;
     this.currencyFormat = currencyFormat;
@@ -102,11 +92,9 @@ class Footer extends HTMLElement {
     // Cache important elements
 
     this.salePrice.style.color = this.UIConfigs[TotalPriceComponentTextColor];
-    this.crossedPrice.style.color =
-      this.UIConfigs[TotalPriceCrossedOutTextColor];
+    this.crossedPrice.style.color = this.UIConfigs[TotalPriceCrossedOutTextColor];
 
-    this.addToCartBtn.style.backgroundColor =
-      this.UIConfigs[ButtonBackgroundColor];
+    this.addToCartBtn.style.backgroundColor = this.UIConfigs[ButtonBackgroundColor];
     this.addToCartBtn.style.borderRadius = this.UIConfigs[ButtonBorderRadius];
     this.addToCartBtn.style.borderColor = this.UIConfigs[ButtonBorderColor];
     this.addToCartBtn.style.textFamily = this.UIConfigs[ButtonTextFamily];
@@ -122,13 +110,12 @@ class Footer extends HTMLElement {
 
   async handleClick() {
     // const productContainers = document.querySelectorAll("product-container");
-    const selectedProducts = Array.from(this.productContainers).map(
-      (container) => ({
-        productId: container.getProductId(),
-        variantId: container.getSelectedVariantId(),
-        isChecked: container.isChecked(),
-      })
-    );
+    const selectedProducts = Array.from(this.productContainers).map((container) => ({
+      productId: container.getProductId(),
+      variantId: container.getSelectedVariantId(),
+      isChecked: container.isChecked(),
+      price: container.getPrice(),
+    }));
 
     // Request cart token
 
@@ -166,69 +153,33 @@ class Footer extends HTMLElement {
 
     if (this.prices.size > 0) {
       this.addToCartBtn.disabled = false;
-      const totalPrice = Array.from(this.prices.values()).reduce(
-        (sum, p) => sum + p,
-        0
-      );
-      log(
-        'totalPrice',
-        totalPrice,
-        this.discountTitle,
-        this.discountMode,
-        this.discountAmount
-      );
+      const totalPrice = Array.from(this.prices.values()).reduce((sum, p) => sum + p, 0);
+      log('totalPrice', totalPrice, this.discountTitle, this.discountMode, this.discountAmount);
       if (this.discountTitle != null) {
         log('this.discountTitle', this.discountTitle);
-        if (
-          this.discountTitle === 'cheapestItemFree' &&
-          this.variantsLength == this.prices.size
-        ) {
+        if (this.discountTitle === 'cheapestItemFree' && this.variantsLength == this.prices.size) {
           log('cheapestItemFree');
           const cheapestPrice = Math.min(...Array.from(this.prices.values()));
           const newAmount = totalPrice - cheapestPrice;
-          this.salePrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(newAmount).toFixed(2)
-          );
-          this.crossedPrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(totalPrice).toFixed(2)
-          );
+          this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(newAmount).toFixed(2));
+          this.crossedPrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
         } else if (this.discountTitle === 'percentOrFixed') {
           log('percentOrFixed');
-          const discount =
-            this.discountMode === '%'
-              ? totalPrice * (parseFloat(this.discountAmount) / 100)
-              : parseFloat(this.discountAmount);
+          const discount = this.discountMode === '%' ? totalPrice * (parseFloat(this.discountAmount) / 100) : parseFloat(this.discountAmount);
           const newAmount = totalPrice - discount;
           log('newAmount', newAmount);
-          this.salePrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(newAmount).toFixed(2)
-          );
-          this.crossedPrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(totalPrice).toFixed(2)
-          );
+          this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(newAmount).toFixed(2));
+          this.crossedPrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
         } else {
-          this.salePrice.textContent = this.currencyFormat.replace(
-            this.regex,
-            parseFloat(totalPrice).toFixed(2)
-          );
+          this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
           this.crossedPrice.textContent = null;
         }
       } else {
-        this.salePrice.textContent = this.currencyFormat.replace(
-          this.regex,
-          parseFloat(totalPrice).toFixed(2)
-        );
+        this.salePrice.textContent = this.currencyFormat.replace(this.regex, parseFloat(totalPrice).toFixed(2));
         this.crossedPrice.textContent = null;
       }
     } else {
-      this.salePrice.textContent = this.currencyFormat.replace(
-        this.regex,
-        '0.00'
-      );
+      this.salePrice.textContent = this.currencyFormat.replace(this.regex, '0.00');
       this.crossedPrice.textContent = null;
       this.addToCartBtn.disabled = true;
     }
@@ -308,6 +259,12 @@ class ProductContainer extends HTMLElement {
     return this.checkbox?.checked ?? false;
   }
 
+  price() {
+    const variantId = this.getSelectedVariantId();
+    const selectedVariant = this.product.variants?.nodes?.find((v) => v.id === variantId);
+    return selectedVariant?.price?.amount ?? 0;
+  }
+
   add(container) {
     const product = this.product;
 
@@ -350,11 +307,7 @@ class ProductContainer extends HTMLElement {
     // If there is at least one variant, show its price by default
     const firstVariantPrice = product?.variants?.nodes?.[0]?.price?.amount;
 
-    if (firstVariantPrice)
-      this.priceSpan.textContent = this.currencyFormat.replace(
-        this.regex,
-        firstVariantPrice
-      );
+    if (firstVariantPrice) this.priceSpan.textContent = this.currencyFormat.replace(this.regex, firstVariantPrice);
 
     this.priceSpan.style.color = this.UIConfigs[TotalPriceComponentTextColor];
     // TODO adding footer earlier than this.
@@ -375,14 +328,9 @@ class ProductContainer extends HTMLElement {
     this.footer.updatePrice(this.pid, firstVariantPrice, this.isChecked());
 
     this.variantSelect.addEventListener('change', (e) => {
-      const selectedVariant = this.product.variants?.nodes?.find(
-        (v) => v.id === e.target.value
-      );
+      const selectedVariant = this.product.variants?.nodes?.find((v) => v.id === e.target.value);
       const newPrice = selectedVariant?.price?.amount ?? 0;
-      this.priceSpan.textContent = this.currencyFormat.replace(
-        this.regex,
-        newPrice
-      );
+      this.priceSpan.textContent = this.currencyFormat.replace(this.regex, newPrice);
 
       this.footer.updatePrice(this.product.id, newPrice, this.isChecked());
     });
@@ -390,9 +338,7 @@ class ProductContainer extends HTMLElement {
     this.checkbox.addEventListener('change', (e) => {
       // console.log("checkbox changed", e);
       const variantId = this.getSelectedVariantId();
-      const selectedVariant = this.product.variants?.nodes?.find(
-        (v) => v.id === variantId
-      );
+      const selectedVariant = this.product.variants?.nodes?.find((v) => v.id === variantId);
       const newPrice = selectedVariant?.price?.amount ?? 0;
       this.footer.updatePrice(this.product.id, newPrice, this.isChecked());
       // console.log(" changing opacity to ", this.isChecked());
@@ -465,42 +411,22 @@ class SellCrossContainer extends HTMLElement {
 
     container.style.backgroundColor = this.UIConfigs[CanvasBackgroundColor];
 
-    container.style.borderRadius = this.appendPx(
-      this.UIConfigs[CanvasBorderRadius]
-    );
+    container.style.borderRadius = this.appendPx(this.UIConfigs[CanvasBorderRadius]);
     container.style.borderColor = this.UIConfigs[CanvasBorderColor];
-    container.style.borderWidth = this.appendPx(
-      this.UIConfigs[CanvasBorderWidth]
-    );
+    container.style.borderWidth = this.appendPx(this.UIConfigs[CanvasBorderWidth]);
 
-    container.style.paddingLeft = this.appendPx(
-      this.UIConfigs[CanvasLeftPadding]
-    );
-    container.style.paddingRight = this.appendPx(
-      this.UIConfigs[CanvasRightPadding]
-    );
-    container.style.paddingTop = this.appendPx(
-      this.UIConfigs[CanvasTopPadding]
-    );
-    container.style.paddingBottom = this.appendPx(
-      this.UIConfigs[CanvasBottomPadding]
-    );
+    container.style.paddingLeft = this.appendPx(this.UIConfigs[CanvasLeftPadding]);
+    container.style.paddingRight = this.appendPx(this.UIConfigs[CanvasRightPadding]);
+    container.style.paddingTop = this.appendPx(this.UIConfigs[CanvasTopPadding]);
+    container.style.paddingBottom = this.appendPx(this.UIConfigs[CanvasBottomPadding]);
 
-    container.style.marginLeft = this.appendPx(
-      this.UIConfigs[CanvasLeftMargin]
-    );
-    container.style.marginRight = this.appendPx(
-      this.UIConfigs[CanvasRightMargin]
-    );
+    container.style.marginLeft = this.appendPx(this.UIConfigs[CanvasLeftMargin]);
+    container.style.marginRight = this.appendPx(this.UIConfigs[CanvasRightMargin]);
     container.style.marginTop = this.appendPx(this.UIConfigs[CanvasTopMargin]);
-    container.style.marginBottom = this.appendPx(
-      this.UIConfigs[CanvasBottomMargin]
-    );
+    container.style.marginBottom = this.appendPx(this.UIConfigs[CanvasBottomMargin]);
 
     if (discountText) {
-      const discountTextSpan = this.querySelector(
-        '#cross-sell-discount-text-span'
-      );
+      const discountTextSpan = this.querySelector('#cross-sell-discount-text-span');
       discountTextSpan.textContent = discountText;
     } else {
       const discountText = this.querySelector('#cross-sell-discount-text');
@@ -513,12 +439,7 @@ class SellCrossContainer extends HTMLElement {
 
     const productsListContainer = this.querySelector('#cross-sell-content');
     variants.forEach((variantItem, index) => {
-      const productContainer = new ProductContainer(
-        this.UIConfigs,
-        this.currencyFormat,
-        productsListContainer,
-        variantItem
-      );
+      const productContainer = new ProductContainer(this.UIConfigs, this.currencyFormat, productsListContainer, variantItem);
       this.productContainers.push(productContainer);
 
       productContainer.add(productsListContainer);
@@ -530,29 +451,13 @@ class SellCrossContainer extends HTMLElement {
     });
   }
 
-  addFooter(
-    offerId,
-    discountAmount,
-    discountMode,
-    variantsLength,
-    discountTitle
-  ) {
+  addFooter(offerId, discountAmount, discountMode, variantsLength, discountTitle) {
     log('discountTitle in containers', discountTitle);
-    this.footer = new Footer(
-      this.UIConfigs,
-      this.currencyFormat,
-      offerId,
-      discountAmount,
-      discountMode,
-      variantsLength,
-      discountTitle
-    );
+    this.footer = new Footer(this.UIConfigs, this.currencyFormat, offerId, discountAmount, discountMode, variantsLength, discountTitle);
   }
 
   resize() {
-    const componentHeight = document.querySelector(
-      '.cross-sell-product-image'
-    )?.height;
+    const componentHeight = document.querySelector('.cross-sell-product-image')?.height;
 
     document.querySelectorAll('.cross-sell-plus-symbol').forEach((plusSign) => {
       plusSign.style.paddingTop = `${componentHeight / 2}px`;
@@ -581,16 +486,15 @@ class SellCrossContainer extends HTMLElement {
         crossSellContainer.appendChild(footer);
         footer.classList.add('cross-sell-footer-mobile');
         footer.classList.add('right-padding-5');
+        crossSellContent.classList.add('justify-content-center');
         // footer.classList.remove("cross-sell-footer");
-      } else if (
-        window.innerWidth > 768 &&
-        footer.parentNode !== crossSellContent
-      ) {
+      } else if (window.innerWidth > 768 && footer.parentNode !== crossSellContent) {
         // move footer inside.
         crossSellContent.appendChild(footer);
         // footer.classList.add("cross-sell-footer");
         footer.classList.remove('cross-sell-footer-mobile');
         footer.classList.remove('right-padding-5');
+        crossSellContent.classList.remove('justify-content-center');
       }
     });
 
@@ -695,26 +599,12 @@ const renderSellCross = async () => {
   };
   // Render UI
   const renderUI = async (data) => {
-    const {
-      variants,
-      layout,
-      offerId: fetchedOfferId,
-      currencyFormat,
-      defaultWidgetTitle,
-      discountText,
-      discountAmount,
-      discountMode,
-      discountTitle,
-    } = data.data;
+    const { variants, layout, offerId: fetchedOfferId, currencyFormat, defaultWidgetTitle, discountText, discountAmount, discountMode, discountTitle } = data.data;
     const flattenedLayout = flattenObject(layout);
 
     log('discountTitle', discountTitle, data.data.discountTitle);
     log('flattenedLayout', flattenedLayout);
-    if (
-      fetchedOfferId === null ||
-      fetchedOfferId === undefined ||
-      layout == null
-    ) {
+    if (fetchedOfferId === null || fetchedOfferId === undefined || layout == null) {
       console.warn('Error: offerId/layout not found in the data.');
       return;
     } else {
@@ -737,25 +627,13 @@ const renderSellCross = async () => {
         return;
       }
 
-      const sellCrossContainer = new SellCrossContainer(
-        flattenedLayout,
-        currencyFormat
-      );
+      const sellCrossContainer = new SellCrossContainer(flattenedLayout, currencyFormat);
       sellCrossContainer.add(topLevelComponent);
       // add heading
-      sellCrossContainer.addHeading(
-        defaultWidgetTitle ? defaultWidgetTitle : 'Frequently Bought Together',
-        discountText
-      );
+      sellCrossContainer.addHeading(defaultWidgetTitle ? defaultWidgetTitle : 'Frequently Bought Together', discountText);
 
       // add footer
-      sellCrossContainer.addFooter(
-        fetchedOfferId,
-        discountAmount,
-        discountMode,
-        variants.length,
-        discountTitle
-      );
+      sellCrossContainer.addFooter(fetchedOfferId, discountAmount, discountMode, variants.length, discountTitle);
 
       // add products
       sellCrossContainer.addProducts(variants);

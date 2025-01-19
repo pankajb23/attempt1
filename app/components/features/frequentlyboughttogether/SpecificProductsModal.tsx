@@ -1,15 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import {
-  Button,
-  Text,
-  LegacyCard,
-  ResourceItem,
-  ResourceList,
-  Avatar,
-  Icon,
-  InlineGrid,
-  InlineStack,
-} from '@shopify/polaris';
+import { Button, Text, LegacyCard, ResourceItem, ResourceList, Avatar, Icon, InlineGrid, InlineStack } from '@shopify/polaris';
 import { ViewIcon, XSmallIcon } from '@shopify/polaris-icons';
 import { useFormContext } from 'react-hook-form';
 import { type SelectedProductType } from 'app/types';
@@ -26,17 +16,9 @@ function SelectedProducts(pids, handleProductChange) {
           items={[...pids]}
           renderItem={(item) => {
             const { pid, title, img } = item;
-            const media = (
-              <Avatar customer size="md" name={title} source={img} />
-            );
+            const media = <Avatar customer size="md" name={title} source={img} />;
             return (
-              <ResourceItem
-                id={pid}
-                name={title}
-                media={media}
-                url={''}
-                accessibilityLabel={`View details for ${title}`}
-              >
+              <ResourceItem id={pid} name={title} media={media} url={''} accessibilityLabel={`View details for ${title}`}>
                 <InlineGrid columns={['twoThirds', 'oneThird']}>
                   <InlineStack>
                     <div style={{ width: '90%' }}>
@@ -72,14 +54,8 @@ function SelectedProducts(pids, handleProductChange) {
   );
 }
 
-export default function SpecificProducts({
-  selectedProducts,
-  property,
-  showButton,
-}) {
-  const [selectedIds, setSelectedIds] = useState<Set<SelectedProductType>>(
-    new Set(selectedProducts)
-  );
+export default function SpecificProducts({ selectedProducts, property, showButton }) {
+  const [selectedIds, setSelectedIds] = useState<Set<SelectedProductType>>(new Set(selectedProducts));
 
   const { setValue } = useFormContext();
 
@@ -87,27 +63,24 @@ export default function SpecificProducts({
     setSelectedIds(new Set(selectedProducts));
   }, [selectedProducts]);
 
-  const handleProductChange = useCallback(
-    (products: SelectedProductType | SelectedProductType[]) => {
-      setSelectedIds((prev) => {
-        // If input is array, just replace all tags
-        const newPids = new Set(prev);
-        if (Array.isArray(products)) {
-          setValue(property, products);
-          return new Set(products);
+  const handleProductChange = useCallback((products: SelectedProductType | SelectedProductType[]) => {
+    setSelectedIds((prev) => {
+      // If input is array, just replace all tags
+      const newPids = new Set(prev);
+      if (Array.isArray(products)) {
+        setValue(property, products);
+        return new Set(products);
+      } else {
+        if (newPids.has(products)) {
+          newPids.delete(products);
         } else {
-          if (newPids.has(products)) {
-            newPids.delete(products);
-          } else {
-            newPids.add(products);
-          }
-          setValue(property, newPids);
-          return newPids;
+          newPids.add(products);
         }
-      });
-    },
-    []
-  );
+        setValue(property, newPids);
+        return newPids;
+      }
+    });
+  }, []);
 
   return (
     <div style={{ marginTop: '6px' }}>

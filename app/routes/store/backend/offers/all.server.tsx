@@ -2,15 +2,9 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { prismaClient, authenticate } from 'app/shopify.server';
 import { json } from '@remix-run/node';
 import { TagsData } from '../../rest/api/tags';
-import {
-  GlobalShopToCurrencyCodes,
-  GlobalCurrencyCodes,
-} from 'app/components/common/states';
+import { GlobalShopToCurrencyCodes, GlobalCurrencyCodes } from 'app/components/common/states';
 import getSymbolFromCurrency from 'currency-symbol-map';
-import {
-  FETCH_PRODUCTS_FOR_OFFER,
-  SHOP_DETAILS,
-} from 'app/routes/store/graphql/queries';
+import { FETCH_PRODUCTS_FOR_OFFER, SHOP_DETAILS } from 'app/routes/store/graphql/queries';
 
 async function FetchProductListForDisplay(admin) {
   const response = await admin.graphql(FETCH_PRODUCTS_FOR_OFFER);

@@ -1,11 +1,4 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  Select,
-  TextField,
-  Checkbox,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, Select, TextField, Checkbox } from '@shopify/polaris';
 import { useFormContext, Controller } from 'react-hook-form';
 
 function AddAllCartAction() {
@@ -21,12 +14,9 @@ function AddAllCartAction() {
       value: 'autoClickAddToCart',
     },
   ];
-  const isAddAllCartActionChecked =
-    watch('settingsModal.addAllCartAction') ?? 'redirectToCart';
+  const isAddAllCartActionChecked = watch('settingsModal.addAllCartAction') ?? 'redirectToCart';
 
-  const cssSelectorForAddtoCart = watch(
-    'settingsModal.cssSelectorForAddtoCart'
-  );
+  const cssSelectorForAddtoCart = watch('settingsModal.cssSelectorForAddtoCart');
   return (
     <>
       <Controller
@@ -136,8 +126,7 @@ function DiscountAction() {
               value: 'applyDiscountWhenEntireBundleIsBought',
             },
             {
-              label:
-                'Apply discount when trigger and atleast 1 upsell is bought',
+              label: 'Apply discount when trigger and atleast 1 upsell is bought',
               value: 'applyDiscountForMinUpsell',
             },
           ]}

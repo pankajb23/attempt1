@@ -1,26 +1,10 @@
-import {
-  IndexTable,
-  LegacyCard,
-  IndexFilters,
-  useSetIndexFiltersMode,
-  useIndexResourceState,
-  Text,
-  Badge,
-} from '@shopify/polaris';
+import { IndexTable, LegacyCard, IndexFilters, useSetIndexFiltersMode, useIndexResourceState, Text, Badge } from '@shopify/polaris';
 import type { IndexFiltersProps, TabProps } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
 
 export default function IndexFiltersWithNoFiltersExample() {
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  const [itemStrings, setItemStrings] = useState([
-    'All',
-    'Unpaid',
-    'Open',
-    'Closed',
-    'Local delivery',
-    'Local pickup',
-  ]);
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const [itemStrings, setItemStrings] = useState(['All', 'Unpaid', 'Open', 'Closed', 'Local delivery', 'Local pickup']);
   const deleteView = (index: number) => {
     const newItemStrings = [...itemStrings];
     newItemStrings.splice(index, 1);
@@ -123,10 +107,7 @@ export default function IndexFiltersWithNoFiltersExample() {
         };
   const [queryValue, setQueryValue] = useState('');
 
-  const handleFiltersQueryChange = useCallback(
-    (value: string) => setQueryValue(value),
-    []
-  );
+  const handleFiltersQueryChange = useCallback((value: string) => setQueryValue(value), []);
 
   const orders = [
     {
@@ -174,37 +155,26 @@ export default function IndexFiltersWithNoFiltersExample() {
     plural: 'orders',
   };
 
-  const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(orders);
+  const { selectedResources, allResourcesSelected, handleSelectionChange } = useIndexResourceState(orders);
 
-  const rowMarkup = orders.map(
-    (
-      { id, order, date, customer, total, paymentStatus, fulfillmentStatus },
-      index
-    ) => (
-      <IndexTable.Row
-        id={id}
-        key={id}
-        selected={selectedResources.includes(id)}
-        position={index}
-      >
-        <IndexTable.Cell>
-          <Text variant="bodyMd" fontWeight="bold" as="span">
-            {order}
-          </Text>
-        </IndexTable.Cell>
-        <IndexTable.Cell>{date}</IndexTable.Cell>
-        <IndexTable.Cell>{customer}</IndexTable.Cell>
-        <IndexTable.Cell>
-          <Text as="span" alignment="end" numeric>
-            {total}
-          </Text>
-        </IndexTable.Cell>
-        <IndexTable.Cell>{paymentStatus}</IndexTable.Cell>
-        <IndexTable.Cell>{fulfillmentStatus}</IndexTable.Cell>
-      </IndexTable.Row>
-    )
-  );
+  const rowMarkup = orders.map(({ id, order, date, customer, total, paymentStatus, fulfillmentStatus }, index) => (
+    <IndexTable.Row id={id} key={id} selected={selectedResources.includes(id)} position={index}>
+      <IndexTable.Cell>
+        <Text variant="bodyMd" fontWeight="bold" as="span">
+          {order}
+        </Text>
+      </IndexTable.Cell>
+      <IndexTable.Cell>{date}</IndexTable.Cell>
+      <IndexTable.Cell>{customer}</IndexTable.Cell>
+      <IndexTable.Cell>
+        <Text as="span" alignment="end" numeric>
+          {total}
+        </Text>
+      </IndexTable.Cell>
+      <IndexTable.Cell>{paymentStatus}</IndexTable.Cell>
+      <IndexTable.Cell>{fulfillmentStatus}</IndexTable.Cell>
+    </IndexTable.Row>
+  ));
 
   return (
     <LegacyCard>
@@ -238,9 +208,7 @@ export default function IndexFiltersWithNoFiltersExample() {
       <IndexTable
         resourceName={resourceName}
         itemCount={orders.length}
-        selectedItemsCount={
-          allResourcesSelected ? 'All' : selectedResources.length
-        }
+        selectedItemsCount={allResourcesSelected ? 'All' : selectedResources.length}
         onSelectionChange={handleSelectionChange}
         headings={[
           { title: 'Order' },

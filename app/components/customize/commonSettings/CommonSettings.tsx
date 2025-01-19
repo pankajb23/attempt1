@@ -10,14 +10,10 @@ import CommonSideModal from './CommonSideModal';
 export default function CommonSettingsModal({ navigateToPage }) {
   const { modalsAndStoreId } = useStoreContext();
 
-  const commonSettings = modalsAndStoreId.customPages.find(
-    (page) => page.type === 'CommonSettings'
-  );
+  const commonSettings = modalsAndStoreId.customPages.find((page) => page.type === 'CommonSettings');
   console.log('commonSettings01', commonSettings);
   const methods = useForm({
-    defaultValues: commonSettings?.content
-      ? JSON.parse(commonSettings.content)
-      : null,
+    defaultValues: commonSettings?.content ? JSON.parse(commonSettings.content) : null,
   });
 
   const onSubmit = async (data) => {

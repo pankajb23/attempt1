@@ -1,12 +1,4 @@
-import {
-  Layout,
-  Text,
-  Button,
-  ButtonGroup,
-  Card,
-  BlockStack,
-  InlineGrid,
-} from '@shopify/polaris';
+import { Layout, Text, Button, ButtonGroup, Card, BlockStack, InlineGrid } from '@shopify/polaris';
 import { useTranslation } from 'react-i18next';
 import { ComposeIcon, XSmallIcon } from '@shopify/polaris-icons';
 
@@ -22,11 +14,7 @@ export default function SetupAssistance({ setupShowAssistanceCb }) {
               <Text as="h4" variant="headingMd" fontWeight="bold">
                 {t('offer.callout.heading')}
               </Text>
-              <Button
-                variant="tertiary"
-                icon={XSmallIcon}
-                onClick={() => setupShowAssistanceCb(false)}
-              />
+              <Button variant="tertiary" icon={XSmallIcon} onClick={() => setupShowAssistanceCb(false)} />
             </InlineGrid>
             <Text as="p" variant="bodyMd">
               {t('offer.callout.content')}

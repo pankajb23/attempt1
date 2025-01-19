@@ -94,14 +94,8 @@ function OfferProductClickAction() {
     },
   ];
 
-  const buttonTypes = [
-    'addCheckbox',
-    'addCheckboxLeft',
-    'addButton',
-    'addImmediatelyButton',
-  ];
-  const shouldShowOffProductclickAction =
-    buttonTypes.includes(widgetButtonType);
+  const buttonTypes = ['addCheckbox', 'addCheckboxLeft', 'addButton', 'addImmediatelyButton'];
+  const shouldShowOffProductclickAction = buttonTypes.includes(widgetButtonType);
 
   return (
     <>
@@ -141,18 +135,11 @@ function OfferProductClickAction() {
 function ApplyDiscountWhenTriggerProductIsBought() {
   const { watch, control } = useFormContext();
 
-  const defaultValue =
-    watch('applyDiscountWhenTriggerProductIsBought') ?? false;
+  const defaultValue = watch('applyDiscountWhenTriggerProductIsBought') ?? false;
   const widgetButtonType = watch('widgetButtonType');
 
-  const buttonTypes = [
-    'addCheckbox',
-    'addCheckboxLeft',
-    'addButton',
-    'addImmediatelyButton',
-  ];
-  const shouldShowOffProductclickAction =
-    buttonTypes.includes(widgetButtonType);
+  const buttonTypes = ['addCheckbox', 'addCheckboxLeft', 'addButton', 'addImmediatelyButton'];
+  const shouldShowOffProductclickAction = buttonTypes.includes(widgetButtonType);
 
   return (
     <>

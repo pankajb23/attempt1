@@ -4,12 +4,7 @@ import TriggerCheckbox from '../common/TriggerCheckbox';
 import OtherDetailsModal from '../common/OtherDetailsModal';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import {
-  ProductCallInitializer,
-  selectIsLoading,
-  selectPids,
-  selectTags,
-} from 'app/lib/reducers/RestClientReducer';
+import { ProductCallInitializer, selectIsLoading, selectPids, selectTags } from 'app/lib/reducers/RestClientReducer';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { FrequentlyBoughtTogetherType } from '../../types/FrequentlyBoughtTogetherTypes';
 import OfferNameModal from '../common/OfferNameModal';
@@ -47,27 +42,15 @@ export default function CartUpsellDownsellPage({ navigateTo }) {
         <Layout.Section>
           <FormProvider {...methods}>
             <BlockStack>
-              <TopHeadingBanner
-                navigateTo={navigateTo}
-                heading={'Cart upsell & downsell'}
-                saveOfferButton={true}
-                onSave={methods.handleSubmit(onSubmit)}
-              />
+              <TopHeadingBanner navigateTo={navigateTo} heading={'Cart upsell & downsell'} saveOfferButton={true} onSave={methods.handleSubmit(onSubmit)} />
             </BlockStack>
             <div style={{ marginTop: '16px' }}>
               <BlockStack gap="200">
                 <Layout>
                   <Layout.Section>
                     <BlockStack gap="300">
-                      <OfferNameModal
-                        placeholder={t(
-                          'pages.frequently_bought_together.offer_name.placeholder'
-                        )}
-                      />
-                      <TriggerCheckbox
-                        allProducts={productArrays}
-                        tags={tags}
-                      />
+                      <OfferNameModal placeholder={t('pages.frequently_bought_together.offer_name.placeholder')} />
+                      <TriggerCheckbox allProducts={productArrays} tags={tags} />
                       <OfferProductModal allProducts={productArrays} />
                       <UpsellFunnelDiscount />
                       <OtherDetailsModal />
@@ -76,12 +59,8 @@ export default function CartUpsellDownsellPage({ navigateTo }) {
                   <Layout.Section variant="oneThird">
                     <SideModal
                       heading={'Cart upsell & downsell'}
-                      explanation={
-                        'Cart upsell & downsell appears when the Checkout button is clicked.'
-                      }
-                      img={
-                        'https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Funnel.png'
-                      }
+                      explanation={'Cart upsell & downsell appears when the Checkout button is clicked.'}
+                      img={'https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Funnel.png'}
                     />
                   </Layout.Section>
                 </Layout>

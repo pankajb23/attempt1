@@ -1,24 +1,6 @@
-import {
-  Card,
-  Text,
-  ChoiceList,
-  Icon,
-  InlineStack,
-  Tooltip,
-  Button,
-  Select,
-  LegacyCard,
-  ResourceList,
-  ResourceItem,
-  InlineGrid,
-  Avatar,
-} from '@shopify/polaris';
+import { Card, Text, ChoiceList, Icon, InlineStack, Tooltip, Button, Select, LegacyCard, ResourceList, ResourceItem, InlineGrid, Avatar } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
-import {
-  AlertCircleIcon,
-  XSmallIcon,
-  MenuVerticalIcon,
-} from '@shopify/polaris-icons';
+import { AlertCircleIcon, XSmallIcon, MenuVerticalIcon } from '@shopify/polaris-icons';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import AddProductsModal from '../../../features/common/AddProductsModal';
 import AutomaticOfferProducts from '../../../features/common/AutomaticOfferProducts';
@@ -34,9 +16,7 @@ function SelectedProducts(pids) {
           renderItem={(item) => {
             console.log('logging item ' + item);
             const { id, name, img, isArchived } = item;
-            const media = (
-              <Avatar customer size="md" name={name} source={img} />
-            );
+            const media = <Avatar customer size="md" name={name} source={img} />;
 
             return (
               <ResourceItem
@@ -80,14 +60,11 @@ export default function OfferProductRadioButtonModal() {
   const [selected, setSelected] = useState<string[]>(['manual']);
   const handleChange = useCallback((value: string[]) => setSelected(value), []);
 
-  const [selectProductOption, setProductOptionSelected] = useState<
-    string | undefined
-  >(undefined);
+  const [selectProductOption, setProductOptionSelected] = useState<string | undefined>(undefined);
 
   const [selectedPids, setSelectedPids] = useState<Set<string>>(new Set());
 
-  const [automaticOfferProductValueSet, setAutomaticOfferProductValueSet] =
-    useState<number>(2);
+  const [automaticOfferProductValueSet, setAutomaticOfferProductValueSet] = useState<number>(2);
   const handleAutomaticOfferProductValueSet = (n: number) => {
     setAutomaticOfferProductValueSet(n);
   };
@@ -177,21 +154,9 @@ export default function OfferProductRadioButtonModal() {
   const changingPlyCardAtTheBottom = () => {
     switch (selected[0]) {
       case 'manual':
-        return (
-          <AddProductsModal
-            tagsArray={productsArray}
-            selectedIds={selectedPids}
-            handleChange={handlePidChanges}
-            modalId={modalId}
-          />
-        );
+        return <AddProductsModal tagsArray={productsArray} selectedIds={selectedPids} handleChange={handlePidChanges} modalId={modalId} />;
       case 'automatic':
-        return (
-          <AutomaticOfferProducts
-            value={automaticOfferProductValueSet}
-            handleChange={handleAutomaticOfferProductValueSet}
-          />
-        );
+        return <AutomaticOfferProducts value={automaticOfferProductValueSet} handleChange={handleAutomaticOfferProductValueSet} />;
       default:
         return null;
     }
@@ -231,12 +196,7 @@ export default function OfferProductRadioButtonModal() {
                 </Text>
               </Button>
 
-              <Select
-                label={null}
-                options={selectOption}
-                onChange={handleSelectChange}
-                value={selectProductOption}
-              />
+              <Select label={null} options={selectOption} onChange={handleSelectChange} value={selectProductOption} />
               {SelectedProducts(pidsArray)}
             </InlineStack>
           </div>

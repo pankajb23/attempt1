@@ -51,11 +51,7 @@ export const ProductCallInitializer = ({ userId }: { userId: string }) => {
 
   useEffect(() => {
     console.log('In ProductCallInitializer and initializing things');
-    const subscription = zip(
-      from(service.findAllTags(userId)),
-      from(service.findPids(userId)),
-      from(service.findTags(userId))
-    )
+    const subscription = zip(from(service.findAllTags(userId)), from(service.findPids(userId)), from(service.findTags(userId)))
       .pipe(
         map(([allTags, products, tags]) => {
           dispatch(setInitialize({ allTags, products, tags }));

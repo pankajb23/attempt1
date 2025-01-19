@@ -1,12 +1,4 @@
-import {
-  BlockStack,
-  Card,
-  Checkbox,
-  Text,
-  Divider,
-  Select,
-  TextField,
-} from '@shopify/polaris';
+import { BlockStack, Card, Checkbox, Text, Divider, Select, TextField } from '@shopify/polaris';
 import { useFormContext, Controller } from 'react-hook-form';
 
 enum PlacingCartPageDiscount {
@@ -19,16 +11,10 @@ enum PlacingCartPageDiscount {
 
 export default function GeneralSettings() {
   const { watch, control } = useFormContext();
-  const isTagOrderChecked =
-    watch('generalSettings.tagOrder.isChecked') ?? false;
-  const isMultiLanguageSetupChecked =
-    watch('generalSettings.multilanguage.isChecked') ?? false;
-  const cartPageDiscountType =
-    watch('generalSettings.placingCartPageDiscount') ??
-    'DisplayPopupOnCartPage';
-  const htmlContent =
-    watch('generalSettings.placingCartPageDiscountHtmlElement') ??
-    '.product-form';
+  const isTagOrderChecked = watch('generalSettings.tagOrder.isChecked') ?? false;
+  const isMultiLanguageSetupChecked = watch('generalSettings.multilanguage.isChecked') ?? false;
+  const cartPageDiscountType = watch('generalSettings.placingCartPageDiscount') ?? 'DisplayPopupOnCartPage';
+  const htmlContent = watch('generalSettings.placingCartPageDiscountHtmlElement') ?? '.product-form';
 
   return (
     <>
@@ -111,8 +97,7 @@ export default function GeneralSettings() {
               />
             )}
           />
-          {cartPageDiscountType !==
-            PlacingCartPageDiscount.DisplayPopupOnCartPage && (
+          {cartPageDiscountType !== PlacingCartPageDiscount.DisplayPopupOnCartPage && (
             <Controller
               control={control}
               name="generalSettings.placingCartPageDiscountHtmlElement"

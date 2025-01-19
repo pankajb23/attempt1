@@ -1,11 +1,4 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  Select,
-  Divider,
-  TextField,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, Select, Divider, TextField } from '@shopify/polaris';
 import { useFormContext, Controller } from 'react-hook-form';
 
 function SelectModal({ heading, property, options, cssDefaultValue }) {

@@ -34,10 +34,7 @@ function Component({
 
   const alterProducts = (isChecked: boolean) => {
     if (isChecked) {
-      updateProductToPriceMap(
-        product.id,
-        product.variants.find((variant) => variant.id === selectVariant).price
-      );
+      updateProductToPriceMap(product.id, product.variants.find((variant) => variant.id === selectVariant).price);
     } else {
       removeProductFromPriceMap(product.id);
     }
@@ -55,26 +52,15 @@ function Component({
     setOpacity(isChecked ? 1 : 0.5);
   };
 
-  const selectV = product.variants.find(
-    (variant) => variant.id === selectVariant
-  );
+  const selectV = product.variants.find((variant) => variant.id === selectVariant);
   return (
     <>
       <div className="cross-sell-product" style={{ opacity: opacity }}>
         <div className="cross-sell-product-image-container">
           <div className="cross-sell-checkbox-container">
-            <input
-              type="checkbox"
-              className="cross-sell-product-checkbox"
-              defaultChecked
-              onClick={handleCheckboxChange}
-            />
+            <input type="checkbox" className="cross-sell-product-checkbox" defaultChecked onClick={handleCheckboxChange} />
           </div>
-          <img
-            src={product.img}
-            alt="Product 2"
-            className="cross-sell-product-image"
-          />
+          <img src={product.img} alt="Product 2" className="cross-sell-product-image" />
         </div>
         <div className="cross-sell-product-title">
           <span style={{ color: commonStyling?.textColor }}>
@@ -98,8 +84,7 @@ function Component({
           <div className="cross-sell-product-price">
             <span
               style={{
-                color:
-                  commonStyling[CommonConfigsName.TotalPriceComponentTextColor],
+                color: commonStyling[CommonConfigsName.TotalPriceComponentTextColor],
               }}
             >
               {currencyFormat.replace(regex, selectV.price)}
@@ -112,13 +97,7 @@ function Component({
   );
 }
 
-function Button({
-  commonStyling,
-  isCartEmpty,
-}: {
-  commonStyling;
-  isCartEmpty: boolean;
-}) {
+function Button({ commonStyling, isCartEmpty }: { commonStyling; isCartEmpty: boolean }) {
   return (
     <button
       className="cross-sell-add-to-cart-btn"
@@ -154,32 +133,22 @@ function Footer({
   currencyFormat: string;
   slicedArray: Product[];
 }) {
-  const mobileClassName = isWeb
-    ? 'cross-sell-footer'
-    : 'cross-sell-mobile-footer';
+  const mobileClassName = isWeb ? 'cross-sell-footer' : 'cross-sell-mobile-footer';
 
-  const sumOfPrices = Object.entries(productToPriceMap).reduce(
-    (sum, [key, price]) => {
-      const product = slicedArray.find((product) => product.id === key);
+  const sumOfPrices = Object.entries(productToPriceMap).reduce((sum, [key, price]) => {
+    const product = slicedArray.find((product) => product.id === key);
 
-      if (product) {
-        const numericPrice =
-          typeof price === 'string' ? parseFloat(price) : price;
-        return sum + numericPrice;
-      }
-      return sum;
-    },
-    0
-  );
+    if (product) {
+      const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+      return sum + numericPrice;
+    }
+    return sum;
+  }, 0);
 
   const nintyPercentOff = sumOfPrices * 0.9;
 
-  const formattedTotal = isNaN(nintyPercentOff)
-    ? '0.00'
-    : nintyPercentOff.toFixed(2).toString();
-  const formattedOriginal = isNaN(sumOfPrices)
-    ? '0.00'
-    : sumOfPrices.toFixed(2).toString();
+  const formattedTotal = isNaN(nintyPercentOff) ? '0.00' : nintyPercentOff.toFixed(2).toString();
+  const formattedOriginal = isNaN(sumOfPrices) ? '0.00' : sumOfPrices.toFixed(2).toString();
 
   const regex = /{{(.*?)}}/g;
 
@@ -209,17 +178,13 @@ function Footer({
           className="cross-sell-total-price-cross"
           style={{
             marginLeft: '6px',
-            color:
-              commonStyling[CommonConfigsName.TotalPriceCrossedOutTextColor],
+            color: commonStyling[CommonConfigsName.TotalPriceCrossedOutTextColor],
           }}
         >
           {currencyFormat.replace(regex, formattedOriginal)}
         </span>
       </div>
-      <Button
-        commonStyling={commonStyling}
-        isCartEmpty={productToPriceMap.length === 0}
-      />
+      <Button commonStyling={commonStyling} isCartEmpty={productToPriceMap.length === 0} />
     </div>
   );
 }
@@ -239,13 +204,10 @@ function Web({
 }) {
   const slicedArray = products.slice(0, productsCount);
   const borderWidth = commonStyling[CommonConfigsName.CanvasBorderWidth] ?? 0; // Default to 0 if null/undefined
-  const borderColor =
-    commonStyling[CommonConfigsName.CanvasBorderColor] ?? '#000000'; // Default to black
+  const borderColor = commonStyling[CommonConfigsName.CanvasBorderColor] ?? '#000000'; // Default to black
   const borderRadius = commonStyling[CommonConfigsName.CanvasBorderRadius] ?? 0; // Default to 0 if null/undefined
 
-  const [productToPriceMap, setProductToPriceMap] = useState<
-    Record<string, number>
-  >({});
+  const [productToPriceMap, setProductToPriceMap] = useState<Record<string, number>>({});
 
   const removeProductFromPriceMap = (productId: string) => {
     setProductToPriceMap((prevMap) => {
@@ -263,12 +225,10 @@ function Web({
       // console.log("Height:", newHeight);
 
       // Apply the height to all elements
-      document
-        .querySelectorAll('.cross-sell-plus-symbol')
-        .forEach((element) => {
-          // console.log("Element:", element);
-          element.style.paddingTop = `${newHeight / 2}px`;
-        });
+      document.querySelectorAll('.cross-sell-plus-symbol').forEach((element) => {
+        // console.log("Element:", element);
+        element.style.paddingTop = `${newHeight / 2}px`;
+      });
     }
   }, [products, isWeb]);
 
@@ -284,15 +244,7 @@ function Web({
     borderRadius: `${borderRadius}px`,
   };
 
-  const footer = (
-    <Footer
-      commonStyling={commonStyling}
-      isWeb={isWeb}
-      productToPriceMap={productToPriceMap}
-      currencyFormat={currencyFormat}
-      slicedArray={slicedArray}
-    />
-  );
+  const footer = <Footer commonStyling={commonStyling} isWeb={isWeb} productToPriceMap={productToPriceMap} currencyFormat={currencyFormat} slicedArray={slicedArray} />;
 
   return (
     <div
@@ -341,10 +293,7 @@ function Web({
       </div>
 
       {/* Products Section */}
-      <div
-        id="cross-sell-content"
-        style={{ justifyContent: isWeb ? 'normal' : 'center' }}
-      >
+      <div id="cross-sell-content" style={{ justifyContent: isWeb ? 'normal' : 'center' }}>
         {/* <div id="cross-sell-products"> */}
         {slicedArray.map((product, index) => {
           return (
@@ -382,17 +331,5 @@ export default function ProductPreview({
   productCounts: number;
   currencyFormat: string;
 }) {
-  return (
-    <div>
-      {
-        <Web
-          products={products}
-          commonStyling={commonStyling}
-          productsCount={productCounts}
-          isWeb={isWeb}
-          currencyFormat={currencyFormat}
-        />
-      }
-    </div>
-  );
+  return <div>{<Web products={products} commonStyling={commonStyling} productsCount={productCounts} isWeb={isWeb} currencyFormat={currencyFormat} />}</div>;
 }

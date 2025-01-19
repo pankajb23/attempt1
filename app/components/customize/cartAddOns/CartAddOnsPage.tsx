@@ -1,23 +1,8 @@
-import {
-  Layout,
-  BlockStack,
-  Card,
-  Text,
-  InlineGrid,
-  TextField,
-} from '@shopify/polaris';
-import {
-  FormProvider,
-  useForm,
-  useFormContext,
-  Controller,
-} from 'react-hook-form';
+import { Layout, BlockStack, Card, Text, InlineGrid, TextField } from '@shopify/polaris';
+import { FormProvider, useForm, useFormContext, Controller } from 'react-hook-form';
 import TopHeadingBanner from '../../common/TopHeaderBanner';
 import HelpBottonModal from '../../common/HelpBottomModal';
-import {
-  CustomizePageType,
-  type TranslationComponent,
-} from '../../types/CustomizeTypes';
+import { CustomizePageType, type TranslationComponent } from '../../types/CustomizeTypes';
 import { Component } from '../frequentlyBoughtTogether/TextAndTranslations';
 import StylingModal from './StylingModal';
 import SettingsModal from './SettingsModal';
@@ -101,18 +86,8 @@ function TranslationCard() {
           <Component key={index} component={component} />
         ))}
         <InlineGrid columns={2} gap="200">
-          <TimerBlock
-            property={'cao.translations.timer.minutes'}
-            heading={'Countdown timer'}
-            defaultValue={5}
-            suffix={'minutes'}
-          />
-          <TimerBlock
-            property={'cao.translations.timer.seconds'}
-            heading={null}
-            defaultValue={0}
-            suffix={'seconds'}
-          />
+          <TimerBlock property={'cao.translations.timer.minutes'} heading={'Countdown timer'} defaultValue={5} suffix={'minutes'} />
+          <TimerBlock property={'cao.translations.timer.seconds'} heading={null} defaultValue={0} suffix={'seconds'} />
         </InlineGrid>
         <Text as="p" variant="bodySm">
           The countdown time will be displayed only when there is a discount.

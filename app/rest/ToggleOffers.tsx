@@ -1,10 +1,4 @@
-export default async function ToggleStatus(
-  selectedResources: string[],
-  status,
-  storeId,
-  setModalsAndStoreId,
-  handleSelectionChange
-) {
+export default async function ToggleStatus(selectedResources: string[], status, storeId, setModalsAndStoreId, handleSelectionChange) {
   await fetch(`api/offers/toggle?status=${status}`, {
     method: 'POST',
     headers: {

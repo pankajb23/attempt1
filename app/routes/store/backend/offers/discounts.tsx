@@ -1,29 +1,13 @@
-import {
-  unauthenticated,
-  authenticate,
-  prismaClient,
-} from 'app/shopify.server';
+import { unauthenticated, authenticate, prismaClient } from 'app/shopify.server';
 import { useMutation } from '@apollo/client';
-import {
-  CREATE_BASIC_DISCOUNT_CODE,
-  CREATE_DISCOUNTCODE_FOR_BX_GY_OFFER,
-  CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING,
-} from 'app/routes/store/graphql/mutations';
+import { CREATE_BASIC_DISCOUNT_CODE, CREATE_DISCOUNTCODE_FOR_BX_GY_OFFER, CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING } from 'app/routes/store/graphql/mutations';
 
-export const CREATE_FREE_SHIPPING_DISCOUNT = async (
-  shop,
-  offerId,
-  quantityToBuy,
-  minimumSubtotal,
-  combinesWith
-) => {
+export const CREATE_FREE_SHIPPING_DISCOUNT = async (shop, offerId, quantityToBuy, minimumSubtotal, combinesWith) => {
   const { admin } = await unauthenticated.admin(shop);
 
   const generateCode = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    return Array.from({ length: 5 }, () =>
-      characters.charAt(Math.floor(Math.random() * characters.length))
-    ).join('');
+    return Array.from({ length: 5 }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
   };
 
   const now = new Date();
@@ -43,35 +27,32 @@ export const CREATE_FREE_SHIPPING_DISCOUNT = async (
   console.log('offerContent', JSON.stringify(offerContent));
   let data = null;
   try {
-    const response = await admin.graphql(
-      CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING,
-      {
-        variables: {
-          freeShippingCodeDiscount: {
-            title: `A Generous Discount with Fres shipping ${discountCode}`, // Updated title
-            code: `${discountCode}`, // Random code
-            startsAt: startDate.toISOString(), // Start time in ISO format
-            endsAt: endDate.toISOString(),
-            combinesWith: combinesWith,
-            appliesOncePerCustomer: false,
-            minimumRequirement: {
-              subtotal: {
-                greaterThanOrEqualToSubtotal: minimumSubtotal,
-              },
-              quantity: {
-                greaterThanOrEqualToQuantity: quantityToBuy,
-              },
+    const response = await admin.graphql(CREATE_DISCOUNT_CODE_FOR_FREE_SHIPPING, {
+      variables: {
+        freeShippingCodeDiscount: {
+          title: `A Generous Discount with Fres shipping ${discountCode}`, // Updated title
+          code: `${discountCode}`, // Random code
+          startsAt: startDate.toISOString(), // Start time in ISO format
+          endsAt: endDate.toISOString(),
+          combinesWith: combinesWith,
+          appliesOncePerCustomer: false,
+          minimumRequirement: {
+            subtotal: {
+              greaterThanOrEqualToSubtotal: minimumSubtotal,
             },
-            customerSelection: {
-              all: true,
-            },
-            destination: {
-              all: true,
+            quantity: {
+              greaterThanOrEqualToQuantity: quantityToBuy,
             },
           },
+          customerSelection: {
+            all: true,
+          },
+          destination: {
+            all: true,
+          },
         },
-      }
-    );
+      },
+    });
 
     const data = await response.json();
   } catch (e) {
@@ -88,10 +69,8 @@ export const CREATE_FREE_SHIPPING_DISCOUNT = async (
   // console.log("data", JSON.stringify(data));
   const id = data.data?.discountCodeBasicCreate?.codeDiscountNode?.id;
   const code = discountCode;
-  const startsAt =
-    data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
-  const endsAt =
-    data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
+  const startsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
+  const endsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
 
   console.log('offerId', offerId);
   await prismaClient.discounts.create({
@@ -106,21 +85,12 @@ export const CREATE_FREE_SHIPPING_DISCOUNT = async (
 
   return code;
 };
-export const CREATE_CHEAPEST_ITEM_FREE_DISCOUNT = async (
-  shop,
-  offerId,
-  productIdsToAdd,
-  amountOfProductToGiveAway,
-  productIdToGiveAway,
-  combinesWith
-) => {
+export const CREATE_CHEAPEST_ITEM_FREE_DISCOUNT = async (shop, offerId, productIdsToAdd, amountOfProductToGiveAway, productIdToGiveAway, combinesWith) => {
   const { admin } = await unauthenticated.admin(shop);
 
   const generateCode = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    return Array.from({ length: 5 }, () =>
-      characters.charAt(Math.floor(Math.random() * characters.length))
-    ).join('');
+    return Array.from({ length: 5 }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
   };
 
   const now = new Date();
@@ -140,43 +110,40 @@ export const CREATE_CHEAPEST_ITEM_FREE_DISCOUNT = async (
   console.log('offerContent', JSON.stringify(offerContent));
   let data = null;
   try {
-    const graphQlResponse = await admin.graphql(
-      CREATE_DISCOUNTCODE_FOR_BX_GY_OFFER,
-      {
-        variables: {
-          bxgyCodeDiscount: {
-            title: `A Generous Discount for You! ${discountCode}`, // Updated title
-            code: `${discountCode}`, // Random code
-            startsAt: startDate.toISOString(), // Start time in ISO format
-            endsAt: endDate.toISOString(), // End time in ISO format
-            combinesWith: combinesWith,
-            customerBuys: {
-              items: {
-                products: {
-                  productsToAdd: productIdsToAdd,
-                },
-              },
-              value: {
-                amount: amountOfProductToGiveAway,
-                quantity: 1,
+    const graphQlResponse = await admin.graphql(CREATE_DISCOUNTCODE_FOR_BX_GY_OFFER, {
+      variables: {
+        bxgyCodeDiscount: {
+          title: `A Generous Discount for You! ${discountCode}`, // Updated title
+          code: `${discountCode}`, // Random code
+          startsAt: startDate.toISOString(), // Start time in ISO format
+          endsAt: endDate.toISOString(), // End time in ISO format
+          combinesWith: combinesWith,
+          customerBuys: {
+            items: {
+              products: {
+                productsToAdd: productIdsToAdd,
               },
             },
-            customerGets: {
-              items: {
-                products: {
-                  productsToAdd: productIdToGiveAway,
-                  // productsVariantsToAdd: productVariantsToAdd
-                },
-              },
+            value: {
+              amount: amountOfProductToGiveAway,
+              quantity: 1,
             },
-            customerSelection: {
-              all: true,
-            },
-            appliesOncePerCustomer: true,
           },
+          customerGets: {
+            items: {
+              products: {
+                productsToAdd: productIdToGiveAway,
+                // productsVariantsToAdd: productVariantsToAdd
+              },
+            },
+          },
+          customerSelection: {
+            all: true,
+          },
+          appliesOncePerCustomer: true,
         },
-      }
-    );
+      },
+    });
     data = await graphQlResponse.json();
   } catch (e) {
     console.log('error', e);
@@ -192,10 +159,8 @@ export const CREATE_CHEAPEST_ITEM_FREE_DISCOUNT = async (
   // console.log("data", JSON.stringify(data));
   const id = data.data?.discountCodeBasicCreate?.codeDiscountNode?.id;
   const code = discountCode;
-  const startsAt =
-    data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
-  const endsAt =
-    data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
+  const startsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
+  const endsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
 
   console.log('offerId', offerId);
   await prismaClient.discounts.create({
@@ -216,9 +181,7 @@ export const CREATE_BASIC_DISCOUNT = async (shop, offerId, combinesWith) => {
 
   const generateCode = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    return Array.from({ length: 5 }, () =>
-      characters.charAt(Math.floor(Math.random() * characters.length))
-    ).join('');
+    return Array.from({ length: 5 }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
   };
 
   const now = new Date();
@@ -276,10 +239,8 @@ export const CREATE_BASIC_DISCOUNT = async (shop, offerId, combinesWith) => {
   // console.log("data", JSON.stringify(data));
   const id = data.data?.discountCodeBasicCreate?.codeDiscountNode?.id;
   const code = discountCode;
-  const startsAt =
-    data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
-  const endsAt =
-    data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
+  const startsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.startsAt;
+  const endsAt = data.data?.discountCodeBasicCreate?.codeDiscountNode?.codeDiscount.endsAt;
 
   console.log('offerId', offerId);
   await prismaClient.discounts.create({
@@ -295,14 +256,7 @@ export const CREATE_BASIC_DISCOUNT = async (shop, offerId, combinesWith) => {
   return code;
 };
 
-export const CREATE_DISCOUNT_FOR_OFFER = async (
-  shop,
-  offerId,
-  productsInTheCart,
-  cheapestItemId,
-  aggregatedAmountCart,
-  cheapestItemPrice
-) => {
+export const CREATE_DISCOUNT_FOR_OFFER = async (shop, offerId, productsInTheCart, cheapestItemId, aggregatedAmountCart, cheapestItemPrice) => {
   const { admin } = await unauthenticated.admin(shop);
   const { storefront } = await unauthenticated.storefront(shop);
   const minutesLater = new Date(Date.now() + 10 * 60 * 1000); // Current time + 10 minutes
@@ -313,9 +267,7 @@ export const CREATE_DISCOUNT_FOR_OFFER = async (
     },
   });
 
-  const offerContent = offer.offerContent
-    ? JSON.parse(offer.offerContent)
-    : null;
+  const offerContent = offer.offerContent ? JSON.parse(offer.offerContent) : null;
   const discountState = offerContent?.discountState;
 
   const combinesWith = {
@@ -326,11 +278,7 @@ export const CREATE_DISCOUNT_FOR_OFFER = async (
 
   if (discountState?.isEnabled) {
     if (discountState?.selectedType === 'percentOrFixed') {
-      const discountCode = await CREATE_BASIC_DISCOUNT(
-        shop,
-        offerId,
-        combinesWith
-      );
+      const discountCode = await CREATE_BASIC_DISCOUNT(shop, offerId, combinesWith);
       return discountCode;
     } else if (discountState?.selectedType === 'cheapestItemFree') {
       const discountCode = await CREATE_CHEAPEST_ITEM_FREE_DISCOUNT(
@@ -343,13 +291,7 @@ export const CREATE_DISCOUNT_FOR_OFFER = async (
       );
       return discountCode;
     } else if (discountState?.selectedType === 'freeShipping') {
-      const discountCode = await CREATE_FREE_SHIPPING_DISCOUNT(
-        shop,
-        offerId,
-        productsInTheCart.length,
-        aggregatedAmountCart,
-        combinesWith
-      );
+      const discountCode = await CREATE_FREE_SHIPPING_DISCOUNT(shop, offerId, productsInTheCart.length, aggregatedAmountCart, combinesWith);
       return discountCode;
     }
   }

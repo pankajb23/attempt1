@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  type PayloadAction,
-} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { FrequentlyBoughtTogetherService } from 'app/lib/services/offers/FrequentlyBoughtTogetherService';
 import {
   type FrequentlyBoughtTogetherType,
@@ -46,36 +42,27 @@ interface UpdateOffer {
 }
 
 // Async thunks
-export const fetchOfferContent = createAsyncThunk(
-  'frequentlyBoughtTogether/fetchContent',
-  async ({ userId, offerName }: FetchOfferParams) => {
-    const response = await service.find(userId, offerName);
-    return response;
-  }
-);
+export const fetchOfferContent = createAsyncThunk('frequentlyBoughtTogether/fetchContent', async ({ userId, offerName }: FetchOfferParams) => {
+  const response = await service.find(userId, offerName);
+  return response;
+});
 
-export const saveOfferContent = createAsyncThunk(
-  'frequentlyBoughtTogether/saveContent',
-  async ({ userId, type, offerId }: UpdateOffer, { rejectWithValue }) => {
-    try {
-      const response = await service.upsert(userId, type, offerId);
-      return response;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      }
+export const saveOfferContent = createAsyncThunk('frequentlyBoughtTogether/saveContent', async ({ userId, type, offerId }: UpdateOffer, { rejectWithValue }) => {
+  try {
+    const response = await service.upsert(userId, type, offerId);
+    return response;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
     }
   }
-);
+});
 
 const FrequentlyBoughtTogetherSlicer = createSlice({
   name: 'FrequentlyBoughtTogetherReducer',
   initialState,
   reducers: {
-    setInitialState: (
-      state,
-      action: PayloadAction<FrequentlyBoughtTogetherType>
-    ) => {
+    setInitialState: (state, action: PayloadAction<FrequentlyBoughtTogetherType>) => {
       state.loading = false;
       state.savedContent = action.payload;
       state.draftContent = action.payload;
@@ -93,10 +80,7 @@ const FrequentlyBoughtTogetherSlicer = createSlice({
         state.hasUnsavedChanges = true;
       }
     },
-    updateOfferProducts: (
-      state,
-      action: PayloadAction<OfferProductsManual | OfferProductsAutomatic>
-    ) => {
+    updateOfferProducts: (state, action: PayloadAction<OfferProductsManual | OfferProductsAutomatic>) => {
       if (state.draftContent) {
         state.draftContent.offerProducts = action.payload;
         state.hasUnsavedChanges = true;
@@ -108,20 +92,14 @@ const FrequentlyBoughtTogetherSlicer = createSlice({
         state.hasUnsavedChanges = true;
       }
     },
-    updateDiscountState: (
-      state,
-      action: PayloadAction<{ field: string; value: any }>
-    ) => {
+    updateDiscountState: (state, action: PayloadAction<{ field: string; value: any }>) => {
       if (state.draftContent) {
         const { field, value } = action.payload;
         state.draftContent.discountState[field] = value;
         state.hasUnsavedChanges = true;
       }
     },
-    updateOtherPriorities: (
-      state,
-      action: PayloadAction<{ field: string; value: string }>
-    ) => {
+    updateOtherPriorities: (state, action: PayloadAction<{ field: string; value: string }>) => {
       if (state.draftContent) {
         const { field, value } = action.payload;
         state.draftContent.otherPriorities[field] = value;
@@ -130,16 +108,11 @@ const FrequentlyBoughtTogetherSlicer = createSlice({
     },
     // Reset draft to saved content
     discardChanges: (state) => {
-      state.draftContent = state.savedContent
-        ? { ...state.savedContent }
-        : null;
+      state.draftContent = state.savedContent ? { ...state.savedContent } : null;
       state.hasUnsavedChanges = false;
     },
     // Update entire draft content
-    updateDraftContent: (
-      state,
-      action: PayloadAction<FrequentlyBoughtTogetherType>
-    ) => {
+    updateDraftContent: (state, action: PayloadAction<FrequentlyBoughtTogetherType>) => {
       state.draftContent = action.payload;
       state.hasUnsavedChanges = true;
     },
@@ -174,59 +147,32 @@ const FrequentlyBoughtTogetherSlicer = createSlice({
       })
       .addCase(saveOfferContent.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          (action.payload as string) || 'Failed to save offer content';
+        state.error = (action.payload as string) || 'Failed to save offer content';
       });
   },
 });
 
 // Export actions
-export const {
-  updateOfferName,
-  updateTrigger,
-  updateOfferProducts,
-  updateDiscount,
-  updateDiscountState,
-  updateOtherPriorities,
-  discardChanges,
-  updateDraftContent,
-} = FrequentlyBoughtTogetherSlicer.actions;
+export const { updateOfferName, updateTrigger, updateOfferProducts, updateDiscount, updateDiscountState, updateOtherPriorities, discardChanges, updateDraftContent } =
+  FrequentlyBoughtTogetherSlicer.actions;
 
 // Selectors
-export const selectLoading = (state: {
-  frequentlyBoughtTogether: FrequentlyBoughtTogetherState;
-}) => state.frequentlyBoughtTogether.loading;
+export const selectLoading = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => state.frequentlyBoughtTogether.loading;
 
-export const selectOfferName = (state: {
-  frequentlyBoughtTogether: FrequentlyBoughtTogetherState;
-}) => {
+export const selectOfferName = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => {
   return state.frequentlyBoughtTogether.draftContent?.offerName ?? '';
 };
 
-export const selectError = (state: {
-  frequentlyBoughtTogether: FrequentlyBoughtTogetherState;
-}) => state.frequentlyBoughtTogether.error;
+export const selectError = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => state.frequentlyBoughtTogether.error;
 
-export const selectSavedContent = (state: {
-  frequentlyBoughtTogether: FrequentlyBoughtTogetherState;
-}) => state.frequentlyBoughtTogether.savedContent;
+export const selectSavedContent = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => state.frequentlyBoughtTogether.savedContent;
 
-export const selectDraftContent = (state: {
-  frequentlyBoughtTogether: FrequentlyBoughtTogetherState;
-}) => state.frequentlyBoughtTogether.draftContent;
+export const selectDraftContent = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => state.frequentlyBoughtTogether.draftContent;
 
-export const selectHasUnsavedChanges = (state: {
-  frequentlyBoughtTogether: FrequentlyBoughtTogetherState;
-}) => state.frequentlyBoughtTogether.hasUnsavedChanges;
+export const selectHasUnsavedChanges = (state: { frequentlyBoughtTogether: FrequentlyBoughtTogetherState }) => state.frequentlyBoughtTogether.hasUnsavedChanges;
 
 // Initializer component
-export const FrequentlyBoughtTogetherInitializer = ({
-  userId,
-  offerLabel,
-}: {
-  userId: string;
-  offerLabel?: string;
-}) => {
+export const FrequentlyBoughtTogetherInitializer = ({ userId, offerLabel }: { userId: string; offerLabel?: string }) => {
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
 

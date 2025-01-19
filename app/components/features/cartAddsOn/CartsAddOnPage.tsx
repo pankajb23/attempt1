@@ -4,13 +4,7 @@ import TriggerCheckbox from '../common/TriggerCheckbox';
 import DiscountModal from '../common/DiscountsModal';
 import OtherDetailsModal from '../common/OtherDetailsModal';
 import { useSelector } from 'react-redux';
-import {
-  ProductCallInitializer,
-  selectIsLoading,
-  selectPids,
-  selectTags,
-  selectVariants,
-} from 'app/lib/reducers/RestClientReducer';
+import { ProductCallInitializer, selectIsLoading, selectPids, selectTags, selectVariants } from 'app/lib/reducers/RestClientReducer';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { FrequentlyBoughtTogetherType } from '../../types/FrequentlyBoughtTogetherTypes';
 import OfferNameModal from '../common/OfferNameModal';
@@ -43,15 +37,11 @@ export default function CartsAddOnPage({ navigateTo }) {
 
   const choices = [
     {
-      label: t(
-        'pages.frequently_bought_together.checkbox.percentOrFixed.heading'
-      ),
+      label: t('pages.frequently_bought_together.checkbox.percentOrFixed.heading'),
       value: 'percentOrFixed',
     },
     {
-      label: t(
-        'pages.frequently_bought_together.checkbox.freeShipping.heading'
-      ),
+      label: t('pages.frequently_bought_together.checkbox.freeShipping.heading'),
       value: 'freeShipping',
     },
   ];
@@ -63,12 +53,7 @@ export default function CartsAddOnPage({ navigateTo }) {
         <Layout.Section>
           <FormProvider {...methods}>
             <BlockStack>
-              <TopHeadingBanner
-                navigateTo={navigateTo}
-                heading="Carts Add-On"
-                saveOfferButton={true}
-                onSave={methods.handleSubmit(onSubmit)}
-              />
+              <TopHeadingBanner navigateTo={navigateTo} heading="Carts Add-On" saveOfferButton={true} onSave={methods.handleSubmit(onSubmit)} />
             </BlockStack>
             <div style={{ marginTop: '16px' }}>
               <BlockStack gap="200">
@@ -76,25 +61,14 @@ export default function CartsAddOnPage({ navigateTo }) {
                   <Layout.Section>
                     <BlockStack gap="300">
                       <OfferNameModal placeholder="E.g Upsell for mobile phones" />
-                      <TriggerCheckbox
-                        allProducts={productArrays}
-                        tags={tags}
-                      />
-                      <OfferProductModal
-                        allProducts={productArrays}
-                        allTags={tags}
-                        allVariants={productVariants}
-                      />
+                      <TriggerCheckbox allProducts={productArrays} tags={tags} />
+                      <OfferProductModal allProducts={productArrays} allTags={tags} allVariants={productVariants} />
                       <DiscountModal
                         allProducts={productArrays}
                         allTags={tags}
-                        checkboxHelpText={
-                          'The discount will be applied across all add-ons selected by the customer.'
-                        }
+                        checkboxHelpText={'The discount will be applied across all add-ons selected by the customer.'}
                         choices={choices}
-                        discountTextPlaceholder={
-                          'Get {{discount}} off on add-ons.'
-                        }
+                        discountTextPlaceholder={'Get {{discount}} off on add-ons.'}
                         shouldHaveMinimumCartValueTextField={true}
                       />
                       <OtherDetailsModal />
@@ -103,12 +77,8 @@ export default function CartsAddOnPage({ navigateTo }) {
                   <Layout.Section variant="oneThird">
                     <SideModal
                       heading={'Cart add-ons'}
-                      explanation={
-                        'Cart add-ons are displayed as a pop-up when checkout button is clicked'
-                      }
-                      img={
-                        'https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Cart+Addon.png'
-                      }
+                      explanation={'Cart add-ons are displayed as a pop-up when checkout button is clicked'}
+                      img={'https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Cart+Addon.png'}
                     />
                   </Layout.Section>
                 </Layout>

@@ -32,16 +32,8 @@ export default function SettingsModal() {
           {' '}
           Settings
         </Text>
-        <CheckBoxModal
-          property="hideQuantityPicker"
-          heading="Hide quantity picker"
-          helpText="If enabled multiple variants of the same product can be added to cart."
-        />
-        <CheckBoxModal
-          property="disableUpsellFunnelWidget"
-          heading="Disable Upsell funnel widget"
-          helpText={null}
-        />
+        <CheckBoxModal property="hideQuantityPicker" heading="Hide quantity picker" helpText="If enabled multiple variants of the same product can be added to cart." />
+        <CheckBoxModal property="disableUpsellFunnelWidget" heading="Disable Upsell funnel widget" helpText={null} />
       </BlockStack>
     </Card>
   );

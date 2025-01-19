@@ -1,13 +1,4 @@
-import {
-  Thumbnail,
-  Card,
-  Text,
-  Checkbox,
-  InlineStack,
-  Button,
-  Select,
-  ResourceItem,
-} from '@shopify/polaris';
+import { Thumbnail, Card, Text, Checkbox, InlineStack, Button, Select, ResourceItem } from '@shopify/polaris';
 import { useCallback } from 'react';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -15,11 +6,7 @@ import NestedProductVariantsModal from '../common/NestedProductVariantsModal';
 import SelectedProducts from '../common/SelectedProductsDraggable';
 import AddProductsModal from '../common/AddProductsModal';
 
-export default function OfferProductModal({
-  allProducts,
-  allTags,
-  allVariants,
-}) {
+export default function OfferProductModal({ allProducts, allTags, allVariants }) {
   const { control, setValue, watch, getValues } = useFormContext();
   const shopify = useAppBridge();
 
@@ -28,8 +15,7 @@ export default function OfferProductModal({
 
   const manualOfferType = watch('offerProducts.assets.type') ?? 'products';
   const addOnType = watch('offerProducts.maxAddonsType') ?? 'anyNumberOfAddOns';
-  const shouldShuffleProducts =
-    watch('offerProducts.shouldShuffleProducts') ?? false;
+  const shouldShuffleProducts = watch('offerProducts.shouldShuffleProducts') ?? false;
 
   const selectedPidsArray = watch('offerProducts.assets.products') || [];
 
@@ -44,9 +30,7 @@ export default function OfferProductModal({
         setValue('offerProducts.assets.products', productIds);
       } else {
         const newSet = new Set(selectedPidsArray);
-        newSet.has(productIds)
-          ? newSet.delete(productIds)
-          : newSet.add(productIds);
+        newSet.has(productIds) ? newSet.delete(productIds) : newSet.add(productIds);
         setValue('offerProducts.assets.products', [...newSet]);
       }
     },
@@ -134,22 +118,9 @@ export default function OfferProductModal({
   const changingPlyCardAtTheBottom = () => {
     switch (manualOfferType) {
       case 'tags':
-        return (
-          <NestedProductVariantsModal
-            allVariants={allVariants}
-            modalId={nestedModalId}
-          />
-        );
+        return <NestedProductVariantsModal allVariants={allVariants} modalId={nestedModalId} />;
       case 'products':
-        return (
-          <AddProductsModal
-            allProducts={allProducts}
-            selectedProducts={selectedIds}
-            addSelectedProducts={handleProductChange}
-            modalId={modalId}
-            render={renderItem}
-          />
-        );
+        return <AddProductsModal allProducts={allProducts} selectedProducts={selectedIds} addSelectedProducts={handleProductChange} modalId={modalId} render={renderItem} />;
       default:
         return null;
     }
@@ -183,14 +154,7 @@ export default function OfferProductModal({
               name="offerProducts.assets.type"
               defaultValue={manualOfferType}
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <Select
-                  label={null}
-                  options={selectOption}
-                  onChange={onChange}
-                  value={value}
-                />
-              )}
+              render={({ field: { onChange, value } }) => <Select label={null} options={selectOption} onChange={onChange} value={value} />}
             />
           </InlineStack>
           <SelectedProducts

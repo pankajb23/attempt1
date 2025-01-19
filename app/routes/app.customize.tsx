@@ -13,12 +13,9 @@ import { useStoreContext } from 'app/lib/context/StoreContext';
 export default function CustomizeMainPage() {
   const [page, setPage] = useState(CustomizePageType.LandingPage);
 
-  const navigateToCallback = useCallback(
-    (navigateToPage: CustomizePageType) => {
-      setPage(navigateToPage);
-    },
-    []
-  );
+  const navigateToCallback = useCallback((navigateToPage: CustomizePageType) => {
+    setPage(navigateToPage);
+  }, []);
 
   const { modalsAndStoreId } = useStoreContext();
   const isLoading = modalsAndStoreId.isLoading;
@@ -38,66 +35,25 @@ export default function CustomizeMainPage() {
       switch (page) {
         case CustomizePageType.LandingPage:
           // return customPage(<LandingPageModal key={'landing-page'} navigateToPage={navigateToCallback} />, true);
-          return customPage(
-            <CommonSettingsModal
-              key={'common-setting'}
-              navigateToPage={navigateToCallback}
-            />,
-            false,
-            true
-          );
+          return customPage(<CommonSettingsModal key={'common-setting'} navigateToPage={navigateToCallback} />, false, true);
 
         case CustomizePageType.CommonSettings:
-          return customPage(
-            <CommonSettingsModal
-              key={'common-setting'}
-              navigateToPage={navigateToCallback}
-            />,
-            false,
-            true
-          );
+          return customPage(<CommonSettingsModal key={'common-setting'} navigateToPage={navigateToCallback} />, false, true);
 
         case CustomizePageType.FrequentlyBoughtTogether:
-          return customPage(
-            <FrequentlyBoughtTogetherWidgetPage
-              key={'fbt'}
-              navigateToPage={navigateToCallback}
-            />,
-            true
-          );
+          return customPage(<FrequentlyBoughtTogetherWidgetPage key={'fbt'} navigateToPage={navigateToCallback} />, true);
 
         case CustomizePageType.ProductAddOns:
-          return customPage(
-            <ProductsAddOnWidget
-              key={'pao'}
-              navigateToPage={navigateToCallback}
-            />,
-            false
-          );
+          return customPage(<ProductsAddOnWidget key={'pao'} navigateToPage={navigateToCallback} />, false);
 
         case CustomizePageType.CartAddOns:
-          return customPage(
-            <CartAddOnsPage key={'cao'} navigateToPage={navigateToCallback} />,
-            false
-          );
+          return customPage(<CartAddOnsPage key={'cao'} navigateToPage={navigateToCallback} />, false);
 
         case CustomizePageType.UpsellFunnel:
-          return customPage(
-            <UpsellFunnelPage
-              key={'upsellf'}
-              navigateToPage={navigateToCallback}
-            />,
-            false
-          );
+          return customPage(<UpsellFunnelPage key={'upsellf'} navigateToPage={navigateToCallback} />, false);
 
         case CustomizePageType.ThankYouPageAddOns:
-          return customPage(
-            <ThankYouPageAddOns
-              key={'typao'}
-              navigateToPage={navigateToCallback}
-            />,
-            false
-          );
+          return customPage(<ThankYouPageAddOns key={'typao'} navigateToPage={navigateToCallback} />, false);
 
         default:
           throw new Error('Invalid page');

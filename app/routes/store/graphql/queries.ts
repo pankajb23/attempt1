@@ -1,5 +1,4 @@
-export const FETCH_PRODUCTS_FOR_OFFER = 
-`#graphql
+export const FETCH_PRODUCTS_FOR_OFFER = `#graphql
     query {
   products(first:8){
     nodes{
@@ -29,9 +28,7 @@ export const FETCH_PRODUCTS_FOR_OFFER =
   }
 }`;
 
-
-export const SHOP_DETAILS =
-    `#graphql
+export const SHOP_DETAILS = `#graphql
         query Show{
             shop {
                 id
@@ -49,10 +46,9 @@ export const SHOP_DETAILS =
                 }
                 currencyCode
             }
-        }`
+        }`;
 
-export const FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS =
-    `#graphql
+export const FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS = `#graphql
                 query GetProduct($id: ID!) {
   product(id: $id) {
     id
@@ -74,10 +70,9 @@ export const FETCH_STOREFRONT_PRODUCTS_AND_VARIANTS =
       }
     }
   }
-}`
+}`;
 
-export const FETCH_STOREFRONT_CART_DETAILS =
-    `#graphql
+export const FETCH_STOREFRONT_CART_DETAILS = `#graphql
         query GetCartDetails($cartId: ID!){
             cart(id: $cartId) {
                 id
@@ -103,28 +98,25 @@ export const FETCH_STOREFRONT_CART_DETAILS =
                             }
                         }
                     }
-            }`
+            }`;
 
-export const FETCH_ADMIN_PRODUCT_URL = 
-`#graphql
+export const FETCH_ADMIN_PRODUCT_URL = `#graphql
         query GetProductUrl($productId: ID!){
             product(id: $productId) {
                 onlineStoreUrl
                 onlineStorePreviewUrl
             }
-        }`
+        }`;
 
-export const FETCH_STOREFRONT_SHOP_NAME = 
-`#graphql
+export const FETCH_STOREFRONT_SHOP_NAME = `#graphql
         query GetShopName{
             shop {
                 name
                 id
             }
-        }`
+        }`;
 
-export const CART_DETAILS = 
-                `#graphql
+export const CART_DETAILS = `#graphql
             query GetCartDetails($cartId: ID!){
                 cart(id: $cartId) {
                     checkoutUrl
@@ -162,4 +154,4 @@ export const CART_DETAILS =
                     }
                 }   
             }
-        `
+        `;

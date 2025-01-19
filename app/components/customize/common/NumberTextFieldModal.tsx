@@ -1,13 +1,7 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { TextField, Text } from '@shopify/polaris';
 
-export default function NumberTextField({
-  property,
-  placeholder,
-  heading,
-  defaultValue = null,
-  min = 0,
-}) {
+export default function NumberTextField({ property, placeholder, heading, defaultValue = null, min = 0 }) {
   const { control, watch } = useFormContext();
   const propertyValue = watch(property) ?? defaultValue;
   return (

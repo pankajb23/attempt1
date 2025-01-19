@@ -1,12 +1,6 @@
 import { Layout, BlockStack } from '@shopify/polaris';
 import { useSelector } from 'react-redux';
-import {
-  ProductCallInitializer,
-  selectIsLoading,
-  selectPids,
-  selectTags,
-  selectVariants,
-} from 'app/lib/reducers/RestClientReducer';
+import { ProductCallInitializer, selectIsLoading, selectPids, selectTags, selectVariants } from 'app/lib/reducers/RestClientReducer';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { FrequentlyBoughtTogetherType } from '../types/FrequentlyBoughtTogetherTypes';
 import TopHeadingBanner from '../common/TopHeaderBanner';
@@ -46,12 +40,7 @@ export default function PostPurchaseUpsellPage({ navigateTo }) {
         <Layout.Section>
           <FormProvider {...methods}>
             <BlockStack>
-              <TopHeadingBanner
-                navigateTo={navigateTo}
-                heading="Post purchase upsell"
-                saveOfferButton={true}
-                onSave={methods.handleSubmit(onSubmit)}
-              />
+              <TopHeadingBanner navigateTo={navigateTo} heading="Post purchase upsell" saveOfferButton={true} onSave={methods.handleSubmit(onSubmit)} />
             </BlockStack>
             <div style={{ marginTop: '16px' }}>
               <BlockStack gap="200">
@@ -59,10 +48,7 @@ export default function PostPurchaseUpsellPage({ navigateTo }) {
                   <Layout.Section>
                     <BlockStack gap="300">
                       <OfferNameModal placeholder="E.g Upsell for mobile phones" />
-                      <TriggerCheckbox
-                        allProducts={productArrays}
-                        tags={tags}
-                      />
+                      <TriggerCheckbox allProducts={productArrays} tags={tags} />
                       <OfferProductRadioButtonModal
                         allProducts={productArrays}
                         allTags={tags}
@@ -80,9 +66,7 @@ export default function PostPurchaseUpsellPage({ navigateTo }) {
                       explanation={
                         'Please note this feature is only with Shopify payments and credit card / PayPal Express and available in selected countries for stores that use Shopify’s payment gateway.'
                       }
-                      img={
-                        'https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Post+Purchase.png'
-                      }
+                      img={'https://lb-apps-media.s3.amazonaws.com/Selleasy-media/Post+Purchase.png'}
                     />
                   </Layout.Section>
                 </Layout>

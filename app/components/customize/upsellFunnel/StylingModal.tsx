@@ -1,9 +1,6 @@
 import { BlockStack, Card, Text } from '@shopify/polaris';
 import ButtonWithColorAndPopup from '../common/ButtonWithColorAndPopup';
-import {
-  NumberField,
-  TitleFontWeight,
-} from '../frequentlyBoughtTogether/StylingModal';
+import { NumberField, TitleFontWeight } from '../frequentlyBoughtTogether/StylingModal';
 
 export default function StylingModal() {
   const titleFontWeightOptions = [
@@ -30,30 +27,12 @@ export default function StylingModal() {
           {' '}
           Styling{' '}
         </Text>
-        <ButtonWithColorAndPopup
-          header={'Background color'}
-          property={'stylingModal.bgcolor'}
-        />
-        <ButtonWithColorAndPopup
-          header={'Border color'}
-          property={'stylingModal.borderColor'}
-        />
-        <NumberField
-          property={'stylingModal.titleFontSize'}
-          heading="Title font size"
-        />
-        <TitleFontWeight
-          property={'stylingModal.titleFontWeight'}
-          options={titleFontWeightOptions}
-        />
-        <ButtonWithColorAndPopup
-          header={'Skip & checkout button background color'}
-          property={'stylingModal.skipNCheckoutButtonbg'}
-        />
-        <ButtonWithColorAndPopup
-          header={'Skip & checkout button text color'}
-          property={'stylingModal.skipNCheckoutButtonTextColor'}
-        />
+        <ButtonWithColorAndPopup header={'Background color'} property={'stylingModal.bgcolor'} />
+        <ButtonWithColorAndPopup header={'Border color'} property={'stylingModal.borderColor'} />
+        <NumberField property={'stylingModal.titleFontSize'} heading="Title font size" />
+        <TitleFontWeight property={'stylingModal.titleFontWeight'} options={titleFontWeightOptions} />
+        <ButtonWithColorAndPopup header={'Skip & checkout button background color'} property={'stylingModal.skipNCheckoutButtonbg'} />
+        <ButtonWithColorAndPopup header={'Skip & checkout button text color'} property={'stylingModal.skipNCheckoutButtonTextColor'} />
       </BlockStack>
     </Card>
   );

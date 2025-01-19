@@ -1,11 +1,4 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-  Select,
-  InlineGrid,
-  Divider,
-} from '@shopify/polaris';
+import { BlockStack, Card, Text, Select, InlineGrid, Divider } from '@shopify/polaris';
 import ProductPreview from '../../../lib/preview/modal';
 import { useCallback, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -26,10 +19,7 @@ export default function CommonSideModal() {
 
   const [web, setIsWeb] = useState('web');
 
-  const handleSelectChange = useCallback(
-    (value: string) => setIsWeb(value),
-    []
-  );
+  const handleSelectChange = useCallback((value: string) => setIsWeb(value), []);
   const options = [
     { label: 'web', value: 'web' },
     { label: 'mobile', value: 'mobile' },
@@ -37,10 +27,7 @@ export default function CommonSideModal() {
 
   const [previewCount, setPreviewCount] = useState(2);
 
-  const handlePreviewCountChange = useCallback(
-    (value: string) => setPreviewCount(parseInt(value)),
-    []
-  );
+  const handlePreviewCountChange = useCallback((value: string) => setPreviewCount(parseInt(value)), []);
   const optionsPreview = [
     { label: '2 Products', value: '2' },
     { label: '3 Products', value: '3' },
@@ -70,59 +57,34 @@ export default function CommonSideModal() {
   });
 
   const commonStyling = {
-    [CommonConfigsName.ButtonBackgroundColor]:
-      watch(CommonConfigsName.ButtonBackgroundColor) ?? '#0b8498ff',
-    [CommonConfigsName.ButtonTextColor]:
-      watch(CommonConfigsName.ButtonTextColor) ?? '#ffffff',
-    [CommonConfigsName.ButtonTextFamily]:
-      watch(CommonConfigsName.ButtonTextFamily) ?? 'Arial, sans-serif',
-    [CommonConfigsName.ButtonBorderRadius]:
-      watch(CommonConfigsName.ButtonBorderRadius) ?? '10',
-    [CommonConfigsName.ButtonBorderColor]:
-      watch(CommonConfigsName.ButtonBorderColor) ?? '#d37594ff',
-    [CommonConfigsName.ButtonBorderWidth]:
-      watch(CommonConfigsName.ButtonBorderWidth) ?? '4',
+    [CommonConfigsName.ButtonBackgroundColor]: watch(CommonConfigsName.ButtonBackgroundColor) ?? '#0b8498ff',
+    [CommonConfigsName.ButtonTextColor]: watch(CommonConfigsName.ButtonTextColor) ?? '#ffffff',
+    [CommonConfigsName.ButtonTextFamily]: watch(CommonConfigsName.ButtonTextFamily) ?? 'Arial, sans-serif',
+    [CommonConfigsName.ButtonBorderRadius]: watch(CommonConfigsName.ButtonBorderRadius) ?? '10',
+    [CommonConfigsName.ButtonBorderColor]: watch(CommonConfigsName.ButtonBorderColor) ?? '#d37594ff',
+    [CommonConfigsName.ButtonBorderWidth]: watch(CommonConfigsName.ButtonBorderWidth) ?? '4',
 
-    [CommonConfigsName.CanvasBackgroundColor]:
-      watch(CommonConfigsName.CanvasBackgroundColor) ?? '#ffffff',
-    [CommonConfigsName.CanvasLeftPadding]:
-      watch(CommonConfigsName.CanvasLeftPadding) ?? '10',
-    [CommonConfigsName.CanvasRightPadding]: watch(
-      CommonConfigsName.CanvasRightPadding
-    ),
-    [CommonConfigsName.CanvasTopPadding]:
-      watch(CommonConfigsName.CanvasTopPadding) ?? '10',
-    [CommonConfigsName.CanvasBottomPadding]:
-      watch(CommonConfigsName.CanvasBottomPadding) ?? '10',
-    [CommonConfigsName.CanvasBorderRadius]:
-      watch(CommonConfigsName.CanvasBorderRadius) ?? '10',
-    [CommonConfigsName.CanvasBorderWidth]:
-      watch(CommonConfigsName.CanvasBorderWidth) ?? '4',
-    [CommonConfigsName.CanvasBorderColor]:
-      watch(CommonConfigsName.CanvasBorderColor) ?? '#333333',
+    [CommonConfigsName.CanvasBackgroundColor]: watch(CommonConfigsName.CanvasBackgroundColor) ?? '#ffffff',
+    [CommonConfigsName.CanvasLeftPadding]: watch(CommonConfigsName.CanvasLeftPadding) ?? '10',
+    [CommonConfigsName.CanvasRightPadding]: watch(CommonConfigsName.CanvasRightPadding),
+    [CommonConfigsName.CanvasTopPadding]: watch(CommonConfigsName.CanvasTopPadding) ?? '10',
+    [CommonConfigsName.CanvasBottomPadding]: watch(CommonConfigsName.CanvasBottomPadding) ?? '10',
+    [CommonConfigsName.CanvasBorderRadius]: watch(CommonConfigsName.CanvasBorderRadius) ?? '10',
+    [CommonConfigsName.CanvasBorderWidth]: watch(CommonConfigsName.CanvasBorderWidth) ?? '4',
+    [CommonConfigsName.CanvasBorderColor]: watch(CommonConfigsName.CanvasBorderColor) ?? '#333333',
 
-    [CommonConfigsName.CanvasTextColor]:
-      watch(CommonConfigsName.CanvasTextColor) ?? '#000000',
-    [CommonConfigsName.CanvasTextSize]:
-      watch(CommonConfigsName.CanvasTextSize) ?? '18',
-    [CommonConfigsName.CanvasTextFamily]:
-      watch(CommonConfigsName.CanvasTextFamily) ?? 'Arial, sans-serif',
+    [CommonConfigsName.CanvasTextColor]: watch(CommonConfigsName.CanvasTextColor) ?? '#000000',
+    [CommonConfigsName.CanvasTextSize]: watch(CommonConfigsName.CanvasTextSize) ?? '18',
+    [CommonConfigsName.CanvasTextFamily]: watch(CommonConfigsName.CanvasTextFamily) ?? 'Arial, sans-serif',
 
-    [CommonConfigsName.TotalPriceTextColor]:
-      watch(CommonConfigsName.TotalPriceTextColor) ?? '#fb0101ff',
-    [CommonConfigsName.TotalPriceComponentTextColor]:
-      watch(CommonConfigsName.TotalPriceComponentTextColor) ?? '#444',
-    [CommonConfigsName.TotalPriceCrossedOutTextColor]:
-      watch(CommonConfigsName.TotalPriceCrossedOutTextColor) ?? '#444',
+    [CommonConfigsName.TotalPriceTextColor]: watch(CommonConfigsName.TotalPriceTextColor) ?? '#fb0101ff',
+    [CommonConfigsName.TotalPriceComponentTextColor]: watch(CommonConfigsName.TotalPriceComponentTextColor) ?? '#444',
+    [CommonConfigsName.TotalPriceCrossedOutTextColor]: watch(CommonConfigsName.TotalPriceCrossedOutTextColor) ?? '#444',
 
-    [CommonConfigsName.CanvasLeftMargin]:
-      watch(CommonConfigsName.CanvasLeftMargin) ?? '0',
-    [CommonConfigsName.CanvasRightMargin]:
-      watch(CommonConfigsName.CanvasRightMargin) ?? '0',
-    [CommonConfigsName.CanvasTopMargin]:
-      watch(CommonConfigsName.CanvasTopMargin) ?? '0',
-    [CommonConfigsName.CanvasBottomMargin]:
-      watch(CommonConfigsName.CanvasBottomMargin) ?? '0',
+    [CommonConfigsName.CanvasLeftMargin]: watch(CommonConfigsName.CanvasLeftMargin) ?? '0',
+    [CommonConfigsName.CanvasRightMargin]: watch(CommonConfigsName.CanvasRightMargin) ?? '0',
+    [CommonConfigsName.CanvasTopMargin]: watch(CommonConfigsName.CanvasTopMargin) ?? '0',
+    [CommonConfigsName.CanvasBottomMargin]: watch(CommonConfigsName.CanvasBottomMargin) ?? '0',
 
     // [CommonConfigsName.TotalPriceTextSize]: watch(CommonConfigsName.TotalPriceTextSize) ?? '10',
     // [CommonConfigsName.TotalPriceTextWeight]: watch(CommonConfigsName.TotalPriceTextWeight) ?? 'normal',
@@ -179,13 +141,7 @@ export default function CommonSideModal() {
         </Card>
 
         <Card padding={{ xs: '0', sm: '0' }} roundedAbove="sm">
-          <ProductPreview
-            products={products}
-            commonStyling={commonStyling}
-            isWeb={isWeb}
-            productCounts={previewCount}
-            currencyFormat={currencyFormat}
-          />
+          <ProductPreview products={products} commonStyling={commonStyling} isWeb={isWeb} productCounts={previewCount} currencyFormat={currencyFormat} />
         </Card>
       </BlockStack>
     </div>

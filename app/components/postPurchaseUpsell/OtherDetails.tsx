@@ -4,8 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 export default function OtherDetails() {
   const { control, watch } = useFormContext();
 
-  const postPurchaseDiscountOfferPriority =
-    watch('postPurchaseDiscount.offerPriority') ?? undefined;
+  const postPurchaseDiscountOfferPriority = watch('postPurchaseDiscount.offerPriority') ?? undefined;
 
   return (
     <Card roundedAbove="sm">
@@ -34,8 +33,7 @@ export default function OtherDetails() {
               helpText={
                 <Text as="p" variant="bodySm">
                   {' '}
-                  If more than one offer exists for a trigger product, the
-                  highest priority offer will be chosen.
+                  If more than one offer exists for a trigger product, the highest priority offer will be chosen.
                 </Text>
               }
             />
